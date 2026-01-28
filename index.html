@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atlantis Cruise Card</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚢</text></svg>">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes bob {
+            0%, 100% { transform: translateY(0) rotate(-2deg); }
+            50% { transform: translateY(-10px) rotate(2deg); }
+        }
+        
+        /* Loading Screen */
+        #loadingScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #00d4ff 0%, #0099ff 50%, #ff006e 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+        
+        #loadingScreen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        
+        .ship-emoji {
+            font-size: 80px;
+            animation: bob 3s ease-in-out infinite;
+            margin-bottom: 20px;
+        }
+        
+        .loading-text {
+            color: white;
+            font-size: 32px;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .container {
+            max-width: 480px;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 32px 24px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #ff006e;
+            text-align: center;
+            margin-bottom: 8px;
+            font-size: 28px;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 24px;
+            font-size: 13px;
+        }
+        
+        .form-group {
+            margin-bottom: 16px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #333;
+            font-weight: 500;
+            font-size: 13px;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 14px;
+            transition: all 0.3s;
+            background: white;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #ff006e;
+            box-shadow: 0 0 0 3px rgba(255, 0, 110, 0.1);
+        }
+        
+        .optional-fields {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 2px dashed #e0e0e0;
+        }
+        
+        .section-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #ff006e;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 24px;
+        }
+        
+        button {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .generate-btn {
+            background: #ff006e;
+            color: white;
+        }
+        
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 0, 110, 0.4);
+            background: #e6006a;
+        }
+        
+        .clear-btn {
+            background: #f0f0f0;
+            color: #666;
+        }
+        
+        .clear-btn:hover {
+            background: #e0e0e0;
+        }
+        
+        #qrcode {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 24px;
+            padding: 24px;
+            background: #f9f9f9;
+            border-radius: 16px;
+            min-height: 280px;
+        }
+        
+        #qrcode canvas,
+        #qrcode img {
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .placeholder {
+            color: #999;
+            text-align: center;
+            font-style: italic;
+            font-size: 14px;
+        }
+        
+        .save-note {
+            margin-top: 16px;
+            padding: 14px;
+            background: #fff0f5;
+            border-left: 4px solid #ff006e;
+            border-radius: 8px;
+            font-size: 12px;
+            color: #333;
+            display: none;
+        }
+        
+        .save-note.show {
+            display: block;
+        }
+        
+        .add-field-btn {
+            width: 100%;
+            padding: 10px;
+            background: rgba(255, 0, 110, 0.1);
+            color: #ff006e;
+            border: 2px dashed #ff006e;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 12px;
+        }
+        
+        .add-field-btn:hover {
+            background: rgba(255, 0, 110, 0.2);
+        }
+        
+        .custom-field {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+            align-items: flex-end;
+        }
+        
+        .custom-field input {
+            flex: 1;
+        }
+        
+        .custom-field input:first-child {
+            max-width: 100px;
+        }
+        
+        .remove-field {
+            padding: 12px 16px;
+            background: #ffe0e0;
+            color: #ff006e;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .remove-field:hover {
+            background: #ffcccc;
+        }
+    </style>
+</head>
+<body>
+    <div id="loadingScreen">
+        <div class="ship-emoji">🚢</div>
+        <div class="loading-text">Atlantis 2026</div>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <h1>⚓ Cruise Card</h1>
+            <p class="subtitle">Create your digital contact card</p>
+            
+            <form id="vcardForm">
+                <div class="form-group">
+                    <label for="firstName">First Name *</label>
+                    <input type="text" id="firstName" placeholder="Chad" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="lastName">Last Name *</label>
+                    <input type="text" id="lastName" placeholder="Michaels" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="cabin">🛳️ Cabin Number *</label>
+                    <input type="text" id="cabin" placeholder="6969" required>
+                </div>
+                
+                <div class="optional-fields">
+                    <div class="section-title">📸 Profile</div>
+                    
+                    <div class="form-group">
+                        <label for="photoUrl">Contact Photo URL</label>
+                        <input type="url" id="photoUrl" placeholder="https://imgur.com/totally-not-shirtless.jpg">
+                    </div>
+                    
+                    <div class="section-title">🔗 Social Links</div>
+                    
+                    <div class="form-group">
+                        <label for="telegram">Telegram</label>
+                        <input type="text" id="telegram" placeholder="salty_seaman">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="instagram">Instagram</label>
+                        <input type="text" id="instagram" placeholder="pooldeckthirst">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="twitter">X / Twitter</label>
+                        <input type="text" id="twitter" placeholder="cruiseshipqueens">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="onlyfans">OnlyFans</label>
+                        <input type="text" id="onlyfans" placeholder="porthole_content">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="website">Website</label>
+                        <input type="url" id="website" placeholder="https://hotboatsummer.com">
+                    </div>
+                    
+                    <div id="customFieldsContainer"></div>
+                    
+                    <button type="button" class="add-field-btn" onclick="addCustomField()">+ Add Custom Link</button>
+                </div>
+                
+                <div class="button-group">
+                    <button type="submit" class="generate-btn">Generate QR Code</button>
+                    <button type="button" class="clear-btn" onclick="clearForm()">Clear</button>
+                </div>
+            </form>
+            
+            <div id="qrcode">
+                <div class="placeholder">Your QR code will appear here</div>
+            </div>
+            
+            <div class="save-note" id="saveNote">
+                💾 <strong>Tip:</strong> Long-press or right-click the QR code to save it! Add it to your phone's lock screen or wallet for easy access.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let qrcodeInstance = null;
+        let customFieldCount = 0;
+        
+        // Hide loading screen after page loads
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                document.getElementById('loadingScreen').classList.add('hidden');
+            }, 1500);
+        });
+        
+        document.getElementById('vcardForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            generateQRCode();
+        });
+        
+        function addCustomField() {
+            customFieldCount++;
+            const container = document.getElementById('customFieldsContainer');
+            const fieldDiv = document.createElement('div');
+            fieldDiv.className = 'custom-field';
+            fieldDiv.id = `custom-field-${customFieldCount}`;
+            fieldDiv.innerHTML = `
+                <input type="text" placeholder="Label" id="custom-label-${customFieldCount}">
+                <input type="text" placeholder="URL or username" id="custom-value-${customFieldCount}">
+                <button type="button" class="remove-field" onclick="removeCustomField(${customFieldCount})">×</button>
+            `;
+            container.appendChild(fieldDiv);
+        }
+        
+        function removeCustomField(id) {
+            const field = document.getElementById(`custom-field-${id}`);
+            if (field) field.remove();
+        }
+        
+        function generateQRCode() {
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            const cabin = document.getElementById('cabin').value.trim();
+            const photoUrl = document.getElementById('photoUrl').value.trim();
+            const telegram = document.getElementById('telegram').value.trim();
+            const instagram = document.getElementById('instagram').value.trim();
+            const twitter = document.getElementById('twitter').value.trim();
+            const onlyfans = document.getElementById('onlyfans').value.trim();
+            const website = document.getElementById('website').value.trim();
+            
+            if (!firstName || !lastName || !cabin) {
+                alert('Please fill in all required fields (Name and Cabin)');
+                return;
+            }
+            
+            // Build VCard 3.0 format with cabin as organization for prominence
+            let vcard = 'BEGIN:VCARD\n';
+            vcard += 'VERSION:3.0\n';
+            vcard += `FN:${firstName} ${lastName}\n`;
+            vcard += `N:${lastName};${firstName};;;\n`;
+            
+            // Add cabin as organization/title for visibility
+            vcard += 'ORG:Atlantis Cruise\n';
+            vcard += `TITLE:Cabin ${cabin}\n`;
+            vcard += `NOTE:Cruise Cabin: ${cabin}\n`;
+            
+            // Add social media as URLs (without photo for now to avoid the error)
+            if (telegram) {
+                const handle = telegram.replace('@', '');
+                const telegramUrl = telegram.startsWith('http') ? telegram : 
+                                   `https://t.me/${handle}`;
+                vcard += `URL;TYPE=Telegram:${telegramUrl}\n`;
+            }
+            
+            if (instagram) {
+                const handle = instagram.replace('@', '');
+                vcard += `URL;TYPE=Instagram:https://instagram.com/${handle}\n`;
+            }
+            
+            if (twitter) {
+                const handle = twitter.replace('@', '');
+                vcard += `URL;TYPE=Twitter:https://x.com/${handle}\n`;
+            }
+            
+            if (onlyfans) {
+                const handle = onlyfans.replace('@', '');
+                vcard += `URL;TYPE=OnlyFans:https://onlyfans.com/${handle}\n`;
+            }
+            
+            if (website) {
+                vcard += `URL:${website}\n`;
+            }
+            
+            // Add custom fields
+            for (let i = 1; i <= customFieldCount; i++) {
+                const labelEl = document.getElementById(`custom-label-${i}`);
+                const valueEl = document.getElementById(`custom-value-${i}`);
+                if (labelEl && valueEl && labelEl.value && valueEl.value) {
+                    const label = labelEl.value.trim();
+                    const value = valueEl.value.trim();
+                    if (label && value) {
+                        let url = value;
+                        if (!url.startsWith('http')) {
+                            url = `https://${url}`;
+                        }
+                        vcard += `URL;TYPE=${label}:${url}\n`;
+                    }
+                }
+            }
+            
+            vcard += 'END:VCARD';
+            
+            // Clear previous QR code
+            const qrcodeDiv = document.getElementById('qrcode');
+            qrcodeDiv.innerHTML = '';
+            
+            // Generate new QR code
+            try {
+                new QRCode(qrcodeDiv, {
+                    text: vcard,
+                    width: 256,
+                    height: 256,
+                    colorDark: '#000000',
+                    colorLight: '#ffffff',
+                    correctLevel: QRCode.CorrectLevel.M
+                });
+                
+                // Show save note
+                document.getElementById('saveNote').classList.add('show');
+            } catch (error) {
+                console.error('QR Code generation error:', error);
+                qrcodeDiv.innerHTML = '<div class="placeholder" style="color: #ff006e;">Error generating QR code. Please try again without special characters.</div>';
+            }
+        }
+        
+        function clearForm() {
+            document.getElementById('vcardForm').reset();
+            document.getElementById('qrcode').innerHTML = '<div class="placeholder">Your QR code will appear here</div>';
+            document.getElementById('saveNote').classList.remove('show');
+            document.getElementById('customFieldsContainer').innerHTML = '';
+            customFieldCount = 0;
+            qrcodeInstance = null;
+        }
+    </script>
+</body>
+</html>
