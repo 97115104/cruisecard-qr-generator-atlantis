@@ -292,13 +292,6 @@
                 </div>
                 
                 <div class="optional-fields">
-                    <div class="section-title">📸 Profile</div>
-                    
-                    <div class="form-group">
-                        <label for="photoUrl">Contact Photo URL</label>
-                        <input type="url" id="photoUrl" placeholder="https://imgur.com/totally-not-shirtless.jpg">
-                    </div>
-                    
                     <div class="section-title">🔗 Social Links</div>
                     
                     <div class="form-group">
@@ -386,7 +379,6 @@
             const firstName = document.getElementById('firstName').value.trim();
             const lastName = document.getElementById('lastName').value.trim();
             const cabin = document.getElementById('cabin').value.trim();
-            const photoUrl = document.getElementById('photoUrl').value.trim();
             const telegram = document.getElementById('telegram').value.trim();
             const instagram = document.getElementById('instagram').value.trim();
             const twitter = document.getElementById('twitter').value.trim();
@@ -467,14 +459,14 @@
                     height: 256,
                     colorDark: '#000000',
                     colorLight: '#ffffff',
-                    correctLevel: QRCode.CorrectLevel.M
+                    correctLevel: QRCode.CorrectLevel.L  // Lower error correction for larger data
                 });
                 
                 // Show save note
                 document.getElementById('saveNote').classList.add('show');
             } catch (error) {
                 console.error('QR Code generation error:', error);
-                qrcodeDiv.innerHTML = '<div class="placeholder" style="color: #ff006e;">Error generating QR code. Please try again without special characters.</div>';
+                qrcodeDiv.innerHTML = '<div class="placeholder" style="color: #ff006e;">Error generating QR code. Try without a photo or with a different image.</div>';
             }
         }
         
