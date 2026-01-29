@@ -9,301 +9,52 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #ff006e;
-            --primary-light: #ff4d94;
-            --primary-dark: #d90060;
-            --primary-glow: rgba(255, 0, 110, 0.15);
-            --bg: #f5f5f5;
-            --bg-card: #ffffff;
-            --text-primary: #333333;
-            --text-secondary: #666666;
-            --text-muted: #999999;
-            --border: #e0e0e0;
-            --success: #00cc88;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-        
-        body {
-            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg);
-            min-height: 100vh;
-            padding: 20px;
-            padding-bottom: env(safe-area-inset-bottom, 20px);
-            color: var(--text-primary);
-        }
-        
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .container {
-            max-width: 500px;
-            margin: 0 auto;
-            animation: fadeInUp 0.6s ease-out;
-        }
-        
-        .back-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            margin-bottom: 16px;
-            padding: 10px 16px;
-            background: white;
-            color: var(--text-secondary);
-            text-decoration: none;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-        }
-        
-        .back-link:hover {
-            color: var(--primary);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        
-        .card {
-            background: var(--bg-card);
-            border-radius: 24px;
-            padding: 28px 24px;
-            margin-bottom: 16px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.08);
-        }
-        
-        h1 {
-            color: var(--primary);
-            font-size: 26px;
-            font-weight: 700;
-            margin-bottom: 6px;
-        }
-        
-        .subtitle {
-            color: var(--text-secondary);
-            font-size: 14px;
-            margin-bottom: 24px;
-        }
-        
-        .section-title {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 14px;
-            margin-top: 22px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
+        :root { --primary: #ff006e; --primary-glow: rgba(255, 0, 110, 0.15); --bg: #f5f5f5; --bg-card: #ffffff; --text-primary: #333; --text-secondary: #666; --text-muted: #999; --border: #e0e0e0; --success: #00cc88; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Outfit', -apple-system, sans-serif; background: var(--bg); min-height: 100vh; padding: 20px; color: var(--text-primary); }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .container { max-width: 500px; margin: 0 auto; animation: fadeInUp 0.6s ease-out; }
+        .back-link { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 16px; padding: 10px 16px; background: white; color: var(--text-secondary); text-decoration: none; border-radius: 10px; font-weight: 600; font-size: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .back-link:hover { color: var(--primary); }
+        .card { background: var(--bg-card); border-radius: 24px; padding: 28px 24px; margin-bottom: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.08); }
+        h1 { color: var(--primary); font-size: 26px; font-weight: 700; margin-bottom: 6px; }
+        .subtitle { color: var(--text-secondary); font-size: 14px; margin-bottom: 24px; }
+        .section-title { font-size: 12px; font-weight: 600; color: var(--primary); margin-bottom: 14px; margin-top: 22px; text-transform: uppercase; letter-spacing: 0.5px; }
         .section-title:first-of-type { margin-top: 0; }
-        
         .form-group { margin-bottom: 16px; }
-        
-        label {
-            display: block;
-            margin-bottom: 6px;
-            color: var(--text-primary);
-            font-weight: 500;
-            font-size: 13px;
-        }
-        
-        .optional-tag {
-            color: var(--text-muted);
-            font-weight: 400;
-        }
-        
-        select, input[type="file"], input[type="text"] {
-            width: 100%;
-            padding: 12px 14px;
-            border: 2px solid var(--border);
-            border-radius: 12px;
-            font-size: 16px;
-            font-family: inherit;
-            background: white;
-            color: var(--text-primary);
-            transition: all 0.3s ease;
-        }
-        
-        select {
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 12px center;
-            background-size: 18px;
-            padding-right: 44px;
-            cursor: pointer;
-        }
-        
-        input:focus, select:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px var(--primary-glow);
-        }
-        
-        input[type="file"] {
-            padding: 10px 12px;
-            font-size: 14px;
-        }
-        
-        input[type="file"]::file-selector-button {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 8px 14px;
-            border-radius: 8px;
-            font-weight: 600;
-            font-family: inherit;
-            cursor: pointer;
-            margin-right: 10px;
-        }
-        
-        .status-text {
-            margin-top: 6px;
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-        
+        label { display: block; margin-bottom: 6px; color: var(--text-primary); font-weight: 500; font-size: 13px; }
+        .optional-tag { color: var(--text-muted); font-weight: 400; }
+        select, input[type="file"], input[type="text"] { width: 100%; padding: 12px 14px; border: 2px solid var(--border); border-radius: 12px; font-size: 16px; font-family: inherit; background: white; color: var(--text-primary); transition: all 0.3s; }
+        select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; background-size: 18px; padding-right: 44px; cursor: pointer; }
+        input:focus, select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-glow); }
+        input[type="file"] { padding: 10px 12px; font-size: 14px; }
+        input[type="file"]::file-selector-button { background: var(--primary); color: white; border: none; padding: 8px 14px; border-radius: 8px; font-weight: 600; font-family: inherit; cursor: pointer; margin-right: 10px; }
+        .status-text { margin-top: 6px; font-size: 12px; color: var(--text-muted); }
         .status-text.success { color: var(--success); }
-        
-        .theme-preview-box {
-            margin-top: 12px;
-            padding: 14px;
-            background: #fff0f5;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 0, 110, 0.15);
-            display: none;
-        }
-        
-        .theme-preview-box.show {
-            display: block;
-            animation: fadeInUp 0.3s ease-out;
-        }
-        
-        .theme-preview-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-        
-        .theme-preview-icon {
-            width: 42px;
-            height: 42px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-        }
-        
-        .theme-preview-title {
-            font-weight: 700;
-            font-size: 15px;
-        }
-        
-        .theme-preview-desc {
-            font-size: 13px;
-            color: var(--text-secondary);
-            line-height: 1.5;
-        }
-        
-        .generate-btn {
-            width: 100%;
-            padding: 16px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 15px;
-            font-weight: 600;
-            font-family: inherit;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 8px;
-        }
-        
-        .generate-btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(255, 0, 110, 0.4);
-            background: var(--primary-dark);
-        }
-        
-        .generate-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        
-        #preview {
-            display: none;
-            text-align: center;
-        }
-        
-        #preview.show {
-            display: block;
-            animation: fadeInUp 0.5s ease-out;
-        }
-        
-        #wallpaperCanvas {
-            max-width: 100%;
-            max-height: 65vh;
-            border-radius: 16px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-            margin: 16px 0;
-        }
-        
-        .download-btn {
-            width: 100%;
-            padding: 16px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 15px;
-            font-weight: 600;
-            font-family: inherit;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .download-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(255, 0, 110, 0.4);
-        }
-        
-        .tip-box {
-            margin-top: 14px;
-            padding: 14px;
-            background: #fff0f5;
-            border-left: 4px solid var(--primary);
-            border-radius: 8px;
-            font-size: 13px;
-            text-align: left;
-            line-height: 1.5;
-        }
-        
+        .theme-preview-box { margin-top: 12px; padding: 14px; background: #fff0f5; border-radius: 12px; border: 1px solid rgba(255, 0, 110, 0.15); display: none; }
+        .theme-preview-box.show { display: block; animation: fadeInUp 0.3s ease-out; }
+        .theme-preview-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+        .theme-preview-icon { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+        .theme-preview-title { font-weight: 700; font-size: 15px; }
+        .theme-preview-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+        .generate-btn { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 15px; font-weight: 600; font-family: inherit; cursor: pointer; transition: all 0.3s; margin-top: 8px; }
+        .generate-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255, 0, 110, 0.4); }
+        .generate-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        #preview { display: none; text-align: center; }
+        #preview.show { display: block; animation: fadeInUp 0.5s ease-out; }
+        #wallpaperCanvas { max-width: 100%; max-height: 70vh; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.15); margin: 16px 0; }
+        .download-btn { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 15px; font-weight: 600; font-family: inherit; cursor: pointer; }
+        .download-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255, 0, 110, 0.4); }
+        .tip-box { margin-top: 14px; padding: 14px; background: #fff0f5; border-left: 4px solid var(--primary); border-radius: 8px; font-size: 13px; text-align: left; }
         .tip-box strong { color: var(--primary); }
-        
-        @media (max-width: 480px) {
-            body { padding: 16px; }
-            .card { padding: 22px 18px; border-radius: 20px; }
-            h1 { font-size: 24px; }
-            #wallpaperCanvas { max-height: 55vh; }
-        }
+        @media (max-width: 480px) { body { padding: 16px; } .card { padding: 22px 18px; } h1 { font-size: 24px; } }
     </style>
 </head>
 <body>
     <div class="container">
         <a href="index.html" class="back-link">← Back to Cruise Card</a>
-        
         <div class="card">
-            <h1>🎨 Lock Screen Remix</h1>
+            <h1>Atlantis 2026 Lock Screen Remix</h1>
             <p class="subtitle">Create a custom wallpaper with your QR code</p>
             
             <div class="section-title">Upload QR Code</div>
@@ -325,7 +76,6 @@
                 <label>Cabin Number *</label>
                 <input type="text" id="cabinNumber" placeholder="6969" inputmode="numeric">
             </div>
-            
             <div class="form-group">
                 <label>Where are you from? <span class="optional-tag">(optional)</span></label>
                 <input type="text" id="location" placeholder="Los Angeles, CA">
@@ -333,7 +83,6 @@
             
             <div class="section-title">Phone Screen Size</div>
             <div class="form-group">
-                <label>Select Your Device</label>
                 <select id="phoneModel">
                     <option value="1290,2796">iPhone 16 Pro Max / 15 Pro Max</option>
                     <option value="1179,2556">iPhone 15 Pro / 14 Pro Max</option>
@@ -347,18 +96,16 @@
             
             <div class="section-title">Choose Your Theme</div>
             <div class="form-group">
-                <label>Party Theme *</label>
                 <select id="themeSelect">
                     <option value="">— Select a theme —</option>
-                    <option value="lostcity">🔱 Lost City — Underwater Atlantis Fantasy</option>
-                    <option value="wild">🦁 Wild! — Primal Jungle Energy</option>
-                    <option value="neon">🎮 Neon Playground — Fast, Flashy & Silly</option>
-                    <option value="whiteheat">🔥 White Heat — Signature Party Elegance</option>
-                    <option value="dogtag">🪖 Dog Tag T-Dance — Military Tribute</option>
-                    <option value="disco">🕺 Revival! Disco — 70s Glory Days</option>
-                    <option value="pink">💕 Twisted Pink — Barbie Butch to Fluffy Fantastic</option>
+                    <option value="lostcity">🔱 Lost City — Underwater Atlantis</option>
+                    <option value="wild">🦁 Wild! — Jungle Energy</option>
+                    <option value="neon">🎮 Neon Playground — Flashy & Fun</option>
+                    <option value="whiteheat">🔥 White Heat — Elegant White</option>
+                    <option value="dogtag">🪖 Dog Tag — Military Tribute</option>
+                    <option value="disco">🕺 Revival! Disco — 70s Vibes</option>
+                    <option value="pink">💕 Twisted Pink — Barbie Dreams</option>
                 </select>
-                
                 <div class="theme-preview-box" id="themePreview">
                     <div class="theme-preview-header">
                         <div class="theme-preview-icon" id="themeIcon">🔱</div>
@@ -375,64 +122,51 @@
             <div class="section-title">Your Custom Lock Screen</div>
             <canvas id="wallpaperCanvas"></canvas>
             <button class="download-btn" id="downloadBtn">📲 Download Wallpaper</button>
-            <div class="tip-box">
-                💡 <strong>Tip:</strong> After downloading, go to Settings → Wallpaper → Add New Wallpaper and select this image from your photos.
-            </div>
+            <div class="tip-box">💡 <strong>Tip:</strong> After downloading, go to Settings → Wallpaper and select this image.</div>
         </div>
     </div>
 
     <script>
-        let qrImage = null;
-        let profileImage = null;
-        let selectedTheme = null;
-        let cabinNumber = '';
-        let userLocation = '';
+        let qrImage = null, profileImage = null, selectedTheme = null, cabinNumber = '', userLocation = '';
         
         const themeData = {
-            lostcity: { icon: '🔱', title: 'Lost City', desc: 'Dive into our immersive underwater fantasy where glowing ruins shimmer, salty sailors and sexy sea gods rule the dance floor.', gradient: 'linear-gradient(135deg, #001f3f, #0066cc)' },
-            wild: { icon: '🦁', title: 'Wild!', desc: 'Answer the call of our dance floor jungle! Unleash your untamed side with dense rainforests, primal rhythms, and raw animal energy.', gradient: 'linear-gradient(135deg, #0a4d3c, #2d5016)' },
-            neon: { icon: '🎮', title: 'Neon Playground', desc: 'Fast, flashy, bright, and silly! A dazzling musical playground. Don\'t take yourselves too seriously!', gradient: 'linear-gradient(135deg, #ff00ff, #00ffff)' },
-            whiteheat: { icon: '🔥', title: 'White Heat', desc: 'Our signature party is hotter than ever. Be as creative as your dreams, as sexy as your desires.', gradient: 'linear-gradient(135deg, #fff, #e8e8e8)' },
-            dogtag: { icon: '🪖', title: 'Dog Tag T-Dance', desc: 'The troops come home! Show your creative strength inspired by the joys of men in (small) uniforms.', gradient: 'linear-gradient(135deg, #4a5568, #2d3748)' },
-            disco: { icon: '🕺', title: 'Revival! Disco', desc: 'Disco lives on! Back to the glory days of the 70s with pure musical magic on the dance floor.', gradient: 'linear-gradient(135deg, #ffd700, #ff6b6b)' },
-            pink: { icon: '💕', title: 'Twisted Pink', desc: 'Everyone looks good in Pink! From Barbie butch to fluffy fantastic, get dolled up for frivolous fun.', gradient: 'linear-gradient(135deg, #ff69b4, #ffc0cb)' }
+            lostcity: { icon: '🔱', title: 'Lost City', desc: 'Dive deep into underwater Atlantis. Mermaids, mermen, and everyone in between.', gradient: 'linear-gradient(135deg, #001f3f, #0066cc)' },
+            wild: { icon: '🦁', title: 'Wild!', desc: 'Unleash your inner animal. May cause spontaneous roaring.', gradient: 'linear-gradient(135deg, #0a4d3c, #2d5016)' },
+            neon: { icon: '🎮', title: 'Neon Playground', desc: 'Bright, flashy, unapologetically extra. Like your ex, but fun.', gradient: 'linear-gradient(135deg, #ff00ff, #00ffff)' },
+            whiteheat: { icon: '🔥', title: 'White Heat', desc: 'All white everything. Looking like a bleach commercial is a serve.', gradient: 'linear-gradient(135deg, #fff, #e8e8e8)' },
+            dogtag: { icon: '🪖', title: 'Dog Tag', desc: 'Small uniforms, big energy. Don\'t ask, just dance.', gradient: 'linear-gradient(135deg, #4a5568, #2d3748)' },
+            disco: { icon: '🕺', title: 'Revival! Disco', desc: 'Bell bottoms and chest hair. Studio 54 wishes.', gradient: 'linear-gradient(135deg, #ffd700, #ff6b6b)' },
+            pink: { icon: '💕', title: 'Twisted Pink', desc: 'Barbie meets bear. Ken is shook.', gradient: 'linear-gradient(135deg, #ff69b4, #ffc0cb)' }
         };
+        
+        const funnyQuotes = [
+            "I'm not gay but my boyfriend is 💅", "Slay the day away ✨", "Sorry can't hear you over my outfit 👗",
+            "Too glam to give a damn 💄", "My ship has come in... literally 🚢", "Professional homosexual 💼",
+            "Cher is my spirit animal 🦄", "Body-ody-ody-ody 🍑", "Main character energy only ⭐",
+            "Not a phase, Mom 🌈", "Beyoncé said I look good 🐝", "The category is: REALNESS 💃",
+            "Probably thinking about brunch 🥂", "My other ride is a disco ball 🪩", "Fluent in Drag Race 👠",
+            "Warning: May burst into song 🎤", "Handle with care: contains glitter 💖", "Yes I'm this extra IRL ✨",
+            "If lost, return to dance floor 🪩", "Charisma, Uniqueness, Nerve & Tan 👑", "Making choices since birth 🤭",
+            "Here for a good time 🎉", "Powered by iced coffee & anxiety ☕", "Born this way 🌈"
+        ];
         
         window.addEventListener('load', function() {
             const qrData = sessionStorage.getItem('qrData');
             const savedCabin = sessionStorage.getItem('cabinNumber');
-            
             if (qrData) {
                 const img = new Image();
-                img.onload = function() {
-                    qrImage = img;
-                    document.getElementById('qrStatus').textContent = '✓ QR code imported from generator';
-                    document.getElementById('qrStatus').classList.add('success');
-                    checkReady();
-                };
+                img.onload = function() { qrImage = img; document.getElementById('qrStatus').textContent = '✓ QR imported'; document.getElementById('qrStatus').classList.add('success'); checkReady(); };
                 img.src = qrData;
             }
-            
-            if (savedCabin) {
-                document.getElementById('cabinNumber').value = savedCabin;
-                cabinNumber = savedCabin;
-                checkReady();
-            }
+            if (savedCabin) { document.getElementById('cabinNumber').value = savedCabin; cabinNumber = savedCabin; checkReady(); }
         });
         
-        document.getElementById('location').addEventListener('input', function() {
-            userLocation = this.value.trim();
-        });
-        
-        document.getElementById('cabinNumber').addEventListener('input', function() {
-            cabinNumber = this.value.trim();
-            checkReady();
-        });
+        document.getElementById('cabinNumber').addEventListener('input', function() { cabinNumber = this.value.trim(); checkReady(); });
+        document.getElementById('location').addEventListener('input', function() { userLocation = this.value.trim(); });
         
         document.getElementById('themeSelect').addEventListener('change', function() {
             selectedTheme = this.value;
             const previewBox = document.getElementById('themePreview');
-            
             if (selectedTheme && themeData[selectedTheme]) {
                 const data = themeData[selectedTheme];
                 document.getElementById('themeIcon').textContent = data.icon;
@@ -440,9 +174,7 @@
                 document.getElementById('themeTitle').textContent = data.title;
                 document.getElementById('themeDesc').textContent = data.desc;
                 previewBox.classList.add('show');
-            } else {
-                previewBox.classList.remove('show');
-            }
+            } else { previewBox.classList.remove('show'); }
             checkReady();
         });
         
@@ -452,12 +184,7 @@
                 const reader = new FileReader();
                 reader.onload = function(event) {
                     const img = new Image();
-                    img.onload = function() {
-                        qrImage = img;
-                        document.getElementById('qrStatus').textContent = '✓ QR code uploaded';
-                        document.getElementById('qrStatus').classList.add('success');
-                        checkReady();
-                    };
+                    img.onload = function() { qrImage = img; document.getElementById('qrStatus').textContent = '✓ Uploaded'; document.getElementById('qrStatus').classList.add('success'); checkReady(); };
                     img.src = event.target.result;
                 };
                 reader.readAsDataURL(file);
@@ -470,342 +197,318 @@
                 const reader = new FileReader();
                 reader.onload = function(event) {
                     const img = new Image();
-                    img.onload = function() {
-                        profileImage = img;
-                        document.getElementById('photoStatus').textContent = '✓ Photo uploaded';
-                        document.getElementById('photoStatus').classList.add('success');
-                    };
+                    img.onload = function() { profileImage = img; document.getElementById('photoStatus').textContent = '✓ Uploaded'; document.getElementById('photoStatus').classList.add('success'); };
                     img.src = event.target.result;
                 };
                 reader.readAsDataURL(file);
             }
         });
         
-        function checkReady() {
-            document.getElementById('generateBtn').disabled = !(qrImage && selectedTheme && cabinNumber);
-        }
+        function checkReady() { document.getElementById('generateBtn').disabled = !(qrImage && selectedTheme && cabinNumber); }
         
         document.getElementById('generateBtn').addEventListener('click', generateWallpaper);
         
         function generateWallpaper() {
-            const phoneSize = document.getElementById('phoneModel').value.split(',');
-            const width = parseInt(phoneSize[0]);
-            const height = parseInt(phoneSize[1]);
-            
+            const [width, height] = document.getElementById('phoneModel').value.split(',').map(Number);
             const canvas = document.getElementById('wallpaperCanvas');
             const ctx = canvas.getContext('2d');
-            canvas.width = width;
-            canvas.height = height;
+            canvas.width = width; canvas.height = height;
+            const scale = width / 1170;
             
-            const scale = Math.min(width, height) / 1170;
+            drawTheme(ctx, width, height, scale, selectedTheme);
             
-            // Draw theme
-            const themeFunctions = { lostcity: drawLostCity, wild: drawWild, neon: drawNeon, whiteheat: drawWhiteHeat, dogtag: drawDogTag, disco: drawDisco, pink: drawPink };
-            themeFunctions[selectedTheme](ctx, width, height, scale);
+            const hasPhoto = profileImage !== null;
+            const hasLocation = userLocation.length > 0;
             
-            let currentY = height * 0.12;
+            // LAYOUT: Spread elements across full height
+            // Title: 5-10%, Photo: 12-35%, Cabin: 36-45%, QR: 46-78%, Location: 80-85%, Quote: 87-95%
             
-            // Profile photo
-            if (profileImage) {
-                const photoSize = Math.min(width * 0.42, 480 * scale);
+            ctx.textAlign = 'center';
+            ctx.shadowColor = 'rgba(0,0,0,0.6)';
+            
+            // 1. ATLANTIS 2026 - Large at top (5-10%)
+            ctx.fillStyle = 'white';
+            ctx.font = `800 ${Math.round(80 * scale)}px 'Outfit', sans-serif`;
+            ctx.shadowBlur = 25 * scale;
+            ctx.fillText('ATLANTIS 2026', width / 2, height * 0.08);
+            
+            // 2. Profile Photo - Large featured (12-35%)
+            if (hasPhoto) {
+                const photoSize = width * 0.42;
                 const photoX = (width - photoSize) / 2;
+                const photoY = height * 0.12;
+                
+                ctx.beginPath();
+                ctx.arc(photoX + photoSize/2, photoY + photoSize/2, photoSize/2 + 10 * scale, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255,255,255,0.95)';
+                ctx.shadowBlur = 35 * scale;
+                ctx.shadowOffsetY = 12 * scale;
+                ctx.fill();
+                ctx.shadowOffsetY = 0;
                 
                 ctx.save();
                 ctx.beginPath();
-                ctx.arc(photoX + photoSize/2, currentY + photoSize/2, photoSize/2 + 8 * scale, 0, Math.PI * 2);
-                ctx.fillStyle = 'rgba(255,255,255,0.95)';
-                ctx.shadowColor = 'rgba(0,0,0,0.4)';
-                ctx.shadowBlur = 40 * scale;
-                ctx.shadowOffsetY = 12 * scale;
-                ctx.fill();
-                ctx.shadowBlur = 0;
-                ctx.shadowOffsetY = 0;
-                
-                ctx.beginPath();
-                ctx.arc(photoX + photoSize/2, currentY + photoSize/2, photoSize/2, 0, Math.PI * 2);
+                ctx.arc(photoX + photoSize/2, photoY + photoSize/2, photoSize/2, 0, Math.PI * 2);
                 ctx.clip();
-                ctx.drawImage(profileImage, photoX, currentY, photoSize, photoSize);
+                ctx.drawImage(profileImage, photoX, photoY, photoSize, photoSize);
                 ctx.restore();
-                
-                currentY += photoSize + 35 * scale;
             }
             
-            // Cabin badge
-            ctx.font = `700 ${Math.round(36 * scale)}px 'Outfit', sans-serif`;
+            // 3. Cabin Number - Medium (36-45%)
+            const cabinY = hasPhoto ? height * 0.39 : height * 0.18;
             ctx.fillStyle = 'rgba(255,255,255,0.85)';
-            ctx.textAlign = 'center';
-            ctx.shadowColor = 'rgba(0,0,0,0.4)';
-            ctx.shadowBlur = 10 * scale;
-            ctx.fillText('CABIN', width/2, currentY);
+            ctx.font = `700 ${Math.round(38 * scale)}px 'Outfit', sans-serif`;
+            ctx.shadowBlur = 12 * scale;
+            ctx.fillText('CABIN', width / 2, cabinY);
             
-            ctx.font = `800 ${Math.round(130 * scale)}px 'Outfit', sans-serif`;
             ctx.fillStyle = 'white';
+            ctx.font = `800 ${Math.round(110 * scale)}px 'Outfit', sans-serif`;
             ctx.shadowBlur = 20 * scale;
-            ctx.shadowOffsetY = 6 * scale;
-            ctx.fillText(cabinNumber, width/2, currentY + 110 * scale);
-            ctx.shadowBlur = 0;
-            ctx.shadowOffsetY = 0;
+            ctx.fillText(cabinNumber, width / 2, cabinY + 95 * scale);
             
-            // QR Code
-            const qrY = profileImage ? currentY + 140 * scale : height * 0.32;
-            const qrSize = Math.min(width * 0.52, 580 * scale);
+            // 4. QR Code - Large featured (46-78%)
+            const qrSize = width * 0.58;
             const qrX = (width - qrSize) / 2;
-            const padding = 28 * scale;
+            const qrY = hasPhoto ? height * 0.48 : height * 0.30;
+            const qrPad = 28 * scale;
             
             ctx.fillStyle = 'rgba(255,255,255,0.97)';
-            ctx.shadowColor = 'rgba(0,0,0,0.35)';
-            ctx.shadowBlur = 40 * scale;
+            ctx.shadowBlur = 35 * scale;
             ctx.shadowOffsetY = 12 * scale;
-            roundRect(ctx, qrX - padding, qrY - padding, qrSize + padding * 2, qrSize + padding * 2, 28 * scale);
+            roundRect(ctx, qrX - qrPad, qrY - qrPad, qrSize + qrPad * 2, qrSize + qrPad * 2, 28 * scale);
             ctx.fill();
             ctx.shadowBlur = 0;
             ctx.shadowOffsetY = 0;
             
             ctx.drawImage(qrImage, qrX, qrY, qrSize, qrSize);
             
-            // Location
-            if (userLocation) {
+            // 5. Location - Medium (80-85%)
+            ctx.shadowBlur = 12 * scale;
+            if (hasLocation) {
+                ctx.fillStyle = 'rgba(255,255,255,0.9)';
                 ctx.font = `600 ${Math.round(42 * scale)}px 'Outfit', sans-serif`;
-                ctx.fillStyle = 'rgba(255,255,255,0.95)';
-                ctx.shadowColor = 'rgba(0,0,0,0.4)';
-                ctx.shadowBlur = 10 * scale;
-                ctx.fillText('📍 ' + userLocation, width/2, height * 0.87);
-                ctx.shadowBlur = 0;
+                ctx.fillText('📍 ' + userLocation, width / 2, height * 0.83);
             }
             
-            // Atlantis text
-            ctx.fillStyle = 'white';
-            ctx.font = `800 ${Math.round(64 * scale)}px 'Outfit', sans-serif`;
-            ctx.shadowColor = 'rgba(0,0,0,0.5)';
-            ctx.shadowBlur = 15 * scale;
-            ctx.fillText('ATLANTIS 2026', width/2, height * 0.95);
+            // 6. Funny Quote - Medium (87-95%)
+            const quote = funnyQuotes[Math.floor(Math.random() * funnyQuotes.length)];
+            ctx.fillStyle = 'rgba(255,255,255,0.85)';
+            ctx.font = `500 ${Math.round(34 * scale)}px 'Outfit', sans-serif`;
             
+            const maxW = width - 100 * scale;
+            const words = quote.split(' ');
+            let line = '', lines = [];
+            for (let word of words) {
+                const test = line + word + ' ';
+                if (ctx.measureText(test).width > maxW && line) { lines.push(line.trim()); line = word + ' '; }
+                else { line = test; }
+            }
+            lines.push(line.trim());
+            
+            const quoteY = hasLocation ? height * 0.90 : height * 0.85;
+            lines.forEach((l, i) => ctx.fillText(l, width / 2, quoteY + i * 42 * scale));
+            
+            ctx.shadowBlur = 0;
             document.getElementById('preview').classList.add('show');
             document.getElementById('preview').scrollIntoView({ behavior: 'smooth' });
         }
         
         function roundRect(ctx, x, y, w, h, r) {
             ctx.beginPath();
-            ctx.moveTo(x + r, y);
-            ctx.lineTo(x + w - r, y);
-            ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-            ctx.lineTo(x + w, y + h - r);
-            ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-            ctx.lineTo(x + r, y + h);
-            ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-            ctx.lineTo(x, y + r);
-            ctx.quadraticCurveTo(x, y, x + r, y);
+            ctx.moveTo(x + r, y); ctx.lineTo(x + w - r, y); ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+            ctx.lineTo(x + w, y + h - r); ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+            ctx.lineTo(x + r, y + h); ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+            ctx.lineTo(x, y + r); ctx.quadraticCurveTo(x, y, x + r, y);
             ctx.closePath();
         }
         
+        function drawTheme(ctx, w, h, s, theme) {
+            const themes = { lostcity: drawLostCity, wild: drawWild, neon: drawNeon, whiteheat: drawWhiteHeat, dogtag: drawDogTag, disco: drawDisco, pink: drawPink };
+            themes[theme](ctx, w, h, s);
+        }
+        
+        // LOST CITY - Deep ocean with bioluminescence
         function drawLostCity(ctx, w, h, s) {
             const grad = ctx.createLinearGradient(0, 0, 0, h);
-            grad.addColorStop(0, '#000814');
-            grad.addColorStop(0.3, '#001d3d');
-            grad.addColorStop(0.6, '#003566');
-            grad.addColorStop(1, '#0077b6');
-            ctx.fillStyle = grad;
-            ctx.fillRect(0, 0, w, h);
+            grad.addColorStop(0, '#000a14'); grad.addColorStop(0.4, '#001a33'); grad.addColorStop(0.7, '#003366'); grad.addColorStop(1, '#0066aa');
+            ctx.fillStyle = grad; ctx.fillRect(0, 0, w, h);
             
+            // Light rays from surface
+            ctx.globalAlpha = 0.1;
             for (let i = 0; i < 6; i++) {
-                const x = (w / 7) * (i + 1);
-                const pillGrad = ctx.createLinearGradient(x, h * 0.6, x, h);
-                pillGrad.addColorStop(0, 'rgba(0, 200, 255, 0.35)');
-                pillGrad.addColorStop(1, 'rgba(0, 100, 150, 0.1)');
-                ctx.fillStyle = pillGrad;
-                ctx.fillRect(x - w * 0.04, h * 0.6, w * 0.08, h * 0.4);
+                const x = w * (0.15 + i * 0.14);
+                ctx.beginPath(); ctx.moveTo(x - 40*s, 0); ctx.lineTo(x + 40*s, 0); ctx.lineTo(x + 150*s, h); ctx.lineTo(x - 150*s, h);
+                ctx.fillStyle = '#00ffff'; ctx.fill();
+            }
+            ctx.globalAlpha = 1;
+            
+            // Bioluminescent particles
+            for (let i = 0; i < 40; i++) {
+                const x = Math.random() * w, y = Math.random() * h, r = (3 + Math.random() * 5) * s;
+                const glow = ctx.createRadialGradient(x, y, 0, x, y, r * 4);
+                glow.addColorStop(0, 'rgba(0, 255, 220, 0.7)'); glow.addColorStop(1, 'rgba(0, 255, 220, 0)');
+                ctx.fillStyle = glow; ctx.beginPath(); ctx.arc(x, y, r * 4, 0, Math.PI * 2); ctx.fill();
             }
             
-            for (let i = 0; i < 50 * s; i++) {
-                const x = Math.random() * w, y = Math.random() * h, r = (Math.random() * 4 + 2) * s;
-                const glow = ctx.createRadialGradient(x, y, 0, x, y, r * 3);
-                glow.addColorStop(0, 'rgba(0, 255, 255, 0.85)');
-                glow.addColorStop(1, 'rgba(0, 255, 255, 0)');
-                ctx.fillStyle = glow;
-                ctx.beginPath();
-                ctx.arc(x, y, r * 3, 0, Math.PI * 2);
-                ctx.fill();
-            }
+            // Trident watermark
+            ctx.font = `${Math.round(350 * s)}px sans-serif`; ctx.fillStyle = 'rgba(0, 200, 255, 0.06)'; ctx.textAlign = 'center';
+            ctx.fillText('🔱', w / 2, h * 0.65);
         }
         
+        // WILD - Dense jungle with fireflies
         function drawWild(ctx, w, h, s) {
             const grad = ctx.createLinearGradient(0, 0, 0, h);
-            grad.addColorStop(0, '#0d1f0d');
-            grad.addColorStop(0.4, '#1a3a1a');
-            grad.addColorStop(0.7, '#2d5016');
-            grad.addColorStop(1, '#3d6b1a');
-            ctx.fillStyle = grad;
-            ctx.fillRect(0, 0, w, h);
+            grad.addColorStop(0, '#021a02'); grad.addColorStop(0.3, '#083308'); grad.addColorStop(0.6, '#0f4d0f'); grad.addColorStop(1, '#1a661a');
+            ctx.fillStyle = grad; ctx.fillRect(0, 0, w, h);
             
-            [[0.1, 0.08, 0.35], [0.85, 0.12, 0.4], [0.25, 0.65, 0.3], [0.75, 0.72, 0.35]].forEach(([px, py, ps]) => {
-                ctx.fillStyle = 'rgba(20, 80, 30, 0.5)';
-                ctx.beginPath();
-                ctx.ellipse(w * px, h * py, w * ps, w * ps * 0.6, 0, 0, Math.PI * 2);
-                ctx.fill();
-            });
+            // Jungle silhouettes
+            ctx.fillStyle = 'rgba(0, 15, 0, 0.5)';
+            ctx.beginPath(); ctx.ellipse(0, 0, w * 0.5, h * 0.25, 0.4, 0, Math.PI * 2); ctx.fill();
+            ctx.beginPath(); ctx.ellipse(w, 0, w * 0.45, h * 0.3, -0.4, 0, Math.PI * 2); ctx.fill();
+            ctx.beginPath(); ctx.ellipse(0, h, w * 0.4, h * 0.2, -0.3, 0, Math.PI * 2); ctx.fill();
+            ctx.beginPath(); ctx.ellipse(w, h, w * 0.35, h * 0.22, 0.3, 0, Math.PI * 2); ctx.fill();
             
-            for (let i = 0; i < 30 * s; i++) {
-                const x = Math.random() * w, y = Math.random() * h, r = (Math.random() * 3 + 2) * s;
-                const fire = ctx.createRadialGradient(x, y, 0, x, y, r * 5);
-                fire.addColorStop(0, 'rgba(255, 200, 100, 0.95)');
-                fire.addColorStop(1, 'rgba(255, 100, 0, 0)');
-                ctx.fillStyle = fire;
-                ctx.beginPath();
-                ctx.arc(x, y, r * 5, 0, Math.PI * 2);
-                ctx.fill();
+            // Fireflies
+            for (let i = 0; i < 35; i++) {
+                const x = Math.random() * w, y = Math.random() * h, r = (2 + Math.random() * 4) * s;
+                const glow = ctx.createRadialGradient(x, y, 0, x, y, r * 6);
+                glow.addColorStop(0, 'rgba(255, 240, 100, 0.9)'); glow.addColorStop(0.4, 'rgba(255, 200, 50, 0.4)'); glow.addColorStop(1, 'rgba(255, 150, 0, 0)');
+                ctx.fillStyle = glow; ctx.beginPath(); ctx.arc(x, y, r * 6, 0, Math.PI * 2); ctx.fill();
             }
+            
+            ctx.font = `${Math.round(320 * s)}px sans-serif`; ctx.fillStyle = 'rgba(255, 255, 255, 0.05)'; ctx.textAlign = 'center';
+            ctx.fillText('🐾', w / 2, h * 0.68);
         }
         
+        // NEON - Vibrant arcade
         function drawNeon(ctx, w, h, s) {
-            const grad = ctx.createLinearGradient(0, 0, w, h);
-            grad.addColorStop(0, '#ff00ff');
-            grad.addColorStop(0.33, '#00ffff');
-            grad.addColorStop(0.66, '#ffff00');
-            grad.addColorStop(1, '#ff00ff');
-            ctx.fillStyle = grad;
-            ctx.fillRect(0, 0, w, h);
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
-            ctx.fillRect(0, 0, w, h);
+            ctx.fillStyle = '#080010'; ctx.fillRect(0, 0, w, h);
             
-            [[0.15, 0.15, 100, 'rgba(255, 0, 255, 0.55)'], [0.75, 0.25, 120, 'rgba(0, 255, 255, 0.55)'], [0.5, 0.75, 110, 'rgba(255, 255, 0, 0.55)']].forEach(([px, py, ps, c]) => {
-                ctx.fillStyle = c;
-                ctx.beginPath();
-                ctx.arc(w * px, h * py, ps * s / 2, 0, Math.PI * 2);
-                ctx.fill();
+            // Neon gradient wash
+            const neon = ctx.createLinearGradient(0, 0, w, h);
+            neon.addColorStop(0, 'rgba(255, 0, 150, 0.35)'); neon.addColorStop(0.5, 'rgba(0, 200, 255, 0.25)'); neon.addColorStop(1, 'rgba(150, 0, 255, 0.35)');
+            ctx.fillStyle = neon; ctx.fillRect(0, 0, w, h);
+            
+            // Glow spots
+            [[0.2, 0.2, 0.4, 'rgba(255, 0, 200, 0.3)'], [0.8, 0.3, 0.35, 'rgba(0, 255, 255, 0.25)'], [0.5, 0.8, 0.45, 'rgba(200, 0, 255, 0.25)'], [0.1, 0.7, 0.3, 'rgba(0, 255, 150, 0.2)']].forEach(([gx, gy, gr, gc]) => {
+                const g = ctx.createRadialGradient(w*gx, h*gy, 0, w*gx, h*gy, w*gr);
+                g.addColorStop(0, gc); g.addColorStop(1, 'rgba(0,0,0,0)');
+                ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
             });
             
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
-            for (let i = 0; i < 60 * s; i++) {
-                const x = Math.random() * w, y = Math.random() * h, sz = (Math.random() * 5 + 3) * s;
-                ctx.save();
-                ctx.translate(x, y);
-                ctx.rotate(Math.random() * Math.PI);
-                ctx.fillRect(-sz / 2, -1.5, sz, 3);
-                ctx.fillRect(-1.5, -sz / 2, 3, sz);
-                ctx.restore();
-            }
+            // Grid
+            ctx.strokeStyle = 'rgba(255, 0, 255, 0.12)'; ctx.lineWidth = 1.5 * s;
+            for (let x = 0; x < w; x += 50*s) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
+            for (let y = 0; y < h; y += 50*s) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
+            
+            ctx.font = `${Math.round(300 * s)}px sans-serif`; ctx.fillStyle = 'rgba(255, 255, 255, 0.08)'; ctx.textAlign = 'center';
+            ctx.fillText('🕹️', w / 2, h * 0.66);
         }
         
+        // WHITE HEAT - Clean hot white
         function drawWhiteHeat(ctx, w, h, s) {
             const grad = ctx.createLinearGradient(0, 0, 0, h);
-            grad.addColorStop(0, '#ffffff');
-            grad.addColorStop(0.5, '#f8f8f8');
-            grad.addColorStop(1, '#f0f0f0');
-            ctx.fillStyle = grad;
-            ctx.fillRect(0, 0, w, h);
+            grad.addColorStop(0, '#ffffff'); grad.addColorStop(0.3, '#f8f4f0'); grad.addColorStop(0.7, '#f0e8e0'); grad.addColorStop(1, '#e8ddd0');
+            ctx.fillStyle = grad; ctx.fillRect(0, 0, w, h);
             
-            ctx.strokeStyle = 'rgba(255, 200, 150, 0.25)';
-            ctx.lineWidth = 5 * s;
+            // Heat glow
+            const heat = ctx.createRadialGradient(w*0.5, h*0.35, 0, w*0.5, h*0.35, w*0.8);
+            heat.addColorStop(0, 'rgba(255, 200, 150, 0.35)'); heat.addColorStop(0.5, 'rgba(255, 220, 180, 0.15)'); heat.addColorStop(1, 'rgba(255,255,255,0)');
+            ctx.fillStyle = heat; ctx.fillRect(0, 0, w, h);
+            
+            // Shimmer lines
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)'; ctx.lineWidth = 2.5 * s;
             for (let i = 0; i < 10; i++) {
                 ctx.beginPath();
-                for (let x = 0; x <= w; x += 15) {
-                    const y = h * (0.15 + i * 0.08) + Math.sin(x * 0.012 + i) * 40 * s;
+                for (let x = 0; x <= w; x += 20) {
+                    const y = h * (0.08 + i * 0.09) + Math.sin(x * 0.007 + i * 0.5) * 25 * s;
                     x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
                 }
                 ctx.stroke();
             }
             
-            const orb = ctx.createRadialGradient(w * 0.5, h * 0.35, 0, w * 0.5, h * 0.35, w * 0.45);
-            orb.addColorStop(0, 'rgba(255, 255, 255, 0.9)');
-            orb.addColorStop(0.5, 'rgba(255, 250, 240, 0.4)');
-            orb.addColorStop(1, 'rgba(255, 240, 220, 0)');
-            ctx.fillStyle = orb;
-            ctx.beginPath();
-            ctx.arc(w * 0.5, h * 0.35, w * 0.45, 0, Math.PI * 2);
-            ctx.fill();
+            ctx.font = `${Math.round(340 * s)}px sans-serif`; ctx.fillStyle = 'rgba(255, 100, 0, 0.07)'; ctx.textAlign = 'center';
+            ctx.fillText('🔥', w / 2, h * 0.67);
         }
         
+        // DOG TAG - Military camo
         function drawDogTag(ctx, w, h, s) {
-            const grad = ctx.createLinearGradient(0, 0, 0, h);
-            grad.addColorStop(0, '#2d3748');
-            grad.addColorStop(0.5, '#4a5568');
-            grad.addColorStop(1, '#718096');
-            ctx.fillStyle = grad;
-            ctx.fillRect(0, 0, w, h);
+            const grad = ctx.createLinearGradient(0, 0, w, h);
+            grad.addColorStop(0, '#2a352a'); grad.addColorStop(0.5, '#3a4a3a'); grad.addColorStop(1, '#4a5a4a');
+            ctx.fillStyle = grad; ctx.fillRect(0, 0, w, h);
             
-            const camo = ['rgba(60, 70, 50, 0.35)', 'rgba(80, 90, 70, 0.35)', 'rgba(100, 110, 90, 0.35)'];
-            for (let i = 0; i < 50 * s; i++) {
-                const x = Math.random() * w, y = Math.random() * h, sz = (Math.random() * 180 + 120) * s;
-                ctx.fillStyle = camo[Math.floor(Math.random() * 3)];
+            // Camo blobs
+            const camo = ['rgba(35, 45, 30, 0.5)', 'rgba(50, 65, 45, 0.45)', 'rgba(70, 85, 60, 0.35)', 'rgba(30, 40, 25, 0.5)'];
+            for (let i = 0; i < 25; i++) {
+                ctx.fillStyle = camo[Math.floor(Math.random() * camo.length)];
                 ctx.beginPath();
-                ctx.ellipse(x, y, sz, sz * 0.7, Math.random() * Math.PI, 0, Math.PI * 2);
+                ctx.ellipse(Math.random() * w, Math.random() * h, (100 + Math.random() * 180) * s, (60 + Math.random() * 120) * s, Math.random() * Math.PI, 0, Math.PI * 2);
                 ctx.fill();
             }
             
-            ctx.strokeStyle = 'rgba(200, 200, 200, 0.22)';
-            ctx.lineWidth = 4 * s;
-            for (let y = -50; y < h + 50; y += 25 * s) {
-                ctx.beginPath();
-                for (let x = 0; x <= w; x += 10) {
-                    const yOff = Math.sin(x * 0.05) * 18 * s;
-                    x === 0 ? ctx.moveTo(x, y + yOff) : ctx.lineTo(x, y + yOff);
-                }
-                ctx.stroke();
-            }
+            // Dog tag chain
+            ctx.strokeStyle = 'rgba(180, 180, 180, 0.2)'; ctx.lineWidth = 5 * s;
+            ctx.beginPath(); ctx.moveTo(w * 0.35, 0); ctx.quadraticCurveTo(w * 0.25, h * 0.12, w * 0.5, h * 0.18); ctx.stroke();
+            
+            ctx.font = `${Math.round(300 * s)}px sans-serif`; ctx.fillStyle = 'rgba(255, 255, 255, 0.06)'; ctx.textAlign = 'center';
+            ctx.fillText('🪖', w / 2, h * 0.66);
         }
         
+        // DISCO - Groovy 70s
         function drawDisco(ctx, w, h, s) {
             const grad = ctx.createLinearGradient(0, 0, 0, h);
-            grad.addColorStop(0, '#ffd700');
-            grad.addColorStop(0.4, '#ffb347');
-            grad.addColorStop(0.7, '#ff6b6b');
-            grad.addColorStop(1, '#c41e3a');
-            ctx.fillStyle = grad;
-            ctx.fillRect(0, 0, w, h);
+            grad.addColorStop(0, '#3d1a00'); grad.addColorStop(0.3, '#6b3300'); grad.addColorStop(0.6, '#994d00'); grad.addColorStop(1, '#7a3000');
+            ctx.fillStyle = grad; ctx.fillRect(0, 0, w, h);
             
-            for (let i = 0; i < 75 * s; i++) {
-                const x = Math.random() * w, y = Math.random() * h, sz = (Math.random() * 50 + 25) * s;
-                ctx.fillStyle = `rgba(255, 255, 255, ${Math.random() * 0.65})`;
-                ctx.save();
-                ctx.translate(x, y);
-                ctx.rotate(Math.random() * Math.PI);
-                ctx.fillRect(-sz / 2, -sz / 2, sz, sz);
-                ctx.restore();
+            // Disco ball rays
+            const cx = w * 0.5, cy = h * 0.2;
+            ctx.globalAlpha = 0.18;
+            for (let i = 0; i < 28; i++) {
+                const angle = (Math.PI * 2 / 28) * i;
+                const g = ctx.createLinearGradient(cx, cy, cx + Math.cos(angle) * w, cy + Math.sin(angle) * h);
+                g.addColorStop(0, 'rgba(255, 215, 0, 0.9)'); g.addColorStop(1, 'rgba(255, 100, 50, 0)');
+                ctx.fillStyle = g; ctx.beginPath();
+                ctx.moveTo(cx, cy); ctx.lineTo(cx + Math.cos(angle - 0.06) * w, cy + Math.sin(angle - 0.06) * h);
+                ctx.lineTo(cx + Math.cos(angle + 0.06) * w, cy + Math.sin(angle + 0.06) * h); ctx.fill();
+            }
+            ctx.globalAlpha = 1;
+            
+            // Sparkles
+            for (let i = 0; i < 50; i++) {
+                const x = Math.random() * w, y = Math.random() * h, sz = (4 + Math.random() * 8) * s;
+                ctx.fillStyle = `rgba(255, 215, 0, ${0.25 + Math.random() * 0.4})`;
+                ctx.fillRect(x - sz/2, y - sz/2, sz, sz);
             }
             
-            ctx.strokeStyle = 'rgba(255, 215, 0, 0.35)';
-            ctx.lineWidth = 10 * s;
-            for (let i = 0; i < 36; i++) {
-                const angle = (Math.PI * 2 / 36) * i;
-                ctx.beginPath();
-                ctx.moveTo(w / 2, h * 0.35);
-                ctx.lineTo(w / 2 + Math.cos(angle) * w, h * 0.35 + Math.sin(angle) * w);
-                ctx.stroke();
-            }
+            ctx.font = `${Math.round(320 * s)}px sans-serif`; ctx.fillStyle = 'rgba(255, 255, 255, 0.08)'; ctx.textAlign = 'center';
+            ctx.fillText('🪩', w / 2, h * 0.65);
         }
         
+        // PINK - Barbie dreams
         function drawPink(ctx, w, h, s) {
             const grad = ctx.createLinearGradient(0, 0, 0, h);
-            grad.addColorStop(0, '#ff69b4');
-            grad.addColorStop(0.5, '#ff85c1');
-            grad.addColorStop(1, '#ffc0cb');
-            ctx.fillStyle = grad;
-            ctx.fillRect(0, 0, w, h);
+            grad.addColorStop(0, '#ff0080'); grad.addColorStop(0.3, '#ff4da6'); grad.addColorStop(0.6, '#ff80bf'); grad.addColorStop(1, '#ffb3d9');
+            ctx.fillStyle = grad; ctx.fillRect(0, 0, w, h);
             
-            for (let i = 0; i < 35 * s; i++) {
-                const x = Math.random() * w, y = Math.random() * h, sz = (Math.random() * 70 + 35) * s;
-                ctx.fillStyle = `rgba(255, 192, 203, ${Math.random() * 0.45 + 0.2})`;
-                ctx.save();
-                ctx.translate(x, y);
-                ctx.scale(sz / 100, sz / 100);
-                ctx.beginPath();
-                ctx.moveTo(0, 20);
-                ctx.bezierCurveTo(-50, -20, -100, 20, 0, 100);
-                ctx.bezierCurveTo(100, 20, 50, -20, 0, 20);
-                ctx.fill();
-                ctx.restore();
+            // Glitter
+            for (let i = 0; i < 70; i++) {
+                const x = Math.random() * w, y = Math.random() * h, r = (2 + Math.random() * 5) * s;
+                const g = ctx.createRadialGradient(x, y, 0, x, y, r * 2.5);
+                g.addColorStop(0, 'rgba(255, 255, 255, 0.85)'); g.addColorStop(1, 'rgba(255, 255, 255, 0)');
+                ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, r * 2.5, 0, Math.PI * 2); ctx.fill();
             }
             
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
-            for (let i = 0; i < 120 * s; i++) {
-                const x = Math.random() * w, y = Math.random() * h, sz = (Math.random() * 6 + 3) * s;
-                ctx.save();
-                ctx.translate(x, y);
-                ctx.rotate(Math.random() * Math.PI);
-                ctx.fillRect(-sz / 2, -1, sz, 2);
-                ctx.fillRect(-1, -sz / 2, 2, sz);
-                ctx.restore();
+            // Hearts
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.12)';
+            for (let i = 0; i < 10; i++) {
+                const x = Math.random() * w, y = Math.random() * h, sz = (50 + Math.random() * 80) * s;
+                ctx.save(); ctx.translate(x, y); ctx.scale(sz / 100, sz / 100);
+                ctx.beginPath(); ctx.moveTo(0, -10); ctx.bezierCurveTo(-25, -35, -50, -10, 0, 30); ctx.bezierCurveTo(50, -10, 25, -35, 0, -10);
+                ctx.fill(); ctx.restore();
             }
+            
+            ctx.font = `${Math.round(340 * s)}px sans-serif`; ctx.fillStyle = 'rgba(255, 255, 255, 0.1)'; ctx.textAlign = 'center';
+            ctx.fillText('🦄', w / 2, h * 0.67);
         }
         
         document.getElementById('downloadBtn').addEventListener('click', function() {
