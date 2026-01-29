@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QR Lock Screen Remix</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚢</text></svg>">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -207,8 +206,9 @@
             
             <div class="section-title">Step 1: Upload Your QR Code</div>
             <div class="form-group">
-                <label for="qrUpload">QR Code Image *</label>
-                <input type="file" id="qrUpload" accept="image/*" required>
+                <label for="qrUpload">QR Code Image (optional if coming from generator)</label>
+                <input type="file" id="qrUpload" accept="image/*">
+                <div id="qrStatus" style="margin-top: 8px; font-size: 12px; color: #666;"></div>
             </div>
             
             <div class="section-title">Step 2: Upload Profile Photo (Optional)</div>
@@ -217,10 +217,15 @@
                 <input type="file" id="photoUpload" accept="image/*">
             </div>
             
-            <div class="section-title">Step 3: Enter Cabin Number *</div>
+            <div class="section-title">Step 3: Enter Your Details</div>
             <div class="form-group">
-                <label for="cabinNumber">Cabin Number</label>
+                <label for="cabinNumber">Cabin Number *</label>
                 <input type="text" id="cabinNumber" placeholder="6969" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="location">Where are you from? *</label>
+                <input type="text" id="location" placeholder="Los Angeles, CA" required>
             </div>
             
             <div class="section-title">Step 4: Select Your Phone</div>
@@ -255,6 +260,10 @@
                     <div class="theme-preview" style="background: linear-gradient(135deg, #06ffa5 0%, #00cc88 100%);">🌴</div>
                     <div class="theme-name">Tropical Paradise</div>
                 </div>
+                <div class="theme-card" data-theme="passport">
+                    <div class="theme-preview" style="background: linear-gradient(135deg, #1e3a8a 0%, #60a5fa 100%);">🛂</div>
+                    <div class="theme-name">Passport</div>
+                </div>
                 <div class="theme-card" data-theme="minimal">
                     <div class="theme-preview" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">⚡</div>
                     <div class="theme-name">Clean & Minimal</div>
@@ -276,8 +285,36 @@
         let profileImage = null;
         let selectedTheme = null;
         let cabinNumber = '';
+        let userLocation = '';
         
-        // Cabin number input
+        // Check for passed QR data from index.html
+        window.addEventListener('load', function() {
+            const qrData = sessionStorage.getItem('qrData');
+            const savedCabin = sessionStorage.getItem('cabinNumber');
+            
+            if (qrData) {
+                const img = new Image();
+                img.onload = function() {
+                    qrImage = img;
+                    document.getElementById('qrStatus').textContent = '✓ QR code imported from generator';
+                    document.getElementById('qrStatus').style.color = '#00cc88';
+                    checkReadyToGenerate();
+                };
+                img.src = qrData;
+            }
+            
+            if (savedCabin) {
+                document.getElementById('cabinNumber').value = savedCabin;
+                cabinNumber = savedCabin;
+                checkReadyToGenerate();
+            }
+        });
+        
+        // Location input
+        document.getElementById('location').addEventListener('input', function() {
+            userLocation = this.value.trim();
+            checkReadyToGenerate();
+        });
         document.getElementById('cabinNumber').addEventListener('input', function() {
             cabinNumber = this.value.trim();
             checkReadyToGenerate();
@@ -328,7 +365,7 @@
         
         function checkReadyToGenerate() {
             const btn = document.getElementById('generateBtn');
-            btn.disabled = !(qrImage && selectedTheme && cabinNumber);
+            btn.disabled = !(qrImage && selectedTheme && cabinNumber && userLocation);
         }
         
         // Generate Wallpaper
@@ -359,23 +396,31 @@
                 case 'tropical':
                     drawTropicalTheme(ctx, width, height);
                     break;
+                case 'passport':
+                    drawPassportTheme(ctx, width, height);
+                    break;
                 case 'minimal':
                     drawMinimalTheme(ctx, width, height);
                     break;
             }
             
-            // Add profile photo if provided
+            // Add profile photo if provided (increased size)
             if (profileImage) {
-                const photoSize = Math.min(width * 0.35, 400);
+                const photoSize = Math.min(width * 0.45, 500);
                 const photoX = (width - photoSize) / 2;
-                const photoY = height * 0.15;
+                const photoY = height * 0.12;
                 
                 // Draw circular photo with border
                 ctx.save();
                 ctx.beginPath();
-                ctx.arc(photoX + photoSize/2, photoY + photoSize/2, photoSize/2 + 8, 0, Math.PI * 2);
-                ctx.fillStyle = 'rgba(255,255,255,0.9)';
+                ctx.arc(photoX + photoSize/2, photoY + photoSize/2, photoSize/2 + 10, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255,255,255,0.95)';
+                ctx.shadowColor = 'rgba(0,0,0,0.3)';
+                ctx.shadowBlur = 30;
+                ctx.shadowOffsetY = 10;
                 ctx.fill();
+                ctx.shadowBlur = 0;
+                ctx.shadowOffsetY = 0;
                 
                 ctx.beginPath();
                 ctx.arc(photoX + photoSize/2, photoY + photoSize/2, photoSize/2, 0, Math.PI * 2);
@@ -383,57 +428,11 @@
                 ctx.drawImage(profileImage, photoX, photoY, photoSize, photoSize);
                 ctx.restore();
                 
-                // Add cabin number badge below photo
-                const badgeY = photoY + photoSize + 30;
-                const badgeText = `CABIN ${cabinNumber}`;
-                
-                ctx.font = `bold ${width * 0.05}px sans-serif`;
-                const textWidth = ctx.measureText(badgeText).width;
-                const badgePadding = 30;
-                const badgeWidth = textWidth + badgePadding * 2;
-                const badgeHeight = width * 0.08;
-                const badgeX = (width - badgeWidth) / 2;
-                
-                // Badge background
-                ctx.fillStyle = 'rgba(255, 0, 110, 0.95)';
-                ctx.shadowColor = 'rgba(0,0,0,0.3)';
-                ctx.shadowBlur = 20;
-                ctx.shadowOffsetY = 8;
-                roundRect(ctx, badgeX, badgeY, badgeWidth, badgeHeight, 20);
-                ctx.fill();
-                ctx.shadowBlur = 0;
-                ctx.shadowOffsetY = 0;
-                
-                // Badge text
-                ctx.fillStyle = 'white';
-                ctx.textAlign = 'center';
-                ctx.fillText(badgeText, width/2, badgeY + badgeHeight * 0.65);
+                // Add themed cabin badge below photo
+                drawCabinBadge(ctx, width, photoY + photoSize + 40, selectedTheme);
             } else {
                 // If no profile photo, show cabin prominently at top
-                const badgeY = height * 0.15;
-                const badgeText = `CABIN ${cabinNumber}`;
-                
-                ctx.font = `bold ${width * 0.08}px sans-serif`;
-                const textWidth = ctx.measureText(badgeText).width;
-                const badgePadding = 40;
-                const badgeWidth = textWidth + badgePadding * 2;
-                const badgeHeight = width * 0.12;
-                const badgeX = (width - badgeWidth) / 2;
-                
-                // Badge background
-                ctx.fillStyle = 'rgba(255, 0, 110, 0.95)';
-                ctx.shadowColor = 'rgba(0,0,0,0.3)';
-                ctx.shadowBlur = 20;
-                ctx.shadowOffsetY = 8;
-                roundRect(ctx, badgeX, badgeY, badgeWidth, badgeHeight, 20);
-                ctx.fill();
-                ctx.shadowBlur = 0;
-                ctx.shadowOffsetY = 0;
-                
-                // Badge text
-                ctx.fillStyle = 'white';
-                ctx.textAlign = 'center';
-                ctx.fillText(badgeText, width/2, badgeY + badgeHeight * 0.65);
+                drawCabinBadge(ctx, width, height * 0.15, selectedTheme);
             }
             
             // Add QR code
@@ -455,13 +454,23 @@
             // Draw QR
             ctx.drawImage(qrImage, qrX, qrY, qrSize, qrSize);
             
-            // Add text
+            // Add location badge at bottom
+            const locBadgeY = height * 0.88;
+            ctx.font = `600 ${width * 0.04}px sans-serif`;
+            ctx.fillStyle = 'rgba(255,255,255,0.9)';
+            ctx.textAlign = 'center';
+            ctx.shadowColor = 'rgba(0,0,0,0.3)';
+            ctx.shadowBlur = 8;
+            ctx.fillText(`📍 ${userLocation}`, width/2, locBadgeY);
+            ctx.shadowBlur = 0;
+            
+            // Add Atlantis text
             ctx.fillStyle = 'white';
             ctx.font = `bold ${width * 0.06}px sans-serif`;
             ctx.textAlign = 'center';
             ctx.shadowColor = 'rgba(0,0,0,0.5)';
             ctx.shadowBlur = 10;
-            ctx.fillText('Atlantis 2026', width/2, height * 0.92);
+            ctx.fillText('Atlantis 2026', width/2, height * 0.95);
             
             // Show preview
             document.getElementById('preview').classList.add('show');
@@ -482,20 +491,82 @@
             ctx.closePath();
         }
         
+        function drawCabinBadge(ctx, width, yPos, theme) {
+            const badgeText = cabinNumber;
+            const fontSize = width * 0.12;
+            ctx.font = `bold ${fontSize}px sans-serif`;
+            
+            // Theme-specific styling
+            let emoji = '🚢';
+            let bgColor = 'rgba(0, 212, 255, 0.95)';
+            
+            switch(theme) {
+                case 'ocean':
+                    emoji = '⚓';
+                    bgColor = 'rgba(0, 150, 255, 0.95)';
+                    break;
+                case 'sunset':
+                    emoji = '🌅';
+                    bgColor = 'rgba(255, 139, 83, 0.95)';
+                    break;
+                case 'neon':
+                    emoji = '💎';
+                    bgColor = 'rgba(247, 37, 133, 0.95)';
+                    break;
+                case 'tropical':
+                    emoji = '🏝️';
+                    bgColor = 'rgba(6, 255, 165, 0.95)';
+                    break;
+                case 'passport':
+                    emoji = '🛂';
+                    bgColor = 'rgba(30, 58, 138, 0.95)';
+                    break;
+                case 'minimal':
+                    emoji = '🎫';
+                    bgColor = 'rgba(102, 126, 234, 0.95)';
+                    break;
+            }
+            
+            // Draw large emoji background
+            ctx.font = `${width * 0.25}px sans-serif`;
+            ctx.fillStyle = 'rgba(255,255,255,0.1)';
+            ctx.textAlign = 'center';
+            ctx.fillText(emoji, width/2, yPos + width * 0.08);
+            
+            // Draw cabin number
+            ctx.font = `bold ${fontSize}px sans-serif`;
+            ctx.fillStyle = 'white';
+            ctx.shadowColor = 'rgba(0,0,0,0.5)';
+            ctx.shadowBlur = 15;
+            ctx.shadowOffsetY = 5;
+            ctx.fillText(badgeText, width/2, yPos + width * 0.08);
+            
+            // Draw "CABIN" label
+            ctx.font = `600 ${width * 0.04}px sans-serif`;
+            ctx.fillStyle = 'rgba(255,255,255,0.8)';
+            ctx.shadowBlur = 8;
+            ctx.fillText('CABIN', width/2, yPos - width * 0.02);
+            
+            ctx.shadowBlur = 0;
+            ctx.shadowOffsetY = 0;
+        }
+        
         function drawOceanTheme(ctx, width, height) {
+            // Deep ocean gradient
             const gradient = ctx.createLinearGradient(0, 0, 0, height);
-            gradient.addColorStop(0, '#00d4ff');
-            gradient.addColorStop(0.5, '#0099ff');
-            gradient.addColorStop(1, '#0066cc');
+            gradient.addColorStop(0, '#001f3f');
+            gradient.addColorStop(0.3, '#004080');
+            gradient.addColorStop(0.6, '#0066cc');
+            gradient.addColorStop(1, '#00d4ff');
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, width, height);
             
-            // Add wave patterns
-            ctx.fillStyle = 'rgba(255,255,255,0.1)';
-            for (let i = 0; i < 3; i++) {
+            // Animated wave layers
+            ctx.fillStyle = 'rgba(0, 212, 255, 0.15)';
+            for (let i = 0; i < 4; i++) {
                 ctx.beginPath();
                 for (let x = 0; x <= width; x += 10) {
-                    const y = height * (0.8 + i * 0.1) + Math.sin(x * 0.01 + i) * 50;
+                    const y = height * (0.7 + i * 0.08) + Math.sin(x * 0.008 + i * 1.5) * 60;
                     if (x === 0) ctx.moveTo(x, y);
                     else ctx.lineTo(x, y);
                 }
@@ -503,87 +574,262 @@
                 ctx.lineTo(0, height);
                 ctx.fill();
             }
+            
+            // Bubbles
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+            for (let i = 0; i < 20; i++) {
+                const x = Math.random() * width;
+                const y = Math.random() * height;
+                const radius = Math.random() * 30 + 10;
+                ctx.beginPath();
+                ctx.arc(x, y, radius, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            
+            // Light rays from top
+            const rayGradient = ctx.createLinearGradient(width/2, 0, width/2, height * 0.4);
+            rayGradient.addColorStop(0, 'rgba(255, 255, 255, 0.15)');
+            rayGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+            ctx.fillStyle = rayGradient;
+            ctx.fillRect(0, 0, width, height * 0.4);
         }
         
         function drawSunsetTheme(ctx, width, height) {
+            // Vibrant sunset gradient
             const gradient = ctx.createLinearGradient(0, 0, 0, height);
-            gradient.addColorStop(0, '#ff6b6b');
-            gradient.addColorStop(0.5, '#ff8e53');
-            gradient.addColorStop(1, '#ffd93d');
+            gradient.addColorStop(0, '#2d1b69');
+            gradient.addColorStop(0.3, '#ff6b6b');
+            gradient.addColorStop(0.6, '#ff8e53');
+            gradient.addColorStop(0.85, '#ffd93d');
+            gradient.addColorStop(1, '#ffeaa7');
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, width, height);
             
-            // Sun
-            const sunGradient = ctx.createRadialGradient(width/2, height * 0.3, 0, width/2, height * 0.3, width * 0.4);
-            sunGradient.addColorStop(0, 'rgba(255,255,255,0.3)');
-            sunGradient.addColorStop(1, 'rgba(255,255,255,0)');
+            // Large sun
+            const sunGradient = ctx.createRadialGradient(width/2, height * 0.35, 0, width/2, height * 0.35, width * 0.5);
+            sunGradient.addColorStop(0, 'rgba(255, 255, 255, 0.5)');
+            sunGradient.addColorStop(0.3, 'rgba(255, 220, 150, 0.3)');
+            sunGradient.addColorStop(0.6, 'rgba(255, 180, 100, 0.15)');
+            sunGradient.addColorStop(1, 'rgba(255, 150, 50, 0)');
             ctx.fillStyle = sunGradient;
-            ctx.fillRect(0, 0, width, height);
-        }
-        
-        function drawNeonTheme(ctx, width, height) {
-            const gradient = ctx.createLinearGradient(0, 0, 0, height);
-            gradient.addColorStop(0, '#f72585');
-            gradient.addColorStop(0.5, '#b5179e');
-            gradient.addColorStop(1, '#7209b7');
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, width, height);
+            ctx.beginPath();
+            ctx.arc(width/2, height * 0.35, width * 0.5, 0, Math.PI * 2);
+            ctx.fill();
             
-            // Grid lines
-            ctx.strokeStyle = 'rgba(255,255,255,0.1)';
-            ctx.lineWidth = 2;
-            for (let i = 0; i < width; i += width / 10) {
+            // Cloud silhouettes
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
+            for (let i = 0; i < 3; i++) {
+                const y = height * (0.15 + i * 0.12);
                 ctx.beginPath();
-                ctx.moveTo(i, 0);
-                ctx.lineTo(i, height);
-                ctx.stroke();
-            }
-            for (let i = 0; i < height; i += height / 20) {
+                ctx.ellipse(width * 0.2, y, width * 0.15, width * 0.05, 0, 0, Math.PI * 2);
+                ctx.fill();
                 ctx.beginPath();
-                ctx.moveTo(0, i);
-                ctx.lineTo(width, i);
-                ctx.stroke();
+                ctx.ellipse(width * 0.8, y + 20, width * 0.2, width * 0.06, 0, 0, Math.PI * 2);
+                ctx.fill();
             }
-        }
-        
-        function drawTropicalTheme(ctx, width, height) {
-            const gradient = ctx.createLinearGradient(0, 0, 0, height);
-            gradient.addColorStop(0, '#06ffa5');
-            gradient.addColorStop(0.5, '#00cc88');
-            gradient.addColorStop(1, '#009966');
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, width, height);
             
-            // Palm leaves
-            ctx.fillStyle = 'rgba(0,0,0,0.1)';
+            // Palm tree silhouettes at bottom
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+            const palmX = width * 0.15;
+            const palmY = height * 0.8;
+            ctx.fillRect(palmX - 5, palmY, 10, height * 0.2);
             for (let i = 0; i < 5; i++) {
                 ctx.save();
-                ctx.translate(width * (0.2 + i * 0.15), height * 0.1);
-                ctx.rotate((i - 2) * 0.3);
+                ctx.translate(palmX, palmY);
+                ctx.rotate((i - 2) * 0.4);
                 ctx.beginPath();
-                ctx.ellipse(0, 0, width * 0.15, width * 0.05, 0, 0, Math.PI * 2);
+                ctx.ellipse(0, -50, 60, 20, 0, 0, Math.PI * 2);
                 ctx.fill();
                 ctx.restore();
             }
         }
         
-        function drawMinimalTheme(ctx, width, height) {
+        function drawNeonTheme(ctx, width, height) {
+            // Dark neon background
             const gradient = ctx.createLinearGradient(0, 0, 0, height);
-            gradient.addColorStop(0, '#f8f9fa');
+            gradient.addColorStop(0, '#0a0014');
+            gradient.addColorStop(0.5, '#1a0033');
+            gradient.addColorStop(1, '#2d004d');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, width, height);
+            
+            // Neon grid perspective
+            ctx.strokeStyle = 'rgba(247, 37, 133, 0.3)';
+            ctx.lineWidth = 2;
+            
+            // Vertical lines with perspective
+            for (let i = 0; i < 12; i++) {
+                const xTop = width * (i / 12);
+                const xBottom = width * ((i - 1) / 14 + 0.07);
+                ctx.beginPath();
+                ctx.moveTo(xTop, height * 0.5);
+                ctx.lineTo(xBottom, height);
+                ctx.stroke();
+            }
+            
+            // Horizontal lines
+            for (let i = 0; i < 20; i++) {
+                const y = height * (0.5 + (i / 40));
+                const scale = (i / 20);
+                ctx.beginPath();
+                ctx.moveTo(width * (0.07 - scale * 0.07), y);
+                ctx.lineTo(width * (0.93 + scale * 0.07), y);
+                ctx.stroke();
+            }
+            
+            // Glowing orbs
+            const colors = ['rgba(247, 37, 133, 0.6)', 'rgba(181, 23, 158, 0.6)', 'rgba(114, 9, 183, 0.6)'];
+            for (let i = 0; i < 15; i++) {
+                const x = Math.random() * width;
+                const y = Math.random() * height * 0.5;
+                const radius = Math.random() * 40 + 20;
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                
+                const orbGradient = ctx.createRadialGradient(x, y, 0, x, y, radius);
+                orbGradient.addColorStop(0, color);
+                orbGradient.addColorStop(1, 'rgba(247, 37, 133, 0)');
+                ctx.fillStyle = orbGradient;
+                ctx.beginPath();
+                ctx.arc(x, y, radius, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+        
+        function drawTropicalTheme(ctx, width, height) {
+            // Lush tropical gradient
+            const gradient = ctx.createLinearGradient(0, 0, 0, height);
+            gradient.addColorStop(0, '#0a4d3c');
+            gradient.addColorStop(0.3, '#06ffa5');
+            gradient.addColorStop(0.6, '#00cc88');
+            gradient.addColorStop(1, '#00a86b');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, width, height);
+            
+            // Tropical leaves pattern
+            ctx.fillStyle = 'rgba(0, 50, 30, 0.3)';
+            for (let i = 0; i < 8; i++) {
+                const x = (i % 4) * (width / 4) + width / 8;
+                const y = Math.floor(i / 4) * height * 0.3 + height * 0.1;
+                
+                ctx.save();
+                ctx.translate(x, y);
+                ctx.rotate((i % 3) * 0.5 - 0.5);
+                
+                // Monstera leaf shape
+                ctx.beginPath();
+                ctx.ellipse(0, 0, width * 0.15, width * 0.2, 0, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.restore();
+            }
+            
+            // Hibiscus flowers
+            const flowerColors = ['rgba(255, 100, 150, 0.6)', 'rgba(255, 200, 0, 0.6)', 'rgba(255, 150, 200, 0.6)'];
+            for (let i = 0; i < 6; i++) {
+                const x = Math.random() * width;
+                const y = Math.random() * height;
+                ctx.fillStyle = flowerColors[i % 3];
+                
+                for (let p = 0; p < 5; p++) {
+                    ctx.save();
+                    ctx.translate(x, y);
+                    ctx.rotate((p * Math.PI * 2) / 5);
+                    ctx.beginPath();
+                    ctx.ellipse(30, 0, 25, 15, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+                }
+            }
+            
+            // Subtle sparkles
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+            for (let i = 0; i < 30; i++) {
+                const x = Math.random() * width;
+                const y = Math.random() * height;
+                ctx.fillRect(x, y, 3, 3);
+            }
+        }
+        
+        function drawMinimalTheme(ctx, width, height) {
+            // Soft gradient background
+            const gradient = ctx.createLinearGradient(0, 0, 0, height);
+            gradient.addColorStop(0, '#ffffff');
+            gradient.addColorStop(0.5, '#f8f9fa');
             gradient.addColorStop(1, '#e9ecef');
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, width, height);
             
-            // Subtle geometric shapes
-            ctx.fillStyle = 'rgba(102,126,234,0.05)';
-            ctx.beginPath();
-            ctx.arc(width * 0.2, height * 0.2, width * 0.3, 0, Math.PI * 2);
-            ctx.fill();
+            // Soft circular gradients
+            const circles = [
+                { x: width * 0.2, y: height * 0.2, r: width * 0.35, color: 'rgba(102,126,234,0.08)' },
+                { x: width * 0.8, y: height * 0.7, r: width * 0.4, color: 'rgba(255,0,110,0.06)' },
+                { x: width * 0.5, y: height * 0.5, r: width * 0.3, color: 'rgba(0,212,255,0.05)' }
+            ];
             
-            ctx.fillStyle = 'rgba(118,75,162,0.05)';
-            ctx.beginPath();
-            ctx.arc(width * 0.8, height * 0.8, width * 0.4, 0, Math.PI * 2);
-            ctx.fill();
+            circles.forEach(circle => {
+                const grad = ctx.createRadialGradient(circle.x, circle.y, 0, circle.x, circle.y, circle.r);
+                grad.addColorStop(0, circle.color);
+                grad.addColorStop(1, 'rgba(255,255,255,0)');
+                ctx.fillStyle = grad;
+                ctx.beginPath();
+                ctx.arc(circle.x, circle.y, circle.r, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            
+            // Geometric line art
+            ctx.strokeStyle = 'rgba(102,126,234,0.15)';
+            ctx.lineWidth = 3;
+            ctx.setLineDash([10, 10]);
+            
+            for (let i = 0; i < 5; i++) {
+                ctx.beginPath();
+                ctx.moveTo(width * (i / 5), 0);
+                ctx.lineTo(width * (1 - i / 5), height);
+                ctx.stroke();
+            }
+            ctx.setLineDash([]);
+        }
+        
+        function drawPassportTheme(ctx, width, height) {
+            // Navy blue passport background
+            const gradient = ctx.createLinearGradient(0, 0, 0, height);
+            gradient.addColorStop(0, '#1e3a8a');
+            gradient.addColorStop(0.5, '#3b82f6');
+            gradient.addColorStop(1, '#60a5fa');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, width, height);
+            
+            // Gold embossed pattern
+            ctx.strokeStyle = 'rgba(251, 191, 36, 0.2)';
+            ctx.lineWidth = 3;
+            const borderPadding = width * 0.08;
+            
+            // Outer border
+            ctx.strokeRect(borderPadding, borderPadding, width - borderPadding * 2, height - borderPadding * 2);
+            
+            // Inner decorative border
+            ctx.strokeRect(borderPadding + 20, borderPadding + 20, width - (borderPadding + 20) * 2, height - (borderPadding + 20) * 2);
+            
+            // Corner decorations
+            const corners = [
+                [borderPadding + 40, borderPadding + 40],
+                [width - borderPadding - 40, borderPadding + 40],
+                [borderPadding + 40, height - borderPadding - 40],
+                [width - borderPadding - 40, height - borderPadding - 40]
+            ];
+            
+            ctx.fillStyle = 'rgba(251, 191, 36, 0.3)';
+            corners.forEach(([x, y]) => {
+                ctx.beginPath();
+                ctx.arc(x, y, 15, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            
+            // Top text
+            ctx.fillStyle = 'rgba(251, 191, 36, 0.8)';
+            ctx.font = `600 ${width * 0.045}px serif`;
+            ctx.textAlign = 'center';
+            ctx.fillText('ATLANTIS CRUISE 2026', width/2, borderPadding + 60);
         }
         
         // Download
