@@ -610,7 +610,7 @@
             pink: { icon: '💕', title: 'Twisted Pink', desc: 'Barbie meets bear. Ken is shook.', gradient: 'linear-gradient(135deg, #ff69b4, #ffc0cb)', isGlass: false },
             glass: { icon: '🪟', title: 'Glass', desc: 'Clean, minimal, Apple-inspired transparency.', gradient: 'none', isGlass: true },
             basic: { icon: '🖤', title: 'Basic Black', desc: 'Simple, elegant, timeless. Pure black sophistication.', gradient: 'linear-gradient(135deg, #1a1a1a, #000000)', isGlass: false },
-            fabulous: { icon: '🏳️‍🌈', title: 'Fabulous', desc: 'Loud, proud, and covered in rainbows. Slay queen!', gradient: 'linear-gradient(135deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #8b00ff)', isGlass: false },
+            fabulous: { icon: '🏳️‍🌈', title: 'Fabulous', desc: 'Loud, proud, and covered in rainbows. Slay queen!', gradient: 'linear-gradient(135deg, #ff6b6b, #ffd93d, #6bcb77, #4d96ff)', isGlass: false },
             atlantis1: { icon: '🚢', title: 'Atlantis T-Dance', desc: 'The legendary deck party. Dog Tag vibes with thousands of your closest friends.', gradient: 'linear-gradient(135deg, #1a5276, #2980b9)', isGlass: false },
             atlantis2: { icon: '🌈', title: 'Atlantis Pride', desc: 'Rainbow explosion on the high seas. Pure joy and celebration.', gradient: 'linear-gradient(135deg, #ff6b6b, #ffd93d, #6bcb77, #4d96ff)', isGlass: false }
         };
@@ -1138,29 +1138,14 @@
             if (bgImages.fabulous) {
                 drawPhotoBackground(ctx, w, h, bgImages.fabulous);
             } else {
-                // Fallback: Rainbow stripes background
-                const stripeHeight = h / 6;
-                const rainbowColors = ['#FF0018', '#FFA52C', '#FFFF41', '#008018', '#0000F9', '#86007D'];
-                
-                rainbowColors.forEach((color, i) => {
-                    ctx.fillStyle = color;
-                    ctx.fillRect(0, i * stripeHeight, w, stripeHeight + 1);
-                });
-
-                // Add sparkle/glitter effect
-                for (let i = 0; i < 100; i++) {
-                    const x = Math.random() * w;
-                    const y = Math.random() * h;
-                    const r = (2 + Math.random() * 6) * s;
-                    const g = ctx.createRadialGradient(x, y, 0, x, y, r * 2);
-                    g.addColorStop(0, 'rgba(255, 255, 255, 0.9)');
-                    g.addColorStop(0.5, 'rgba(255, 255, 255, 0.4)');
-                    g.addColorStop(1, 'rgba(255, 255, 255, 0)');
-                    ctx.fillStyle = g;
-                    ctx.beginPath();
-                    ctx.arc(x, y, r * 2, 0, Math.PI * 2);
-                    ctx.fill();
-                }
+                // Fallback: simple smooth rainbow gradient (subtle)
+                const grad = ctx.createLinearGradient(0, 0, w, h);
+                grad.addColorStop(0, '#ff6b6b');
+                grad.addColorStop(0.33, '#ffd93d');
+                grad.addColorStop(0.66, '#6bcb77');
+                grad.addColorStop(1, '#4d96ff');
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, w, h);
             }
         }
 
