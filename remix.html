@@ -519,7 +519,9 @@
                 <select id="themeSelect">
                     <option value="">— Select a theme —</option>
                     <option value="neon">Neon Playground — Flashy & Fun</option>
-                    <option value="dogtag">Dog Tag — Military Tribute</option>
+                    <option value="dogtag">Dog Tag Green — Military Tribute</option>
+                    <option value="dogtagyellow">Dog Tag Yellow — Military Tribute</option>
+                    <option value="dogtagred">Dog Tag Red — Military Tribute</option>
                     <option value="pink">Twisted Pink — Barbie Dreams</option>
                     <option value="glass">Glass — Apple-style Minimal</option>
                     <option value="basic">Basic Black — Clean & Simple</option>
@@ -583,7 +585,10 @@
             atlantis1: 'https://cruisecardgen.97115104.com/backgrounds/Atlantis1.jpg',
             atlantis2: 'https://cruisecardgen.97115104.com/backgrounds/Atlantis2.jpg',
             fabulous: 'https://cruisecardgen.97115104.com/backgrounds/Fab.jpg',
-            pink: 'backgrounds/pink.jpg'
+            pink: 'https://cruisecardgen.97115104.com/backgrounds/pink.jpg',
+            dogtag: 'https://cruisecardgen.97115104.com/backgrounds/dogtaggreen.png',
+            dogtagyellow: 'https://cruisecardgen.97115104.com/backgrounds/dogtagyellow.png',
+            dogtagred: 'https://cruisecardgen.97115104.com/backgrounds/dogtagred.png'
         };
 
         // Preload images
@@ -598,7 +603,9 @@
 
         const themeData = {
             neon: { icon: '🎮', title: 'Neon Playground', desc: 'Bright, flashy, unapologetically extra. Like your ex, but fun.', gradient: 'linear-gradient(135deg, #ff00ff, #00ffff)', isGlass: false },
-            dogtag: { icon: '🪖', title: 'Dog Tag', desc: 'Small uniforms, big energy. Don\'t ask, just dance.', gradient: 'linear-gradient(135deg, #4a5568, #2d3748)', isGlass: false },
+            dogtag: { icon: '🪖', title: 'Dog Tag Green', desc: 'Military camo vibes — green.', gradient: 'linear-gradient(135deg, #4a5568, #2d3748)', isGlass: false },
+            dogtagyellow: { icon: '🪖', title: 'Dog Tag Yellow', desc: 'Military camo vibes — yellow variant.', gradient: 'linear-gradient(135deg, #776400, #b58a00)', isGlass: false },
+            dogtagred: { icon: '🪖', title: 'Dog Tag Red', desc: 'Military camo vibes — red variant.', gradient: 'linear-gradient(135deg, #5a1a1a, #8b2323)', isGlass: false },
             pink: { icon: '💕', title: 'Twisted Pink', desc: 'Barbie meets bear. Ken is shook.', gradient: 'linear-gradient(135deg, #ff69b4, #ffc0cb)', isGlass: false },
             glass: { icon: '🪟', title: 'Glass', desc: 'Clean, minimal, Apple-inspired transparency.', gradient: 'none', isGlass: true },
             basic: { icon: '🖤', title: 'Basic Black', desc: 'Simple, elegant, timeless. Pure black sophistication.', gradient: 'linear-gradient(135deg, #1a1a1a, #000000)', isGlass: false },
@@ -1052,7 +1059,9 @@
         function drawTheme(ctx, w, h, s, theme) {
                 const themes = { 
                 neon: drawNeon, 
-                dogtag: drawDogTag, 
+                dogtag: drawDogTagGreen,
+                dogtagyellow: drawDogTagYellow,
+                dogtagred: drawDogTagRed,
                 pink: drawPink,
                 glass: drawGlass,
                 basic: drawBasic,
@@ -1060,7 +1069,7 @@
                 atlantis1: drawAtlantis1,
                 atlantis2: drawAtlantis2
             };
-            themes[theme](ctx, w, h, s);
+            if (themes[theme]) themes[theme](ctx, w, h, s);
         }
 
         // ATLANTIS 1 - T-Dance photo background
@@ -1163,8 +1172,25 @@
 
         
 
-        // DOG TAG - Military camo
-        function drawDogTag(ctx, w, h, s) {
+                // DOG TAG - Military camo
+
+                // Wrapper functions prefer photo backgrounds when available
+                function drawDogTagGreen(ctx, w, h, s) {
+                    if (bgImages.dogtag) { drawPhotoBackground(ctx, w, h, bgImages.dogtag); return; }
+                    drawDogTag(ctx, w, h, s);
+                }
+
+                function drawDogTagYellow(ctx, w, h, s) {
+                    if (bgImages.dogtagyellow) { drawPhotoBackground(ctx, w, h, bgImages.dogtagyellow); return; }
+                    drawDogTag(ctx, w, h, s);
+                }
+
+                function drawDogTagRed(ctx, w, h, s) {
+                    if (bgImages.dogtagred) { drawPhotoBackground(ctx, w, h, bgImages.dogtagred); return; }
+                    drawDogTag(ctx, w, h, s);
+                }
+
+                function drawDogTag(ctx, w, h, s) {
             const grad = ctx.createLinearGradient(0, 0, w, h);
             grad.addColorStop(0, '#2a352a'); grad.addColorStop(0.5, '#3a4a3a'); grad.addColorStop(1, '#4a5a4a');
             ctx.fillStyle = grad; ctx.fillRect(0, 0, w, h);
