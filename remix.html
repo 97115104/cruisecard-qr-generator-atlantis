@@ -582,7 +582,8 @@
         const bgImagePaths = {
             atlantis1: 'https://cruisecardgen.97115104.com/backgrounds/Atlantis1.jpg',
             atlantis2: 'https://cruisecardgen.97115104.com/backgrounds/Atlantis2.jpg',
-            fabulous: 'https://cruisecardgen.97115104.com/backgrounds/Fab.jpg'
+            fabulous: 'https://cruisecardgen.97115104.com/backgrounds/Fab.jpg',
+            pink: 'backgrounds/pink.jpg'
         };
 
         // Preload images
@@ -1185,6 +1186,11 @@
         
         // PINK - Barbie dreams
         function drawPink(ctx, w, h, s) {
+            // If a photo background is available for pink, use it instead of the gradient
+            if (bgImages.pink) {
+                drawPhotoBackground(ctx, w, h, bgImages.pink);
+                return;
+            }
             const grad = ctx.createLinearGradient(0, 0, 0, h);
             grad.addColorStop(0, '#ff0080'); grad.addColorStop(0.3, '#ff4da6'); grad.addColorStop(0.6, '#ff80bf'); grad.addColorStop(1, '#ffb3d9');
             ctx.fillStyle = grad; ctx.fillRect(0, 0, w, h);
