@@ -518,12 +518,8 @@
             <div class="form-group">
                 <select id="themeSelect">
                     <option value="">— Select a theme —</option>
-                    <option value="lostcity">Lost City — Underwater Atlantis</option>
-                    <option value="wild">Wild! — Jungle Energy</option>
                     <option value="neon">Neon Playground — Flashy & Fun</option>
-                    <option value="whiteheat">White Heat — Elegant White</option>
                     <option value="dogtag">Dog Tag — Military Tribute</option>
-                    <option value="disco">Revival! Disco — 70s Vibes</option>
                     <option value="pink">Twisted Pink — Barbie Dreams</option>
                     <option value="glass">Glass — Apple-style Minimal</option>
                     <option value="basic">Basic Black — Clean & Simple</option>
@@ -534,7 +530,7 @@
                 <div class="theme-preview-box" id="themePreview">
                     <div class="theme-preview-header">
                         <div class="theme-preview-icon" id="themeIcon"></div>
-                        <div class="theme-preview-title" id="themeTitle">Lost City</div>
+                        <div class="theme-preview-title" id="themeTitle">— Select a theme —</div>
                     </div>
                     <div class="theme-preview-desc" id="themeDesc"></div>
                 </div>
@@ -600,12 +596,8 @@
         const currentYear = new Date().getFullYear();
 
         const themeData = {
-            lostcity: { icon: '🔱', title: 'Lost City', desc: 'Dive deep into underwater Atlantis. Mermaids, mermen, and everyone in between.', gradient: 'linear-gradient(135deg, #001f3f, #0066cc)', isGlass: false },
-            wild: { icon: '🦁', title: 'Wild!', desc: 'Unleash your inner animal. May cause spontaneous roaring.', gradient: 'linear-gradient(135deg, #0a4d3c, #2d5016)', isGlass: false },
             neon: { icon: '🎮', title: 'Neon Playground', desc: 'Bright, flashy, unapologetically extra. Like your ex, but fun.', gradient: 'linear-gradient(135deg, #ff00ff, #00ffff)', isGlass: false },
-            whiteheat: { icon: '🔥', title: 'White Heat', desc: 'All white everything. Looking like a bleach commercial is a serve.', gradient: 'linear-gradient(135deg, #fff, #e8e8e8)', isGlass: false },
             dogtag: { icon: '🪖', title: 'Dog Tag', desc: 'Small uniforms, big energy. Don\'t ask, just dance.', gradient: 'linear-gradient(135deg, #4a5568, #2d3748)', isGlass: false },
-            disco: { icon: '🕺', title: 'Revival! Disco', desc: 'Bell bottoms and chest hair. Studio 54 wishes.', gradient: 'linear-gradient(135deg, #ffd700, #ff6b6b)', isGlass: false },
             pink: { icon: '💕', title: 'Twisted Pink', desc: 'Barbie meets bear. Ken is shook.', gradient: 'linear-gradient(135deg, #ff69b4, #ffc0cb)', isGlass: false },
             glass: { icon: '🪟', title: 'Glass', desc: 'Clean, minimal, Apple-inspired transparency.', gradient: 'none', isGlass: true },
             basic: { icon: '🖤', title: 'Basic Black', desc: 'Simple, elegant, timeless. Pure black sophistication.', gradient: 'linear-gradient(135deg, #1a1a1a, #000000)', isGlass: false },
@@ -808,7 +800,7 @@
             const hasLocation = userLocation.length > 0;
             
             // Determine text color based on theme
-            const useBlackText = (selectedTheme === 'whiteheat' || selectedTheme === 'glass');
+            const useBlackText = (selectedTheme === 'glass');
 
             ctx.textAlign = 'center';
             ctx.shadowColor = useBlackText ? 'rgba(255,255,255,0.6)' : 'rgba(0,0,0,0.6)';
@@ -1057,13 +1049,9 @@
         }
 
         function drawTheme(ctx, w, h, s, theme) {
-            const themes = { 
-                lostcity: drawLostCity, 
-                wild: drawWild, 
+                const themes = { 
                 neon: drawNeon, 
-                whiteheat: drawWhiteHeat, 
                 dogtag: drawDogTag, 
-                disco: drawDisco, 
                 pink: drawPink,
                 glass: drawGlass,
                 basic: drawBasic,
@@ -1148,51 +1136,7 @@
             }
         }
 
-        // LOST CITY - Deep ocean with bioluminescence
-        function drawLostCity(ctx, w, h, s) {
-            const grad = ctx.createLinearGradient(0, 0, 0, h);
-            grad.addColorStop(0, '#000a14'); grad.addColorStop(0.4, '#001a33'); grad.addColorStop(0.7, '#003366'); grad.addColorStop(1, '#0066aa');
-            ctx.fillStyle = grad; ctx.fillRect(0, 0, w, h);
-
-            // Light rays from surface
-            ctx.globalAlpha = 0.1;
-            for (let i = 0; i < 6; i++) {
-                const x = w * (0.15 + i * 0.14);
-                ctx.beginPath(); ctx.moveTo(x - 40 * s, 0); ctx.lineTo(x + 40 * s, 0); ctx.lineTo(x + 150 * s, h); ctx.lineTo(x - 150 * s, h);
-                ctx.fillStyle = '#00ffff'; ctx.fill();
-            }
-            ctx.globalAlpha = 1;
-
-            // Bioluminescent particles
-            for (let i = 0; i < 40; i++) {
-                const x = Math.random() * w, y = Math.random() * h, r = (3 + Math.random() * 5) * s;
-                const glow = ctx.createRadialGradient(x, y, 0, x, y, r * 4);
-                glow.addColorStop(0, 'rgba(0, 255, 220, 0.7)'); glow.addColorStop(1, 'rgba(0, 255, 220, 0)');
-                ctx.fillStyle = glow; ctx.beginPath(); ctx.arc(x, y, r * 4, 0, Math.PI * 2); ctx.fill();
-            }
-        }
-
-        // WILD - Dense jungle with fireflies
-        function drawWild(ctx, w, h, s) {
-            const grad = ctx.createLinearGradient(0, 0, 0, h);
-            grad.addColorStop(0, '#021a02'); grad.addColorStop(0.3, '#083308'); grad.addColorStop(0.6, '#0f4d0f'); grad.addColorStop(1, '#1a661a');
-            ctx.fillStyle = grad; ctx.fillRect(0, 0, w, h);
-
-            // Jungle silhouettes
-            ctx.fillStyle = 'rgba(0, 15, 0, 0.5)';
-            ctx.beginPath(); ctx.ellipse(0, 0, w * 0.5, h * 0.25, 0.4, 0, Math.PI * 2); ctx.fill();
-            ctx.beginPath(); ctx.ellipse(w, 0, w * 0.45, h * 0.3, -0.4, 0, Math.PI * 2); ctx.fill();
-            ctx.beginPath(); ctx.ellipse(0, h, w * 0.4, h * 0.2, -0.3, 0, Math.PI * 2); ctx.fill();
-            ctx.beginPath(); ctx.ellipse(w, h, w * 0.35, h * 0.22, 0.3, 0, Math.PI * 2); ctx.fill();
-
-            // Fireflies
-            for (let i = 0; i < 35; i++) {
-                const x = Math.random() * w, y = Math.random() * h, r = (2 + Math.random() * 4) * s;
-                const glow = ctx.createRadialGradient(x, y, 0, x, y, r * 6);
-                glow.addColorStop(0, 'rgba(255, 240, 100, 0.9)'); glow.addColorStop(0.4, 'rgba(255, 200, 50, 0.4)'); glow.addColorStop(1, 'rgba(255, 150, 0, 0)');
-                ctx.fillStyle = glow; ctx.beginPath(); ctx.arc(x, y, r * 6, 0, Math.PI * 2); ctx.fill();
-            }
-        }
+        
 
         // NEON - Vibrant arcade
         function drawNeon(ctx, w, h, s) {
@@ -1216,28 +1160,7 @@
             for (let y = 0; y < h; y += 50 * s) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
         }
 
-        // WHITE HEAT - Clean hot white (with black text)
-        function drawWhiteHeat(ctx, w, h, s) {
-            const grad = ctx.createLinearGradient(0, 0, 0, h);
-            grad.addColorStop(0, '#ffffff'); grad.addColorStop(0.3, '#f8f4f0'); grad.addColorStop(0.7, '#f0e8e0'); grad.addColorStop(1, '#e8ddd0');
-            ctx.fillStyle = grad; ctx.fillRect(0, 0, w, h);
-
-            // Heat glow
-            const heat = ctx.createRadialGradient(w * 0.5, h * 0.35, 0, w * 0.5, h * 0.35, w * 0.8);
-            heat.addColorStop(0, 'rgba(255, 200, 150, 0.35)'); heat.addColorStop(0.5, 'rgba(255, 220, 180, 0.15)'); heat.addColorStop(1, 'rgba(255,255,255,0)');
-            ctx.fillStyle = heat; ctx.fillRect(0, 0, w, h);
-
-            // Shimmer lines
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)'; ctx.lineWidth = 2.5 * s;
-            for (let i = 0; i < 10; i++) {
-                ctx.beginPath();
-                for (let x = 0; x <= w; x += 20) {
-                    const y = h * (0.08 + i * 0.09) + Math.sin(x * 0.007 + i * 0.5) * 25 * s;
-                    x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-                }
-                ctx.stroke();
-            }
-        }
+        
 
         // DOG TAG - Military camo
         function drawDogTag(ctx, w, h, s) {
@@ -1259,33 +1182,7 @@
             ctx.beginPath(); ctx.moveTo(w * 0.35, 0); ctx.quadraticCurveTo(w * 0.25, h * 0.12, w * 0.5, h * 0.18); ctx.stroke();
         }
 
-        // DISCO - Groovy 70s
-        function drawDisco(ctx, w, h, s) {
-            const grad = ctx.createLinearGradient(0, 0, 0, h);
-            grad.addColorStop(0, '#3d1a00'); grad.addColorStop(0.3, '#6b3300'); grad.addColorStop(0.6, '#994d00'); grad.addColorStop(1, '#7a3000');
-            ctx.fillStyle = grad; ctx.fillRect(0, 0, w, h);
-
-            // Disco ball rays
-            const cx = w * 0.5, cy = h * 0.2;
-            ctx.globalAlpha = 0.18;
-            for (let i = 0; i < 28; i++) {
-                const angle = (Math.PI * 2 / 28) * i;
-                const g = ctx.createLinearGradient(cx, cy, cx + Math.cos(angle) * w, cy + Math.sin(angle) * h);
-                g.addColorStop(0, 'rgba(255, 215, 0, 0.9)'); g.addColorStop(1, 'rgba(255, 100, 50, 0)');
-                ctx.fillStyle = g; ctx.beginPath();
-                ctx.moveTo(cx, cy); ctx.lineTo(cx + Math.cos(angle - 0.06) * w, cy + Math.sin(angle - 0.06) * h);
-                ctx.lineTo(cx + Math.cos(angle + 0.06) * w, cy + Math.sin(angle + 0.06) * h); ctx.fill();
-            }
-            ctx.globalAlpha = 1;
-
-            // Sparkles
-            for (let i = 0; i < 50; i++) {
-                const x = Math.random() * w, y = Math.random() * h, sz = (4 + Math.random() * 8) * s;
-                ctx.fillStyle = `rgba(255, 215, 0, ${0.25 + Math.random() * 0.4})`;
-                ctx.fillRect(x - sz / 2, y - sz / 2, sz, sz);
-            }
-        }
-
+        
         // PINK - Barbie dreams
         function drawPink(ctx, w, h, s) {
             const grad = ctx.createLinearGradient(0, 0, 0, h);
