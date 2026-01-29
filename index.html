@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Atlantis 2026 Cruise Card</title>
+    <title>Atlantis Cruise Card</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚢</text></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -419,7 +419,7 @@
 <body>
     <div id="loadingScreen">
         <div class="ship-emoji">🚢</div>
-        <div class="loading-text">Atlantis 2026</div>
+        <div class="loading-text">Atlantis <span id="currentYear"></span></div>
         <div class="loading-sub">Setting sail...</div>
     </div>
 
@@ -514,6 +514,10 @@
     </div>
 
     <script>
+        // Get current year dynamically
+        const currentYear = new Date().getFullYear();
+        document.getElementById('currentYear').textContent = currentYear;
+
         let qrcodeInstance = null;
         let customFieldCount = 0;
         
@@ -578,7 +582,7 @@
             }
             
             // Add cabin as organization/title for visibility
-            vcard += 'ORG:Atlantis Cruise 2026\n';
+            vcard += `ORG:Atlantis Cruise ${currentYear}\n`;
             vcard += `TITLE:Cabin ${cabin}\n`;
             
             // Add notes if provided
