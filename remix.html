@@ -9,7 +9,7 @@
         href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚢</text></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #ff006e;
@@ -223,9 +223,20 @@
             font-size: 22px;
         }
 
+        .theme-preview-icon.transparent-bg {
+            background: transparent !important;
+            border: 2px dashed #ccc;
+        }
+
         .theme-preview-title {
             font-weight: 700;
             font-size: 15px;
+        }
+
+        .theme-preview-title.glass-font {
+            font-family: 'Inter', -apple-system, sans-serif;
+            font-weight: 300;
+            letter-spacing: 0.5px;
         }
 
         .theme-preview-desc {
@@ -514,6 +525,8 @@
                     <option value="glass">🪟 Glass — Apple-style Minimal</option>
                     <option value="basic">🖤 Basic Black — Clean & Simple</option>
                     <option value="fabulous">🏳️‍🌈 Fabulous — Rainbow Pride</option>
+                    <option value="atlantis1">🚢 Atlantis T-Dance — Deck Party</option>
+                    <option value="atlantis2">🌈 Atlantis Pride — Rainbow Party</option>
                 </select>
                 <div class="theme-preview-box" id="themePreview">
                     <div class="theme-preview-header">
@@ -565,31 +578,48 @@
         let quoteMode = 'random';
         let currentRandomQuote = '';
 
+        // Preload background images for photo-based themes
+        const bgImages = {};
+        const bgImagePaths = {
+            atlantis1: 'backgrounds/atlantis1.jpg',
+            atlantis2: 'backgrounds/atlantis2.jpg',
+            fabulous: 'backgrounds/fab1.jpg'
+        };
+
+        // Preload images
+        Object.keys(bgImagePaths).forEach(key => {
+            const img = new Image();
+            img.onload = () => { bgImages[key] = img; };
+            img.src = bgImagePaths[key];
+        });
+
         // Get current year dynamically
         const currentYear = new Date().getFullYear();
 
         const themeData = {
-            lostcity: { icon: '🔱', title: 'Lost City', desc: 'Dive deep into underwater Atlantis. Mermaids, mermen, and everyone in between.', gradient: 'linear-gradient(135deg, #001f3f, #0066cc)' },
-            wild: { icon: '🦁', title: 'Wild!', desc: 'Unleash your inner animal. May cause spontaneous roaring.', gradient: 'linear-gradient(135deg, #0a4d3c, #2d5016)' },
-            neon: { icon: '🎮', title: 'Neon Playground', desc: 'Bright, flashy, unapologetically extra. Like your ex, but fun.', gradient: 'linear-gradient(135deg, #ff00ff, #00ffff)' },
-            whiteheat: { icon: '🔥', title: 'White Heat', desc: 'All white everything. Looking like a bleach commercial is a serve.', gradient: 'linear-gradient(135deg, #fff, #e8e8e8)' },
-            dogtag: { icon: '🪖', title: 'Dog Tag', desc: 'Small uniforms, big energy. Don\'t ask, just dance.', gradient: 'linear-gradient(135deg, #4a5568, #2d3748)' },
-            disco: { icon: '🕺', title: 'Revival! Disco', desc: 'Bell bottoms and chest hair. Studio 54 wishes.', gradient: 'linear-gradient(135deg, #ffd700, #ff6b6b)' },
-            pink: { icon: '💕', title: 'Twisted Pink', desc: 'Barbie meets bear. Ken is shook.', gradient: 'linear-gradient(135deg, #ff69b4, #ffc0cb)' },
-            glass: { icon: '🪟', title: 'Glass', desc: 'Clean, minimal, Apple-inspired frosted glass aesthetic.', gradient: 'linear-gradient(135deg, #e8e8e8, #f5f5f5)' },
-            basic: { icon: '🖤', title: 'Basic Black', desc: 'Simple, elegant, timeless. Pure black sophistication.', gradient: 'linear-gradient(135deg, #1a1a1a, #000000)' },
-            fabulous: { icon: '🏳️‍🌈', title: 'Fabulous', desc: 'Loud, proud, and covered in rainbows. Slay queen!', gradient: 'linear-gradient(135deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #8b00ff)' }
+            lostcity: { icon: '🔱', title: 'Lost City', desc: 'Dive deep into underwater Atlantis. Mermaids, mermen, and everyone in between.', gradient: 'linear-gradient(135deg, #001f3f, #0066cc)', isGlass: false },
+            wild: { icon: '🦁', title: 'Wild!', desc: 'Unleash your inner animal. May cause spontaneous roaring.', gradient: 'linear-gradient(135deg, #0a4d3c, #2d5016)', isGlass: false },
+            neon: { icon: '🎮', title: 'Neon Playground', desc: 'Bright, flashy, unapologetically extra. Like your ex, but fun.', gradient: 'linear-gradient(135deg, #ff00ff, #00ffff)', isGlass: false },
+            whiteheat: { icon: '🔥', title: 'White Heat', desc: 'All white everything. Looking like a bleach commercial is a serve.', gradient: 'linear-gradient(135deg, #fff, #e8e8e8)', isGlass: false },
+            dogtag: { icon: '🪖', title: 'Dog Tag', desc: 'Small uniforms, big energy. Don\'t ask, just dance.', gradient: 'linear-gradient(135deg, #4a5568, #2d3748)', isGlass: false },
+            disco: { icon: '🕺', title: 'Revival! Disco', desc: 'Bell bottoms and chest hair. Studio 54 wishes.', gradient: 'linear-gradient(135deg, #ffd700, #ff6b6b)', isGlass: false },
+            pink: { icon: '💕', title: 'Twisted Pink', desc: 'Barbie meets bear. Ken is shook.', gradient: 'linear-gradient(135deg, #ff69b4, #ffc0cb)', isGlass: false },
+            glass: { icon: '🪟', title: 'Glass', desc: 'Clean, minimal, Apple-inspired transparency.', gradient: 'none', isGlass: true },
+            basic: { icon: '🖤', title: 'Basic Black', desc: 'Simple, elegant, timeless. Pure black sophistication.', gradient: 'linear-gradient(135deg, #1a1a1a, #000000)', isGlass: false },
+            fabulous: { icon: '🏳️‍🌈', title: 'Fabulous', desc: 'Loud, proud, and covered in rainbows. Slay queen!', gradient: 'linear-gradient(135deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #8b00ff)', isGlass: false },
+            atlantis1: { icon: '🚢', title: 'Atlantis T-Dance', desc: 'The legendary deck party. Dog Tag vibes with thousands of your closest friends.', gradient: 'linear-gradient(135deg, #1a5276, #2980b9)', isGlass: false },
+            atlantis2: { icon: '🌈', title: 'Atlantis Pride', desc: 'Rainbow explosion on the high seas. Pure joy and celebration.', gradient: 'linear-gradient(135deg, #ff6b6b, #ffd93d, #6bcb77, #4d96ff)', isGlass: false }
         };
 
         const funnyQuotes = [
-            "I'm not gay but my boyfriend is", "Slay the day away", "Sorry can't hear you over my outfit",
-            "Too glam to give a damn", "My ship has come in... literally", "Professional homosexual",
-            "Cher is my spirit animal", "Body-ody-ody-ody", "Main character energy only",
-            "Not a phase, Mom", "Beyonce said I look good", "The category is: REALNESS",
-            "Probably thinking about brunch", "My other ride is a disco ball", "Fluent in Drag Race",
-            "Warning: May burst into song", "Handle with care: contains glitter", "Yes I'm this extra IRL",
-            "If lost, return to dance floor", "Charisma, Uniqueness, Nerve & Tan", "Making choices since birth",
-            "Here for a good time", "Powered by iced coffee & anxiety", "Born this way"
+            "I'm not gay but my boyfriend is 💅", "Slay the day away ✨", "Sorry can't hear you over my outfit 👗",
+            "Too glam to give a damn 💄", "My ship has come in... literally 🚢", "Professional homosexual 💼",
+            "Cher is my spirit animal 🦄", "Body-ody-ody-ody 🍑", "Main character energy only ⭐",
+            "Not a phase, Mom 🌈", "Beyoncé said I look good 🐝", "The category is: REALNESS 💃",
+            "Probably thinking about brunch 🥂", "My other ride is a disco ball 🪩", "Fluent in Drag Race 👠",
+            "Warning: May burst into song 🎤", "Handle with care: contains glitter 💖", "Yes I'm this extra IRL ✨",
+            "If lost, return to dance floor 🪩", "Charisma, Uniqueness, Nerve & Tan 👑", "Making choices since birth 🤭",
+            "Here for a good time 🎉", "Powered by iced coffee & anxiety ☕", "Born this way 🌈"
         ];
 
         // Initialize with a random quote
@@ -668,9 +698,23 @@
             const previewBox = document.getElementById('themePreview');
             if (selectedTheme && themeData[selectedTheme]) {
                 const data = themeData[selectedTheme];
-                document.getElementById('themeIcon').textContent = data.icon;
-                document.getElementById('themeIcon').style.background = data.gradient;
-                document.getElementById('themeTitle').textContent = data.title;
+                const iconEl = document.getElementById('themeIcon');
+                const titleEl = document.getElementById('themeTitle');
+                
+                iconEl.textContent = data.icon;
+                
+                // Handle glass theme specially - transparent background and different font
+                if (data.isGlass) {
+                    iconEl.style.background = 'transparent';
+                    iconEl.classList.add('transparent-bg');
+                    titleEl.classList.add('glass-font');
+                } else {
+                    iconEl.style.background = data.gradient;
+                    iconEl.classList.remove('transparent-bg');
+                    titleEl.classList.remove('glass-font');
+                }
+                
+                titleEl.textContent = data.title;
                 document.getElementById('themeDesc').textContent = data.desc;
                 previewBox.classList.add('show');
             } else { previewBox.classList.remove('show'); }
@@ -759,17 +803,24 @@
 
             const hasPhoto = profileImage !== null;
             const hasLocation = userLocation.length > 0;
+            
+            // Determine text color based on theme
+            const useBlackText = (selectedTheme === 'whiteheat' || selectedTheme === 'glass');
 
             ctx.textAlign = 'center';
-            ctx.shadowColor = 'rgba(0,0,0,0.6)';
+            ctx.shadowColor = useBlackText ? 'rgba(255,255,255,0.6)' : 'rgba(0,0,0,0.6)';
 
             // Global offsets
             const topSafeOffset = height * 0.245 + height * 0.015; // downward shift + 1.5%
             const spacingCompression = 0.90; // tighten overall gaps by 2%
 
-            /* 1. TITLE */
-            ctx.fillStyle = 'white';
-            ctx.font = `800 ${Math.round(78 * scale)}px 'Outfit', sans-serif`;
+            /* 1. TITLE - Use Inter font for glass theme */
+            ctx.fillStyle = useBlackText ? 'rgba(0,0,0,0.9)' : 'white';
+            if (selectedTheme === 'glass') {
+                ctx.font = `300 ${Math.round(72 * scale)}px 'Inter', sans-serif`;
+            } else {
+                ctx.font = `800 ${Math.round(78 * scale)}px 'Outfit', sans-serif`;
+            }
             ctx.shadowBlur = 25 * scale;
             ctx.fillText(
                 `ATLANTIS ${currentYear}`,
@@ -796,7 +847,7 @@
                     0,
                     Math.PI * 2
                 );
-                ctx.fillStyle = 'rgba(255,255,255,0.95)';
+                ctx.fillStyle = useBlackText ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.95)';
                 ctx.shadowBlur = 32 * scale;
                 ctx.shadowOffsetY = 10 * scale;
                 ctx.fill();
@@ -841,51 +892,58 @@
                 ? photoBottom + height * 0.05 // 5% gap from photo bottom
                 : height * 0.20 * spacingCompression + topSafeOffset;
 
-            ctx.fillStyle = 'rgba(255,255,255,0.85)';
-            ctx.font = `700 ${Math.round(36 * scale)}px 'Outfit', sans-serif`;
+            ctx.fillStyle = useBlackText ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.85)';
+            if (selectedTheme === 'glass') {
+                ctx.font = `400 ${Math.round(34 * scale)}px 'Inter', sans-serif`;
+            } else {
+                ctx.font = `700 ${Math.round(36 * scale)}px 'Outfit', sans-serif`;
+            }
             ctx.shadowBlur = 12 * scale;
             ctx.fillText('CABIN', width / 2, cabinY);
 
-            ctx.fillStyle = 'white';
-            ctx.font = `800 ${Math.round(104 * scale)}px 'Outfit', sans-serif`;
+            ctx.fillStyle = useBlackText ? 'rgba(0,0,0,0.9)' : 'white';
+            if (selectedTheme === 'glass') {
+                ctx.font = `500 ${Math.round(96 * scale)}px 'Inter', sans-serif`;
+            } else {
+                ctx.font = `800 ${Math.round(104 * scale)}px 'Outfit', sans-serif`;
+            }
             ctx.shadowBlur = 18 * scale;
             ctx.fillText(cabinNumber, width / 2, cabinY + 88 * scale);
 
             const cabinBottom = cabinY + 88 * scale;
 
-            /* 4. QR CODE (20% smaller + reduce gap with cabin by 3%) */
+            /* 4. QR CODE - Simple classic style only */
             const qrSize = width * 0.40 * 0.8; // 20% smaller
             const qrX = (width - qrSize) / 2;
-
-            const qrY = cabinBottom + height * 0.03; // gap between cabin & QR code tightened
-
+            const qrY = cabinBottom + height * 0.03;
             const qrPad = 24 * scale;
 
+            // Classic QR style
             ctx.fillStyle = 'rgba(255,255,255,0.97)';
             ctx.shadowBlur = 30 * scale;
+            ctx.shadowColor = 'rgba(0,0,0,0.3)';
             ctx.shadowOffsetY = 10 * scale;
-            roundRect(
-                ctx,
-                qrX - qrPad,
-                qrY - qrPad,
-                qrSize + qrPad * 2,
-                qrSize + qrPad * 2,
-                26 * scale
-            );
+            roundRect(ctx, qrX - qrPad, qrY - qrPad, qrSize + qrPad * 2, qrSize + qrPad * 2, 26 * scale);
             ctx.fill();
-
             ctx.shadowBlur = 0;
             ctx.shadowOffsetY = 0;
             ctx.drawImage(qrImage, qrX, qrY, qrSize, qrSize);
 
-            /* 5. LOCATION (below QR) */
+            // Reset shadow color for text
+            ctx.shadowColor = useBlackText ? 'rgba(255,255,255,0.6)' : 'rgba(0,0,0,0.6)';
+
+            /* 5. LOCATION (below QR) - with pin emoji */
             if (hasLocation) {
-                ctx.fillStyle = 'rgba(255,255,255,0.9)';
-                ctx.font = `600 ${Math.round(40 * scale)}px 'Outfit', sans-serif`;
+                ctx.fillStyle = useBlackText ? 'rgba(0,0,0,0.8)' : 'rgba(255,255,255,0.9)';
+                if (selectedTheme === 'glass') {
+                    ctx.font = `400 ${Math.round(38 * scale)}px 'Inter', sans-serif`;
+                } else {
+                    ctx.font = `600 ${Math.round(40 * scale)}px 'Outfit', sans-serif`;
+                }
                 ctx.shadowBlur = 12 * scale;
 
-                const locationY = qrY + qrSize + height * 0.036; // slightly below QR
-                ctx.fillText(userLocation, width / 2, locationY);
+                const locationY = qrY + qrSize + height * 0.036;
+                ctx.fillText('📍 ' + userLocation, width / 2, locationY);
             }
 
             /* 6. QUOTE (below QR, slightly lower than location) - only if not 'none' mode */
@@ -898,9 +956,13 @@
                 }
                 
                 if (quote) {
-                    ctx.fillStyle = 'rgba(255,255,255,0.85)';
+                    ctx.fillStyle = useBlackText ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.85)';
                     // Quote text 3% bigger: 32 * 1.03 = ~33
-                    ctx.font = `500 ${Math.round(33 * scale)}px 'Outfit', sans-serif`;
+                    if (selectedTheme === 'glass') {
+                        ctx.font = `300 ${Math.round(33 * scale)}px 'Inter', sans-serif`;
+                    } else {
+                        ctx.font = `500 ${Math.round(33 * scale)}px 'Outfit', sans-serif`;
+                    }
 
                     const maxW = width - 100 * scale;
                     const words = quote.split(' ');
@@ -918,7 +980,7 @@
                     }
                     lines.push(line.trim());
 
-                    const quoteY = qrY + qrSize + height * 0.072; // slightly below location
+                    const quoteY = qrY + qrSize + height * 0.072;
                     lines.forEach((l, i) =>
                         ctx.fillText(l, width / 2, quoteY + i * 42 * scale)
                     );
@@ -930,8 +992,6 @@
             document.getElementById('preview').classList.add('show');
             document.getElementById('preview').scrollIntoView({ behavior: 'smooth' });
         }
-
-
 
 
         function roundRect(ctx, x, y, w, h, r) {
@@ -968,6 +1028,31 @@
             ctx.fillRect(0, 0, w, h);
         }
 
+        function drawPhotoBackground(ctx, w, h, img) {
+            // Draw photo background covering the canvas
+            const imgAspect = img.width / img.height;
+            const canvasAspect = w / h;
+            let drawW, drawH, drawX, drawY;
+
+            if (imgAspect > canvasAspect) {
+                drawH = h;
+                drawW = drawH * imgAspect;
+                drawX = (w - drawW) / 2;
+                drawY = 0;
+            } else {
+                drawW = w;
+                drawH = drawW / imgAspect;
+                drawX = 0;
+                drawY = (h - drawH) / 2;
+            }
+
+            ctx.drawImage(img, drawX, drawY, drawW, drawH);
+
+            // Add overlay for better text readability
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
+            ctx.fillRect(0, 0, w, h);
+        }
+
         function drawTheme(ctx, w, h, s, theme) {
             const themes = { 
                 lostcity: drawLostCity, 
@@ -979,50 +1064,51 @@
                 pink: drawPink,
                 glass: drawGlass,
                 basic: drawBasic,
-                fabulous: drawFabulous
+                fabulous: drawFabulous,
+                atlantis1: drawAtlantis1,
+                atlantis2: drawAtlantis2
             };
             themes[theme](ctx, w, h, s);
         }
 
-        // GLASS - Apple-style minimal frosted glass
-        function drawGlass(ctx, w, h, s) {
-            // Soft gradient background
-            const grad = ctx.createLinearGradient(0, 0, w, h);
-            grad.addColorStop(0, '#e8eef5');
-            grad.addColorStop(0.3, '#d4dce8');
-            grad.addColorStop(0.6, '#c8d4e4');
-            grad.addColorStop(1, '#b8c8dc');
-            ctx.fillStyle = grad;
-            ctx.fillRect(0, 0, w, h);
-
-            // Subtle glass panels
-            ctx.globalAlpha = 0.15;
-            for (let i = 0; i < 4; i++) {
-                const x = w * (0.1 + Math.random() * 0.6);
-                const y = h * (0.1 + Math.random() * 0.6);
-                const rw = w * (0.3 + Math.random() * 0.3);
-                const rh = h * (0.15 + Math.random() * 0.2);
-                
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
-                roundRect(ctx, x, y, rw, rh, 30 * s);
-                ctx.fill();
-            }
-            ctx.globalAlpha = 1;
-
-            // Soft light orbs
-            const orbs = [
-                [0.2, 0.3, 0.25, 'rgba(255, 255, 255, 0.3)'],
-                [0.8, 0.2, 0.2, 'rgba(200, 220, 255, 0.25)'],
-                [0.5, 0.7, 0.3, 'rgba(255, 255, 255, 0.2)'],
-                [0.1, 0.8, 0.15, 'rgba(220, 230, 255, 0.2)']
-            ];
-            orbs.forEach(([ox, oy, or, oc]) => {
-                const g = ctx.createRadialGradient(w * ox, h * oy, 0, w * ox, h * oy, w * or);
-                g.addColorStop(0, oc);
-                g.addColorStop(1, 'rgba(255,255,255,0)');
-                ctx.fillStyle = g;
+        // ATLANTIS 1 - T-Dance photo background
+        function drawAtlantis1(ctx, w, h, s) {
+            if (bgImages.atlantis1) {
+                drawPhotoBackground(ctx, w, h, bgImages.atlantis1);
+            } else {
+                // Fallback gradient if image not loaded
+                const grad = ctx.createLinearGradient(0, 0, 0, h);
+                grad.addColorStop(0, '#1a5276');
+                grad.addColorStop(1, '#2980b9');
+                ctx.fillStyle = grad;
                 ctx.fillRect(0, 0, w, h);
-            });
+            }
+        }
+
+        // ATLANTIS 2 - Pride party photo background
+        function drawAtlantis2(ctx, w, h, s) {
+            if (bgImages.atlantis2) {
+                drawPhotoBackground(ctx, w, h, bgImages.atlantis2);
+            } else {
+                // Fallback gradient if image not loaded
+                const grad = ctx.createLinearGradient(0, 0, 0, h);
+                grad.addColorStop(0, '#ff6b6b');
+                grad.addColorStop(0.33, '#ffd93d');
+                grad.addColorStop(0.66, '#6bcb77');
+                grad.addColorStop(1, '#4d96ff');
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, w, h);
+            }
+        }
+
+        // GLASS - No background at all (transparent/clear)
+        function drawGlass(ctx, w, h, s) {
+            // Completely transparent - no background
+            ctx.clearRect(0, 0, w, h);
+            
+            // Optional: very faint white to ensure it's not fully transparent
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.02)';
+            ctx.fillRect(0, 0, w, h);
         }
 
         // BASIC - Clean black
@@ -1043,54 +1129,35 @@
             ctx.fillRect(0, 0, w, h);
         }
 
-        // FABULOUS - Rainbow pride
+        // FABULOUS - Rainbow pride with photo background
         function drawFabulous(ctx, w, h, s) {
-            // Rainbow stripes background
-            const stripeHeight = h / 6;
-            const rainbowColors = ['#FF0018', '#FFA52C', '#FFFF41', '#008018', '#0000F9', '#86007D'];
-            
-            rainbowColors.forEach((color, i) => {
-                ctx.fillStyle = color;
-                ctx.fillRect(0, i * stripeHeight, w, stripeHeight + 1);
-            });
+            if (bgImages.fabulous) {
+                drawPhotoBackground(ctx, w, h, bgImages.fabulous);
+            } else {
+                // Fallback: Rainbow stripes background
+                const stripeHeight = h / 6;
+                const rainbowColors = ['#FF0018', '#FFA52C', '#FFFF41', '#008018', '#0000F9', '#86007D'];
+                
+                rainbowColors.forEach((color, i) => {
+                    ctx.fillStyle = color;
+                    ctx.fillRect(0, i * stripeHeight, w, stripeHeight + 1);
+                });
 
-            // Add sparkle/glitter effect
-            for (let i = 0; i < 100; i++) {
-                const x = Math.random() * w;
-                const y = Math.random() * h;
-                const r = (2 + Math.random() * 6) * s;
-                const g = ctx.createRadialGradient(x, y, 0, x, y, r * 2);
-                g.addColorStop(0, 'rgba(255, 255, 255, 0.9)');
-                g.addColorStop(0.5, 'rgba(255, 255, 255, 0.4)');
-                g.addColorStop(1, 'rgba(255, 255, 255, 0)');
-                ctx.fillStyle = g;
-                ctx.beginPath();
-                ctx.arc(x, y, r * 2, 0, Math.PI * 2);
-                ctx.fill();
+                // Add sparkle/glitter effect
+                for (let i = 0; i < 100; i++) {
+                    const x = Math.random() * w;
+                    const y = Math.random() * h;
+                    const r = (2 + Math.random() * 6) * s;
+                    const g = ctx.createRadialGradient(x, y, 0, x, y, r * 2);
+                    g.addColorStop(0, 'rgba(255, 255, 255, 0.9)');
+                    g.addColorStop(0.5, 'rgba(255, 255, 255, 0.4)');
+                    g.addColorStop(1, 'rgba(255, 255, 255, 0)');
+                    ctx.fillStyle = g;
+                    ctx.beginPath();
+                    ctx.arc(x, y, r * 2, 0, Math.PI * 2);
+                    ctx.fill();
+                }
             }
-
-            // Add diagonal shine streaks
-            ctx.globalAlpha = 0.15;
-            for (let i = 0; i < 8; i++) {
-                const x = w * (-0.2 + i * 0.2);
-                ctx.beginPath();
-                ctx.moveTo(x, 0);
-                ctx.lineTo(x + w * 0.15, 0);
-                ctx.lineTo(x + w * 0.35, h);
-                ctx.lineTo(x + w * 0.2, h);
-                ctx.closePath();
-                ctx.fillStyle = 'white';
-                ctx.fill();
-            }
-            ctx.globalAlpha = 1;
-
-            // Subtle overlay for depth
-            const overlay = ctx.createLinearGradient(0, 0, 0, h);
-            overlay.addColorStop(0, 'rgba(255, 255, 255, 0.1)');
-            overlay.addColorStop(0.5, 'rgba(0, 0, 0, 0)');
-            overlay.addColorStop(1, 'rgba(0, 0, 0, 0.15)');
-            ctx.fillStyle = overlay;
-            ctx.fillRect(0, 0, w, h);
         }
 
         // LOST CITY - Deep ocean with bioluminescence
@@ -1115,9 +1182,6 @@
                 glow.addColorStop(0, 'rgba(0, 255, 220, 0.7)'); glow.addColorStop(1, 'rgba(0, 255, 220, 0)');
                 ctx.fillStyle = glow; ctx.beginPath(); ctx.arc(x, y, r * 4, 0, Math.PI * 2); ctx.fill();
             }
-
-            ctx.font = `${Math.round(350 * s)}px sans-serif`; ctx.fillStyle = 'rgba(0, 200, 255, 0.06)'; ctx.textAlign = 'center';
-            ctx.fillText('', w / 2, h * 0.65);
         }
 
         // WILD - Dense jungle with fireflies
@@ -1140,9 +1204,6 @@
                 glow.addColorStop(0, 'rgba(255, 240, 100, 0.9)'); glow.addColorStop(0.4, 'rgba(255, 200, 50, 0.4)'); glow.addColorStop(1, 'rgba(255, 150, 0, 0)');
                 ctx.fillStyle = glow; ctx.beginPath(); ctx.arc(x, y, r * 6, 0, Math.PI * 2); ctx.fill();
             }
-
-            ctx.font = `${Math.round(320 * s)}px sans-serif`; ctx.fillStyle = 'rgba(255, 255, 255, 0.05)'; ctx.textAlign = 'center';
-            ctx.fillText('', w / 2, h * 0.68);
         }
 
         // NEON - Vibrant arcade
@@ -1165,12 +1226,9 @@
             ctx.strokeStyle = 'rgba(255, 0, 255, 0.12)'; ctx.lineWidth = 1.5 * s;
             for (let x = 0; x < w; x += 50 * s) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
             for (let y = 0; y < h; y += 50 * s) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
-
-            ctx.font = `${Math.round(300 * s)}px sans-serif`; ctx.fillStyle = 'rgba(255, 255, 255, 0.08)'; ctx.textAlign = 'center';
-            ctx.fillText('', w / 2, h * 0.66);
         }
 
-        // WHITE HEAT - Clean hot white
+        // WHITE HEAT - Clean hot white (with black text)
         function drawWhiteHeat(ctx, w, h, s) {
             const grad = ctx.createLinearGradient(0, 0, 0, h);
             grad.addColorStop(0, '#ffffff'); grad.addColorStop(0.3, '#f8f4f0'); grad.addColorStop(0.7, '#f0e8e0'); grad.addColorStop(1, '#e8ddd0');
@@ -1191,9 +1249,6 @@
                 }
                 ctx.stroke();
             }
-
-            ctx.font = `${Math.round(340 * s)}px sans-serif`; ctx.fillStyle = 'rgba(255, 100, 0, 0.07)'; ctx.textAlign = 'center';
-            ctx.fillText('', w / 2, h * 0.67);
         }
 
         // DOG TAG - Military camo
@@ -1214,9 +1269,6 @@
             // Dog tag chain
             ctx.strokeStyle = 'rgba(180, 180, 180, 0.2)'; ctx.lineWidth = 5 * s;
             ctx.beginPath(); ctx.moveTo(w * 0.35, 0); ctx.quadraticCurveTo(w * 0.25, h * 0.12, w * 0.5, h * 0.18); ctx.stroke();
-
-            ctx.font = `${Math.round(300 * s)}px sans-serif`; ctx.fillStyle = 'rgba(255, 255, 255, 0.06)'; ctx.textAlign = 'center';
-            ctx.fillText('', w / 2, h * 0.66);
         }
 
         // DISCO - Groovy 70s
@@ -1244,9 +1296,6 @@
                 ctx.fillStyle = `rgba(255, 215, 0, ${0.25 + Math.random() * 0.4})`;
                 ctx.fillRect(x - sz / 2, y - sz / 2, sz, sz);
             }
-
-            ctx.font = `${Math.round(320 * s)}px sans-serif`; ctx.fillStyle = 'rgba(255, 255, 255, 0.08)'; ctx.textAlign = 'center';
-            ctx.fillText('', w / 2, h * 0.65);
         }
 
         // PINK - Barbie dreams
@@ -1271,9 +1320,6 @@
                 ctx.beginPath(); ctx.moveTo(0, -10); ctx.bezierCurveTo(-25, -35, -50, -10, 0, 30); ctx.bezierCurveTo(50, -10, 25, -35, 0, -10);
                 ctx.fill(); ctx.restore();
             }
-
-            ctx.font = `${Math.round(340 * s)}px sans-serif`; ctx.fillStyle = 'rgba(255, 255, 255, 0.1)'; ctx.textAlign = 'center';
-            ctx.fillText('', w / 2, h * 0.67);
         }
 
         document.getElementById('downloadBtn').addEventListener('click', function () {
