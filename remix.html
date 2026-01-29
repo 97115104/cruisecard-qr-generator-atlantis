@@ -12,8 +12,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #ff006e;
-            --primary-glow: rgba(255, 0, 110, 0.15);
+            --primary: #073b57;
+            --primary-glow: rgba(7,59,87,0.12);
             --bg: #f5f5f5;
             --bg-card: #ffffff;
             --text-primary: #333;
@@ -29,6 +29,10 @@
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
         }
+
+        /* Override text selection to use blue instead of pink */
+        ::selection { background: var(--primary-light); color: white; }
+        ::-moz-selection { background: var(--primary-light); color: white; }
 
         body {
             font-family: 'Outfit', -apple-system, sans-serif;
@@ -195,9 +199,9 @@
         .theme-preview-box {
             margin-top: 12px;
             padding: 14px;
-            background: #fff0f5;
+            background: #f0fbff;
             border-radius: 12px;
-            border: 1px solid rgba(255, 0, 110, 0.15);
+            border: 1px solid rgba(7, 59, 87, 0.06);
             display: none;
         }
 
@@ -262,7 +266,7 @@
 
         .generate-btn:hover:not(:disabled) {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(255, 0, 110, 0.4);
+            box-shadow: 0 8px 20px rgba(7, 59, 87, 0.18);
         }
 
         .generate-btn:disabled {
@@ -303,13 +307,13 @@
 
         .download-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(255, 0, 110, 0.4);
+            box-shadow: 0 8px 20px rgba(42, 123, 168, 0.25);
         }
 
         .tip-box {
             margin-top: 14px;
             padding: 14px;
-            background: #fff0f5;
+            background: #f0fbff;
             border-left: 4px solid var(--primary);
             border-radius: 8px;
             font-size: 13px;
@@ -343,7 +347,7 @@
 
         .quote-option-btn.active {
             border-color: var(--primary);
-            background: rgba(255, 0, 110, 0.1);
+            background: rgba(7, 59, 87, 0.06);
             color: var(--primary);
         }
 
@@ -447,8 +451,8 @@
         }
 
         .clear-wallpaper-btn:hover {
-            border-color: #ff4444;
-            color: #ff4444;
+            border-color: var(--primary);
+            color: var(--primary);
         }
 
         @media (max-width: 480px) {

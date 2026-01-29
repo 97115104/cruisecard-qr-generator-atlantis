@@ -11,10 +11,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         :root {
-            --primary: #ff006e;
-            --primary-light: #ff4d94;
-            --primary-dark: #d90060;
-            --primary-glow: rgba(255, 0, 110, 0.15);
+            --primary: #073b57;
+            --primary-light: #2a7ba8;
+            --primary-dark: #052936;
+            --primary-glow: rgba(7,59,87,0.12);
             --bg: #f5f5f5;
             --bg-card: #ffffff;
             --text-primary: #333333;
@@ -23,7 +23,7 @@
             --border: #e0e0e0;
             --border-light: #f0f0f0;
             --success: #00cc88;
-            --gradient-hero: linear-gradient(135deg, #00d4ff 0%, #0099ff 50%, #ff006e 100%);
+            --gradient-hero: linear-gradient(135deg, #58a7db 0%, #2a7ba8 50%, #073b57 100%);
         }
         
         * {
@@ -308,7 +308,7 @@
         
         .generate-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(255, 0, 110, 0.4);
+            box-shadow: 0 8px 20px rgba(7, 59, 87, 0.18);
             background: var(--primary-dark);
         }
         
@@ -354,7 +354,7 @@
         .save-note {
             margin-top: 16px;
             padding: 16px;
-            background: #fff0f5;
+            background: #f0fbff;
             border-left: 4px solid var(--primary);
             border-radius: 8px;
             font-size: 13px;
@@ -392,14 +392,14 @@
         
         .remix-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(255, 0, 110, 0.4);
+            box-shadow: 0 8px 20px rgba(7, 59, 87, 0.18);
             background: var(--primary-dark);
         }
         
         .add-field-btn {
             width: 100%;
             padding: 12px;
-            background: rgba(255, 0, 110, 0.1);
+            background: rgba(7, 59, 87, 0.06);
             color: var(--primary);
             border: 2px dashed var(--primary);
             border-radius: 10px;
@@ -410,9 +410,19 @@
             transition: all 0.3s ease;
             margin-top: 14px;
         }
-        
+
         .add-field-btn:hover {
-            background: rgba(255, 0, 110, 0.2);
+            background: rgba(7, 59, 87, 0.12);
+        }
+
+        /* Selection color override to remove any pink highlights */
+        ::selection {
+            background: var(--primary-light);
+            color: white;
+        }
+        ::-moz-selection {
+            background: var(--primary-light);
+            color: white;
         }
         
         .custom-field {
@@ -433,8 +443,8 @@
         
         .remove-field {
             padding: 12px 16px;
-            background: #ffe0e0;
-            color: var(--primary);
+            background: #eaf6ff;
+            color: var(--primary-dark);
             border: none;
             border-radius: 10px;
             cursor: pointer;
@@ -443,9 +453,9 @@
             transition: all 0.3s ease;
             flex: 0 0 auto;
         }
-        
+
         .remove-field:hover {
-            background: #ffcccc;
+            background: #d6efff;
         }
         
         /* Mobile optimizations */
@@ -740,7 +750,7 @@
                 document.getElementById('saveNote').classList.add('show');
             } catch (error) {
                 console.error('QR Code generation error:', error);
-                qrcodeDiv.innerHTML = '<div class="placeholder" style="color: #ff006e;">Error generating QR code. Try with less data.</div>';
+                qrcodeDiv.innerHTML = '<div class="placeholder" style="color: var(--primary);">Error generating QR code. Try with less data.</div>';
             }
         }
         
