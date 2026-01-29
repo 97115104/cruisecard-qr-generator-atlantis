@@ -1,76 +1,344 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>QR Lock Screen Remix | Atlantis 2026</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚢</text></svg>">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚢</text></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #ff006e; --primary-glow: rgba(255, 0, 110, 0.15); --bg: #f5f5f5; --bg-card: #ffffff; --text-primary: #333; --text-secondary: #666; --text-muted: #999; --border: #e0e0e0; --success: #00cc88; }
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Outfit', -apple-system, sans-serif; background: var(--bg); min-height: 100vh; padding: 20px; color: var(--text-primary); }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .container { max-width: 500px; margin: 0 auto; animation: fadeInUp 0.6s ease-out; }
-        .back-link { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 16px; padding: 10px 16px; background: white; color: var(--text-secondary); text-decoration: none; border-radius: 10px; font-weight: 600; font-size: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-        .back-link:hover { color: var(--primary); }
-        .card { background: var(--bg-card); border-radius: 24px; padding: 28px 24px; margin-bottom: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.08); }
-        h1 { color: var(--primary); font-size: 26px; font-weight: 700; margin-bottom: 6px; }
-        .subtitle { color: var(--text-secondary); font-size: 14px; margin-bottom: 24px; }
-        .section-title { font-size: 12px; font-weight: 600; color: var(--primary); margin-bottom: 14px; margin-top: 22px; text-transform: uppercase; letter-spacing: 0.5px; }
-        .section-title:first-of-type { margin-top: 0; }
-        .form-group { margin-bottom: 16px; }
-        label { display: block; margin-bottom: 6px; color: var(--text-primary); font-weight: 500; font-size: 13px; }
-        .optional-tag { color: var(--text-muted); font-weight: 400; }
-        select, input[type="file"], input[type="text"] { width: 100%; padding: 12px 14px; border: 2px solid var(--border); border-radius: 12px; font-size: 16px; font-family: inherit; background: white; color: var(--text-primary); transition: all 0.3s; }
-        select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; background-size: 18px; padding-right: 44px; cursor: pointer; }
-        input:focus, select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-glow); }
-        input[type="file"] { padding: 10px 12px; font-size: 14px; }
-        input[type="file"]::file-selector-button { background: var(--primary); color: white; border: none; padding: 8px 14px; border-radius: 8px; font-weight: 600; font-family: inherit; cursor: pointer; margin-right: 10px; }
-        .status-text { margin-top: 6px; font-size: 12px; color: var(--text-muted); }
-        .status-text.success { color: var(--success); }
-        .theme-preview-box { margin-top: 12px; padding: 14px; background: #fff0f5; border-radius: 12px; border: 1px solid rgba(255, 0, 110, 0.15); display: none; }
-        .theme-preview-box.show { display: block; animation: fadeInUp 0.3s ease-out; }
-        .theme-preview-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-        .theme-preview-icon { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
-        .theme-preview-title { font-weight: 700; font-size: 15px; }
-        .theme-preview-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
-        .generate-btn { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 15px; font-weight: 600; font-family: inherit; cursor: pointer; transition: all 0.3s; margin-top: 8px; }
-        .generate-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255, 0, 110, 0.4); }
-        .generate-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        #preview { display: none; text-align: center; }
-        #preview.show { display: block; animation: fadeInUp 0.5s ease-out; }
-        #wallpaperCanvas { max-width: 100%; max-height: 70vh; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.15); margin: 16px 0; }
-        .download-btn { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 15px; font-weight: 600; font-family: inherit; cursor: pointer; }
-        .download-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255, 0, 110, 0.4); }
-        .tip-box { margin-top: 14px; padding: 14px; background: #fff0f5; border-left: 4px solid var(--primary); border-radius: 8px; font-size: 13px; text-align: left; }
-        .tip-box strong { color: var(--primary); }
-        @media (max-width: 480px) { body { padding: 16px; } .card { padding: 22px 18px; } h1 { font-size: 24px; } }
+        :root {
+            --primary: #ff006e;
+            --primary-glow: rgba(255, 0, 110, 0.15);
+            --bg: #f5f5f5;
+            --bg-card: #ffffff;
+            --text-primary: #333;
+            --text-secondary: #666;
+            --text-muted: #999;
+            --border: #e0e0e0;
+            --success: #00cc88;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Outfit', -apple-system, sans-serif;
+            background: var(--bg);
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--text-primary);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 16px;
+            padding: 10px 16px;
+            background: white;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .back-link:hover {
+            color: var(--primary);
+        }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: 24px;
+            padding: 28px 24px;
+            margin-bottom: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 14px;
+            margin-top: 22px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .section-title:first-of-type {
+            margin-top: 0;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 13px;
+        }
+
+        .optional-tag {
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        select,
+        input[type="file"],
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 16px;
+            font-family: inherit;
+            background: white;
+            color: var(--text-primary);
+            transition: all 0.3s;
+        }
+
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 18px;
+            padding-right: 44px;
+            cursor: pointer;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-glow);
+        }
+
+        input[type="file"] {
+            padding: 10px 12px;
+            font-size: 14px;
+        }
+
+        input[type="file"]::file-selector-button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .status-text {
+            margin-top: 6px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .status-text.success {
+            color: var(--success);
+        }
+
+        .theme-preview-box {
+            margin-top: 12px;
+            padding: 14px;
+            background: #fff0f5;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 0, 110, 0.15);
+            display: none;
+        }
+
+        .theme-preview-box.show {
+            display: block;
+            animation: fadeInUp 0.3s ease-out;
+        }
+
+        .theme-preview-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .theme-preview-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .theme-preview-title {
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .theme-preview-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .generate-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 8px;
+        }
+
+        .generate-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 0, 110, 0.4);
+        }
+
+        .generate-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        #preview {
+            display: none;
+            text-align: center;
+        }
+
+        #preview.show {
+            display: block;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        #wallpaperCanvas {
+            max-width: 100%;
+            max-height: 70vh;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            margin: 16px 0;
+        }
+
+        .download-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 0, 110, 0.4);
+        }
+
+        .tip-box {
+            margin-top: 14px;
+            padding: 14px;
+            background: #fff0f5;
+            border-left: 4px solid var(--primary);
+            border-radius: 8px;
+            font-size: 13px;
+            text-align: left;
+        }
+
+        .tip-box strong {
+            color: var(--primary);
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 16px;
+            }
+
+            .card {
+                padding: 22px 18px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <a href="index.html" class="back-link">← Back to Cruise Card</a>
         <div class="card">
             <h1>Atlantis 2026 Lock Screen Remix</h1>
             <p class="subtitle">Create a custom wallpaper with your QR code</p>
-            
+
             <div class="section-title">Upload QR Code</div>
             <div class="form-group">
                 <label>QR Code Image <span class="optional-tag">(auto-imported if coming from generator)</span></label>
                 <input type="file" id="qrUpload" accept="image/*">
                 <div id="qrStatus" class="status-text"></div>
             </div>
-            
+
             <div class="section-title">Profile Photo</div>
             <div class="form-group">
                 <label>Your Photo <span class="optional-tag">(optional)</span></label>
                 <input type="file" id="photoUpload" accept="image/*">
                 <div id="photoStatus" class="status-text"></div>
             </div>
-            
+
             <div class="section-title">Your Details</div>
             <div class="form-group">
                 <label>Cabin Number *</label>
@@ -80,7 +348,7 @@
                 <label>Where are you from? <span class="optional-tag">(optional)</span></label>
                 <input type="text" id="location" placeholder="Los Angeles, CA">
             </div>
-            
+
             <div class="section-title">Phone Screen Size</div>
             <div class="form-group">
                 <select id="phoneModel">
@@ -93,7 +361,7 @@
                     <option value="1440,3200">Android XL / Samsung Galaxy</option>
                 </select>
             </div>
-            
+
             <div class="section-title">Choose Your Theme</div>
             <div class="form-group">
                 <select id="themeSelect">
@@ -114,21 +382,22 @@
                     <div class="theme-preview-desc" id="themeDesc"></div>
                 </div>
             </div>
-            
+
             <button class="generate-btn" id="generateBtn" disabled>Generate Wallpaper</button>
         </div>
-        
+
         <div class="card" id="preview">
             <div class="section-title">Your Custom Lock Screen</div>
             <canvas id="wallpaperCanvas"></canvas>
             <button class="download-btn" id="downloadBtn">📲 Download Wallpaper</button>
-            <div class="tip-box">💡 <strong>Tip:</strong> After downloading, go to Settings → Wallpaper and select this image.</div>
+            <div class="tip-box">💡 <strong>Tip:</strong> After downloading, go to Settings → Wallpaper and select this
+                image.</div>
         </div>
     </div>
 
     <script>
         let qrImage = null, profileImage = null, selectedTheme = null, cabinNumber = '', userLocation = '';
-        
+
         const themeData = {
             lostcity: { icon: '🔱', title: 'Lost City', desc: 'Dive deep into underwater Atlantis. Mermaids, mermen, and everyone in between.', gradient: 'linear-gradient(135deg, #001f3f, #0066cc)' },
             wild: { icon: '🦁', title: 'Wild!', desc: 'Unleash your inner animal. May cause spontaneous roaring.', gradient: 'linear-gradient(135deg, #0a4d3c, #2d5016)' },
@@ -138,7 +407,7 @@
             disco: { icon: '🕺', title: 'Revival! Disco', desc: 'Bell bottoms and chest hair. Studio 54 wishes.', gradient: 'linear-gradient(135deg, #ffd700, #ff6b6b)' },
             pink: { icon: '💕', title: 'Twisted Pink', desc: 'Barbie meets bear. Ken is shook.', gradient: 'linear-gradient(135deg, #ff69b4, #ffc0cb)' }
         };
-        
+
         const funnyQuotes = [
             "I'm not gay but my boyfriend is 💅", "Slay the day away ✨", "Sorry can't hear you over my outfit 👗",
             "Too glam to give a damn 💄", "My ship has come in... literally 🚢", "Professional homosexual 💼",
@@ -149,22 +418,22 @@
             "If lost, return to dance floor 🪩", "Charisma, Uniqueness, Nerve & Tan 👑", "Making choices since birth 🤭",
             "Here for a good time 🎉", "Powered by iced coffee & anxiety ☕", "Born this way 🌈"
         ];
-        
-        window.addEventListener('load', function() {
+
+        window.addEventListener('load', function () {
             const qrData = sessionStorage.getItem('qrData');
             const savedCabin = sessionStorage.getItem('cabinNumber');
             if (qrData) {
                 const img = new Image();
-                img.onload = function() { qrImage = img; document.getElementById('qrStatus').textContent = '✓ QR imported'; document.getElementById('qrStatus').classList.add('success'); checkReady(); };
+                img.onload = function () { qrImage = img; document.getElementById('qrStatus').textContent = '✓ QR imported'; document.getElementById('qrStatus').classList.add('success'); checkReady(); };
                 img.src = qrData;
             }
             if (savedCabin) { document.getElementById('cabinNumber').value = savedCabin; cabinNumber = savedCabin; checkReady(); }
         });
-        
-        document.getElementById('cabinNumber').addEventListener('input', function() { cabinNumber = this.value.trim(); checkReady(); });
-        document.getElementById('location').addEventListener('input', function() { userLocation = this.value.trim(); });
-        
-        document.getElementById('themeSelect').addEventListener('change', function() {
+
+        document.getElementById('cabinNumber').addEventListener('input', function () { cabinNumber = this.value.trim(); checkReady(); });
+        document.getElementById('location').addEventListener('input', function () { userLocation = this.value.trim(); });
+
+        document.getElementById('themeSelect').addEventListener('change', function () {
             selectedTheme = this.value;
             const previewBox = document.getElementById('themePreview');
             if (selectedTheme && themeData[selectedTheme]) {
@@ -177,142 +446,216 @@
             } else { previewBox.classList.remove('show'); }
             checkReady();
         });
-        
-        document.getElementById('qrUpload').addEventListener('change', function(e) {
+
+        document.getElementById('qrUpload').addEventListener('change', function (e) {
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(event) {
+                reader.onload = function (event) {
                     const img = new Image();
-                    img.onload = function() { qrImage = img; document.getElementById('qrStatus').textContent = '✓ Uploaded'; document.getElementById('qrStatus').classList.add('success'); checkReady(); };
+                    img.onload = function () { qrImage = img; document.getElementById('qrStatus').textContent = '✓ Uploaded'; document.getElementById('qrStatus').classList.add('success'); checkReady(); };
                     img.src = event.target.result;
                 };
                 reader.readAsDataURL(file);
             }
         });
-        
-        document.getElementById('photoUpload').addEventListener('change', function(e) {
+
+        document.getElementById('photoUpload').addEventListener('change', function (e) {
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(event) {
+                reader.onload = function (event) {
                     const img = new Image();
-                    img.onload = function() { profileImage = img; document.getElementById('photoStatus').textContent = '✓ Uploaded'; document.getElementById('photoStatus').classList.add('success'); };
+                    img.onload = function () { profileImage = img; document.getElementById('photoStatus').textContent = '✓ Uploaded'; document.getElementById('photoStatus').classList.add('success'); };
                     img.src = event.target.result;
                 };
                 reader.readAsDataURL(file);
             }
         });
-        
+
         function checkReady() { document.getElementById('generateBtn').disabled = !(qrImage && selectedTheme && cabinNumber); }
-        
+
         document.getElementById('generateBtn').addEventListener('click', generateWallpaper);
-        
+
+
+
         function generateWallpaper() {
             const [width, height] = document.getElementById('phoneModel').value.split(',').map(Number);
             const canvas = document.getElementById('wallpaperCanvas');
             const ctx = canvas.getContext('2d');
-            canvas.width = width; canvas.height = height;
+            canvas.width = width;
+            canvas.height = height;
+
             const scale = width / 1170;
-            
+
             drawTheme(ctx, width, height, scale, selectedTheme);
-            
+
             const hasPhoto = profileImage !== null;
             const hasLocation = userLocation.length > 0;
-            
-            // LAYOUT: Spread elements across full height
-            // Title: 5-10%, Photo: 12-35%, Cabin: 36-45%, QR: 46-78%, Location: 80-85%, Quote: 87-95%
-            
+
             ctx.textAlign = 'center';
             ctx.shadowColor = 'rgba(0,0,0,0.6)';
-            
-            // 1. ATLANTIS 2026 - Large at top (5-10%)
+
+            // Global offsets
+            const topSafeOffset = height * 0.245 + height * 0.015; // downward shift + 1.5%
+            const spacingCompression = 0.90; // tighten overall gaps by 2%
+
+            /* 1. TITLE */
             ctx.fillStyle = 'white';
-            ctx.font = `800 ${Math.round(80 * scale)}px 'Outfit', sans-serif`;
+            ctx.font = `800 ${Math.round(78 * scale)}px 'Outfit', sans-serif`;
             ctx.shadowBlur = 25 * scale;
-            ctx.fillText('ATLANTIS 2026', width / 2, height * 0.08);
-            
-            // 2. Profile Photo - Large featured (12-35%)
+            ctx.fillText(
+                'ATLANTIS 2026',
+                width / 2,
+                height * 0.08 * spacingCompression + topSafeOffset
+            );
+
+            /* 2. PROFILE PHOTO (previously 3% bigger + 2% bigger now) */
+            let photoBottom = 0;
             if (hasPhoto) {
-                const photoSize = width * 0.42;
+                let photoSize = width * 0.38 * 0.8; // original 20% smaller
+                photoSize *= 1.03; // previous 3% bigger
+                photoSize *= 1.02; // +2% bigger now
                 const photoX = (width - photoSize) / 2;
-                const photoY = height * 0.12;
-                
+
+                // Reduce gap between title and profile photo by 2%
+                const photoY = height * 0.13 * spacingCompression + topSafeOffset - height * 0.02;
+
                 ctx.beginPath();
-                ctx.arc(photoX + photoSize/2, photoY + photoSize/2, photoSize/2 + 10 * scale, 0, Math.PI * 2);
+                ctx.arc(
+                    photoX + photoSize / 2,
+                    photoY + photoSize / 2,
+                    photoSize / 2 + 9 * scale,
+                    0,
+                    Math.PI * 2
+                );
                 ctx.fillStyle = 'rgba(255,255,255,0.95)';
-                ctx.shadowBlur = 35 * scale;
-                ctx.shadowOffsetY = 12 * scale;
+                ctx.shadowBlur = 32 * scale;
+                ctx.shadowOffsetY = 10 * scale;
                 ctx.fill();
+
+                ctx.shadowBlur = 0;
                 ctx.shadowOffsetY = 0;
-                
+
                 ctx.save();
                 ctx.beginPath();
-                ctx.arc(photoX + photoSize/2, photoY + photoSize/2, photoSize/2, 0, Math.PI * 2);
+                ctx.arc(
+                    photoX + photoSize / 2,
+                    photoY + photoSize / 2,
+                    photoSize / 2,
+                    0,
+                    Math.PI * 2
+                );
                 ctx.clip();
-                ctx.drawImage(profileImage, photoX, photoY, photoSize, photoSize);
+
+                const imgAspect = profileImage.width / profileImage.height;
+                let drawW, drawH, drawX, drawY;
+
+                if (imgAspect > 1) {
+                    drawH = photoSize;
+                    drawW = drawH * imgAspect;
+                    drawX = photoX - (drawW - photoSize) / 2;
+                    drawY = photoY;
+                } else {
+                    drawW = photoSize;
+                    drawH = drawW / imgAspect;
+                    drawX = photoX;
+                    drawY = photoY - (drawH - photoSize) / 2;
+                }
+
+                ctx.drawImage(profileImage, drawX, drawY, drawW, drawH);
                 ctx.restore();
+
+                photoBottom = photoY + photoSize;
             }
-            
-            // 3. Cabin Number - Medium (36-45%)
-            const cabinY = hasPhoto ? height * 0.39 : height * 0.18;
+
+            /* 3. CABIN (reduce gap with profile photo by 5%) */
+            const cabinY = hasPhoto
+                ? photoBottom + height * 0.05 // 5% gap from photo bottom
+                : height * 0.20 * spacingCompression + topSafeOffset;
+
             ctx.fillStyle = 'rgba(255,255,255,0.85)';
-            ctx.font = `700 ${Math.round(38 * scale)}px 'Outfit', sans-serif`;
+            ctx.font = `700 ${Math.round(36 * scale)}px 'Outfit', sans-serif`;
             ctx.shadowBlur = 12 * scale;
             ctx.fillText('CABIN', width / 2, cabinY);
-            
+
             ctx.fillStyle = 'white';
-            ctx.font = `800 ${Math.round(110 * scale)}px 'Outfit', sans-serif`;
-            ctx.shadowBlur = 20 * scale;
-            ctx.fillText(cabinNumber, width / 2, cabinY + 95 * scale);
-            
-            // 4. QR Code - Large featured (46-78%)
-            const qrSize = width * 0.58;
+            ctx.font = `800 ${Math.round(104 * scale)}px 'Outfit', sans-serif`;
+            ctx.shadowBlur = 18 * scale;
+            ctx.fillText(cabinNumber, width / 2, cabinY + 88 * scale);
+
+            const cabinBottom = cabinY + 88 * scale;
+
+            /* 4. QR CODE (20% smaller + reduce gap with cabin by 3%) */
+            const qrSize = width * 0.40 * 0.8; // 20% smaller
             const qrX = (width - qrSize) / 2;
-            const qrY = hasPhoto ? height * 0.48 : height * 0.30;
-            const qrPad = 28 * scale;
-            
+
+            const qrY = cabinBottom + height * 0.03; // gap between cabin & QR code tightened
+
+            const qrPad = 24 * scale;
+
             ctx.fillStyle = 'rgba(255,255,255,0.97)';
-            ctx.shadowBlur = 35 * scale;
-            ctx.shadowOffsetY = 12 * scale;
-            roundRect(ctx, qrX - qrPad, qrY - qrPad, qrSize + qrPad * 2, qrSize + qrPad * 2, 28 * scale);
+            ctx.shadowBlur = 30 * scale;
+            ctx.shadowOffsetY = 10 * scale;
+            roundRect(
+                ctx,
+                qrX - qrPad,
+                qrY - qrPad,
+                qrSize + qrPad * 2,
+                qrSize + qrPad * 2,
+                26 * scale
+            );
             ctx.fill();
+
             ctx.shadowBlur = 0;
             ctx.shadowOffsetY = 0;
-            
             ctx.drawImage(qrImage, qrX, qrY, qrSize, qrSize);
-            
-            // 5. Location - Medium (80-85%)
-            ctx.shadowBlur = 12 * scale;
+
+            /* 5. LOCATION (below QR) */
             if (hasLocation) {
                 ctx.fillStyle = 'rgba(255,255,255,0.9)';
-                ctx.font = `600 ${Math.round(42 * scale)}px 'Outfit', sans-serif`;
-                ctx.fillText('📍 ' + userLocation, width / 2, height * 0.83);
+                ctx.font = `600 ${Math.round(40 * scale)}px 'Outfit', sans-serif`;
+                ctx.shadowBlur = 12 * scale;
+
+                const locationY = qrY + qrSize + height * 0.036; // slightly below QR
+                ctx.fillText('📍 ' + userLocation, width / 2, locationY);
             }
-            
-            // 6. Funny Quote - Medium (87-95%)
+
+            /* 6. QUOTE (below QR, slightly lower than location) */
             const quote = funnyQuotes[Math.floor(Math.random() * funnyQuotes.length)];
             ctx.fillStyle = 'rgba(255,255,255,0.85)';
-            ctx.font = `500 ${Math.round(34 * scale)}px 'Outfit', sans-serif`;
-            
+            ctx.font = `500 ${Math.round(32 * scale)}px 'Outfit', sans-serif`;
+
             const maxW = width - 100 * scale;
             const words = quote.split(' ');
-            let line = '', lines = [];
+            let line = '';
+            const lines = [];
+
             for (let word of words) {
                 const test = line + word + ' ';
-                if (ctx.measureText(test).width > maxW && line) { lines.push(line.trim()); line = word + ' '; }
-                else { line = test; }
+                if (ctx.measureText(test).width > maxW && line) {
+                    lines.push(line.trim());
+                    line = word + ' ';
+                } else {
+                    line = test;
+                }
             }
             lines.push(line.trim());
-            
-            const quoteY = hasLocation ? height * 0.90 : height * 0.85;
-            lines.forEach((l, i) => ctx.fillText(l, width / 2, quoteY + i * 42 * scale));
-            
+
+            const quoteY = qrY + qrSize + height * 0.072; // slightly below location
+            lines.forEach((l, i) =>
+                ctx.fillText(l, width / 2, quoteY + i * 40 * scale)
+            );
+
             ctx.shadowBlur = 0;
+
             document.getElementById('preview').classList.add('show');
             document.getElementById('preview').scrollIntoView({ behavior: 'smooth' });
         }
-        
+
+
+
+
         function roundRect(ctx, x, y, w, h, r) {
             ctx.beginPath();
             ctx.moveTo(x + r, y); ctx.lineTo(x + w - r, y); ctx.quadraticCurveTo(x + w, y, x + w, y + r);
@@ -321,27 +664,27 @@
             ctx.lineTo(x, y + r); ctx.quadraticCurveTo(x, y, x + r, y);
             ctx.closePath();
         }
-        
+
         function drawTheme(ctx, w, h, s, theme) {
             const themes = { lostcity: drawLostCity, wild: drawWild, neon: drawNeon, whiteheat: drawWhiteHeat, dogtag: drawDogTag, disco: drawDisco, pink: drawPink };
             themes[theme](ctx, w, h, s);
         }
-        
+
         // LOST CITY - Deep ocean with bioluminescence
         function drawLostCity(ctx, w, h, s) {
             const grad = ctx.createLinearGradient(0, 0, 0, h);
             grad.addColorStop(0, '#000a14'); grad.addColorStop(0.4, '#001a33'); grad.addColorStop(0.7, '#003366'); grad.addColorStop(1, '#0066aa');
             ctx.fillStyle = grad; ctx.fillRect(0, 0, w, h);
-            
+
             // Light rays from surface
             ctx.globalAlpha = 0.1;
             for (let i = 0; i < 6; i++) {
                 const x = w * (0.15 + i * 0.14);
-                ctx.beginPath(); ctx.moveTo(x - 40*s, 0); ctx.lineTo(x + 40*s, 0); ctx.lineTo(x + 150*s, h); ctx.lineTo(x - 150*s, h);
+                ctx.beginPath(); ctx.moveTo(x - 40 * s, 0); ctx.lineTo(x + 40 * s, 0); ctx.lineTo(x + 150 * s, h); ctx.lineTo(x - 150 * s, h);
                 ctx.fillStyle = '#00ffff'; ctx.fill();
             }
             ctx.globalAlpha = 1;
-            
+
             // Bioluminescent particles
             for (let i = 0; i < 40; i++) {
                 const x = Math.random() * w, y = Math.random() * h, r = (3 + Math.random() * 5) * s;
@@ -349,25 +692,25 @@
                 glow.addColorStop(0, 'rgba(0, 255, 220, 0.7)'); glow.addColorStop(1, 'rgba(0, 255, 220, 0)');
                 ctx.fillStyle = glow; ctx.beginPath(); ctx.arc(x, y, r * 4, 0, Math.PI * 2); ctx.fill();
             }
-            
+
             // Trident watermark
             ctx.font = `${Math.round(350 * s)}px sans-serif`; ctx.fillStyle = 'rgba(0, 200, 255, 0.06)'; ctx.textAlign = 'center';
-            ctx.fillText('🔱', w / 2, h * 0.65);
+            ctx.fillText('', w / 2, h * 0.65);
         }
-        
+
         // WILD - Dense jungle with fireflies
         function drawWild(ctx, w, h, s) {
             const grad = ctx.createLinearGradient(0, 0, 0, h);
             grad.addColorStop(0, '#021a02'); grad.addColorStop(0.3, '#083308'); grad.addColorStop(0.6, '#0f4d0f'); grad.addColorStop(1, '#1a661a');
             ctx.fillStyle = grad; ctx.fillRect(0, 0, w, h);
-            
+
             // Jungle silhouettes
             ctx.fillStyle = 'rgba(0, 15, 0, 0.5)';
             ctx.beginPath(); ctx.ellipse(0, 0, w * 0.5, h * 0.25, 0.4, 0, Math.PI * 2); ctx.fill();
             ctx.beginPath(); ctx.ellipse(w, 0, w * 0.45, h * 0.3, -0.4, 0, Math.PI * 2); ctx.fill();
             ctx.beginPath(); ctx.ellipse(0, h, w * 0.4, h * 0.2, -0.3, 0, Math.PI * 2); ctx.fill();
             ctx.beginPath(); ctx.ellipse(w, h, w * 0.35, h * 0.22, 0.3, 0, Math.PI * 2); ctx.fill();
-            
+
             // Fireflies
             for (let i = 0; i < 35; i++) {
                 const x = Math.random() * w, y = Math.random() * h, r = (2 + Math.random() * 4) * s;
@@ -375,47 +718,47 @@
                 glow.addColorStop(0, 'rgba(255, 240, 100, 0.9)'); glow.addColorStop(0.4, 'rgba(255, 200, 50, 0.4)'); glow.addColorStop(1, 'rgba(255, 150, 0, 0)');
                 ctx.fillStyle = glow; ctx.beginPath(); ctx.arc(x, y, r * 6, 0, Math.PI * 2); ctx.fill();
             }
-            
+
             ctx.font = `${Math.round(320 * s)}px sans-serif`; ctx.fillStyle = 'rgba(255, 255, 255, 0.05)'; ctx.textAlign = 'center';
-            ctx.fillText('🐾', w / 2, h * 0.68);
+            ctx.fillText('', w / 2, h * 0.68);
         }
-        
+
         // NEON - Vibrant arcade
         function drawNeon(ctx, w, h, s) {
             ctx.fillStyle = '#080010'; ctx.fillRect(0, 0, w, h);
-            
+
             // Neon gradient wash
             const neon = ctx.createLinearGradient(0, 0, w, h);
             neon.addColorStop(0, 'rgba(255, 0, 150, 0.35)'); neon.addColorStop(0.5, 'rgba(0, 200, 255, 0.25)'); neon.addColorStop(1, 'rgba(150, 0, 255, 0.35)');
             ctx.fillStyle = neon; ctx.fillRect(0, 0, w, h);
-            
+
             // Glow spots
             [[0.2, 0.2, 0.4, 'rgba(255, 0, 200, 0.3)'], [0.8, 0.3, 0.35, 'rgba(0, 255, 255, 0.25)'], [0.5, 0.8, 0.45, 'rgba(200, 0, 255, 0.25)'], [0.1, 0.7, 0.3, 'rgba(0, 255, 150, 0.2)']].forEach(([gx, gy, gr, gc]) => {
-                const g = ctx.createRadialGradient(w*gx, h*gy, 0, w*gx, h*gy, w*gr);
+                const g = ctx.createRadialGradient(w * gx, h * gy, 0, w * gx, h * gy, w * gr);
                 g.addColorStop(0, gc); g.addColorStop(1, 'rgba(0,0,0,0)');
                 ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
             });
-            
+
             // Grid
             ctx.strokeStyle = 'rgba(255, 0, 255, 0.12)'; ctx.lineWidth = 1.5 * s;
-            for (let x = 0; x < w; x += 50*s) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
-            for (let y = 0; y < h; y += 50*s) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
-            
+            for (let x = 0; x < w; x += 50 * s) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
+            for (let y = 0; y < h; y += 50 * s) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
+
             ctx.font = `${Math.round(300 * s)}px sans-serif`; ctx.fillStyle = 'rgba(255, 255, 255, 0.08)'; ctx.textAlign = 'center';
-            ctx.fillText('🕹️', w / 2, h * 0.66);
+            ctx.fillText('', w / 2, h * 0.66);
         }
-        
+
         // WHITE HEAT - Clean hot white
         function drawWhiteHeat(ctx, w, h, s) {
             const grad = ctx.createLinearGradient(0, 0, 0, h);
             grad.addColorStop(0, '#ffffff'); grad.addColorStop(0.3, '#f8f4f0'); grad.addColorStop(0.7, '#f0e8e0'); grad.addColorStop(1, '#e8ddd0');
             ctx.fillStyle = grad; ctx.fillRect(0, 0, w, h);
-            
+
             // Heat glow
-            const heat = ctx.createRadialGradient(w*0.5, h*0.35, 0, w*0.5, h*0.35, w*0.8);
+            const heat = ctx.createRadialGradient(w * 0.5, h * 0.35, 0, w * 0.5, h * 0.35, w * 0.8);
             heat.addColorStop(0, 'rgba(255, 200, 150, 0.35)'); heat.addColorStop(0.5, 'rgba(255, 220, 180, 0.15)'); heat.addColorStop(1, 'rgba(255,255,255,0)');
             ctx.fillStyle = heat; ctx.fillRect(0, 0, w, h);
-            
+
             // Shimmer lines
             ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)'; ctx.lineWidth = 2.5 * s;
             for (let i = 0; i < 10; i++) {
@@ -426,17 +769,17 @@
                 }
                 ctx.stroke();
             }
-            
+
             ctx.font = `${Math.round(340 * s)}px sans-serif`; ctx.fillStyle = 'rgba(255, 100, 0, 0.07)'; ctx.textAlign = 'center';
-            ctx.fillText('🔥', w / 2, h * 0.67);
+            ctx.fillText('', w / 2, h * 0.67);
         }
-        
+
         // DOG TAG - Military camo
         function drawDogTag(ctx, w, h, s) {
             const grad = ctx.createLinearGradient(0, 0, w, h);
             grad.addColorStop(0, '#2a352a'); grad.addColorStop(0.5, '#3a4a3a'); grad.addColorStop(1, '#4a5a4a');
             ctx.fillStyle = grad; ctx.fillRect(0, 0, w, h);
-            
+
             // Camo blobs
             const camo = ['rgba(35, 45, 30, 0.5)', 'rgba(50, 65, 45, 0.45)', 'rgba(70, 85, 60, 0.35)', 'rgba(30, 40, 25, 0.5)'];
             for (let i = 0; i < 25; i++) {
@@ -445,21 +788,21 @@
                 ctx.ellipse(Math.random() * w, Math.random() * h, (100 + Math.random() * 180) * s, (60 + Math.random() * 120) * s, Math.random() * Math.PI, 0, Math.PI * 2);
                 ctx.fill();
             }
-            
+
             // Dog tag chain
             ctx.strokeStyle = 'rgba(180, 180, 180, 0.2)'; ctx.lineWidth = 5 * s;
             ctx.beginPath(); ctx.moveTo(w * 0.35, 0); ctx.quadraticCurveTo(w * 0.25, h * 0.12, w * 0.5, h * 0.18); ctx.stroke();
-            
+
             ctx.font = `${Math.round(300 * s)}px sans-serif`; ctx.fillStyle = 'rgba(255, 255, 255, 0.06)'; ctx.textAlign = 'center';
-            ctx.fillText('🪖', w / 2, h * 0.66);
+            ctx.fillText('', w / 2, h * 0.66);
         }
-        
+
         // DISCO - Groovy 70s
         function drawDisco(ctx, w, h, s) {
             const grad = ctx.createLinearGradient(0, 0, 0, h);
             grad.addColorStop(0, '#3d1a00'); grad.addColorStop(0.3, '#6b3300'); grad.addColorStop(0.6, '#994d00'); grad.addColorStop(1, '#7a3000');
             ctx.fillStyle = grad; ctx.fillRect(0, 0, w, h);
-            
+
             // Disco ball rays
             const cx = w * 0.5, cy = h * 0.2;
             ctx.globalAlpha = 0.18;
@@ -472,24 +815,24 @@
                 ctx.lineTo(cx + Math.cos(angle + 0.06) * w, cy + Math.sin(angle + 0.06) * h); ctx.fill();
             }
             ctx.globalAlpha = 1;
-            
+
             // Sparkles
             for (let i = 0; i < 50; i++) {
                 const x = Math.random() * w, y = Math.random() * h, sz = (4 + Math.random() * 8) * s;
                 ctx.fillStyle = `rgba(255, 215, 0, ${0.25 + Math.random() * 0.4})`;
-                ctx.fillRect(x - sz/2, y - sz/2, sz, sz);
+                ctx.fillRect(x - sz / 2, y - sz / 2, sz, sz);
             }
-            
+
             ctx.font = `${Math.round(320 * s)}px sans-serif`; ctx.fillStyle = 'rgba(255, 255, 255, 0.08)'; ctx.textAlign = 'center';
-            ctx.fillText('🪩', w / 2, h * 0.65);
+            ctx.fillText('', w / 2, h * 0.65);
         }
-        
+
         // PINK - Barbie dreams
         function drawPink(ctx, w, h, s) {
             const grad = ctx.createLinearGradient(0, 0, 0, h);
             grad.addColorStop(0, '#ff0080'); grad.addColorStop(0.3, '#ff4da6'); grad.addColorStop(0.6, '#ff80bf'); grad.addColorStop(1, '#ffb3d9');
             ctx.fillStyle = grad; ctx.fillRect(0, 0, w, h);
-            
+
             // Glitter
             for (let i = 0; i < 70; i++) {
                 const x = Math.random() * w, y = Math.random() * h, r = (2 + Math.random() * 5) * s;
@@ -497,7 +840,7 @@
                 g.addColorStop(0, 'rgba(255, 255, 255, 0.85)'); g.addColorStop(1, 'rgba(255, 255, 255, 0)');
                 ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, r * 2.5, 0, Math.PI * 2); ctx.fill();
             }
-            
+
             // Hearts
             ctx.fillStyle = 'rgba(255, 255, 255, 0.12)';
             for (let i = 0; i < 10; i++) {
@@ -506,12 +849,12 @@
                 ctx.beginPath(); ctx.moveTo(0, -10); ctx.bezierCurveTo(-25, -35, -50, -10, 0, 30); ctx.bezierCurveTo(50, -10, 25, -35, 0, -10);
                 ctx.fill(); ctx.restore();
             }
-            
+
             ctx.font = `${Math.round(340 * s)}px sans-serif`; ctx.fillStyle = 'rgba(255, 255, 255, 0.1)'; ctx.textAlign = 'center';
-            ctx.fillText('🦄', w / 2, h * 0.67);
+            ctx.fillText('', w / 2, h * 0.67);
         }
-        
-        document.getElementById('downloadBtn').addEventListener('click', function() {
+
+        document.getElementById('downloadBtn').addEventListener('click', function () {
             const link = document.createElement('a');
             link.download = 'atlantis-2026-lockscreen.png';
             link.href = document.getElementById('wallpaperCanvas').toDataURL('image/png');
@@ -519,4 +862,5 @@
         });
     </script>
 </body>
+
 </html>
