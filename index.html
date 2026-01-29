@@ -2,35 +2,73 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Atlantis Cruise Card</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚢</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
+        :root {
+            --primary: #ff006e;
+            --primary-light: #ff4d94;
+            --primary-dark: #d90060;
+            --primary-glow: rgba(255, 0, 110, 0.15);
+            --bg: #f5f5f5;
+            --bg-card: #ffffff;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --text-muted: #999999;
+            --border: #e0e0e0;
+            --border-light: #f0f0f0;
+            --success: #00cc88;
+            --gradient-hero: linear-gradient(135deg, #00d4ff 0%, #0099ff 50%, #ff006e 100%);
+        }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        html {
+            font-size: 16px;
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f5f5f5;
+            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
             min-height: 100vh;
+            min-height: -webkit-fill-available;
             padding: 20px;
+            padding-bottom: env(safe-area-inset-bottom, 20px);
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
+            color: var(--text-primary);
         }
         
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(20px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
         }
         
-        @keyframes bob {
+        @keyframes float {
             0%, 100% { transform: translateY(0) rotate(-2deg); }
-            50% { transform: translateY(-10px) rotate(2deg); }
+            50% { transform: translateY(-12px) rotate(2deg); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
         }
         
         /* Loading Screen */
@@ -40,13 +78,13 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #00d4ff 0%, #0099ff 50%, #ff006e 100%);
+            background: var(--gradient-hero);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 9999;
-            transition: opacity 0.5s, visibility 0.5s;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
         }
         
         #loadingScreen.hidden {
@@ -56,43 +94,56 @@
         
         .ship-emoji {
             font-size: 80px;
-            animation: bob 3s ease-in-out infinite;
+            animation: float 3s ease-in-out infinite;
             margin-bottom: 20px;
+            filter: drop-shadow(0 8px 24px rgba(0,0,0,0.2));
         }
         
         .loading-text {
             color: white;
             font-size: 32px;
             font-weight: 700;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            text-shadow: 0 2px 12px rgba(0,0,0,0.2);
+            letter-spacing: 1px;
+        }
+        
+        .loading-sub {
+            color: rgba(255,255,255,0.85);
+            font-size: 14px;
+            font-weight: 500;
+            margin-top: 8px;
+            animation: pulse 1.5s ease-in-out infinite;
         }
         
         .container {
             max-width: 480px;
             width: 100%;
-            animation: fadeIn 0.6s ease-out;
+            animation: fadeInUp 0.6s ease-out;
         }
         
         .card {
-            background: white;
+            background: var(--bg-card);
             border-radius: 24px;
             padding: 32px 24px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 28px;
         }
         
         h1 {
-            color: #ff006e;
-            text-align: center;
-            margin-bottom: 8px;
+            color: var(--primary);
             font-size: 28px;
             font-weight: 700;
+            margin-bottom: 6px;
         }
         
         .subtitle {
-            text-align: center;
-            color: #666;
-            margin-bottom: 24px;
-            font-size: 13px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
         }
         
         .form-group {
@@ -102,44 +153,54 @@
         label {
             display: block;
             margin-bottom: 6px;
-            color: #333;
+            color: var(--text-primary);
             font-weight: 500;
             font-size: 13px;
         }
         
-        input {
+        .optional-tag {
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+        
+        input, textarea {
             width: 100%;
             padding: 12px 14px;
-            border: 2px solid #e0e0e0;
+            border: 2px solid var(--border);
             border-radius: 12px;
-            font-size: 14px;
-            transition: all 0.3s;
+            font-size: 16px;
+            font-family: inherit;
+            transition: all 0.3s ease;
             background: white;
+            color: var(--text-primary);
         }
         
-        input:focus {
-            outline: none;
-            border-color: #ff006e;
-            box-shadow: 0 0 0 3px rgba(255, 0, 110, 0.1);
+        input::placeholder, textarea::placeholder {
+            color: var(--text-muted);
         }
         
-        textarea:focus {
+        input:focus, textarea:focus {
             outline: none;
-            border-color: #ff006e;
-            box-shadow: 0 0 0 3px rgba(255, 0, 110, 0.1);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-glow);
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 80px;
         }
         
         .optional-fields {
-            margin-top: 16px;
-            padding-top: 16px;
-            border-top: 2px dashed #e0e0e0;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px dashed var(--border);
         }
         
         .section-title {
             font-size: 12px;
             font-weight: 600;
-            color: #ff006e;
-            margin-bottom: 12px;
+            color: var(--primary);
+            margin-bottom: 14px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
@@ -157,24 +218,31 @@
             border-radius: 12px;
             font-size: 15px;
             font-weight: 600;
+            font-family: inherit;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
         }
         
         .generate-btn {
-            background: #ff006e;
+            background: var(--primary);
             color: white;
         }
         
         .generate-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(255, 0, 110, 0.4);
-            background: #e6006a;
+            background: var(--primary-dark);
+        }
+        
+        .generate-btn:active {
+            transform: translateY(0);
         }
         
         .clear-btn {
             background: #f0f0f0;
-            color: #666;
+            color: var(--text-secondary);
+            flex: 0 0 auto;
+            padding: 14px 20px;
         }
         
         .clear-btn:hover {
@@ -199,7 +267,7 @@
         }
         
         .placeholder {
-            color: #999;
+            color: var(--text-muted);
             text-align: center;
             font-style: italic;
             font-size: 14px;
@@ -207,31 +275,62 @@
         
         .save-note {
             margin-top: 16px;
-            padding: 14px;
+            padding: 16px;
             background: #fff0f5;
-            border-left: 4px solid #ff006e;
+            border-left: 4px solid var(--primary);
             border-radius: 8px;
-            font-size: 12px;
-            color: #333;
+            font-size: 13px;
+            color: var(--text-primary);
             display: none;
+            line-height: 1.6;
         }
         
         .save-note.show {
             display: block;
+            animation: fadeInUp 0.4s ease-out;
+        }
+        
+        .save-note strong {
+            color: var(--primary);
+        }
+        
+        .remix-btn {
+            display: block;
+            width: 100%;
+            margin-top: 14px;
+            padding: 14px 24px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .remix-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 0, 110, 0.4);
+            background: var(--primary-dark);
         }
         
         .add-field-btn {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             background: rgba(255, 0, 110, 0.1);
-            color: #ff006e;
-            border: 2px dashed #ff006e;
+            color: var(--primary);
+            border: 2px dashed var(--primary);
             border-radius: 10px;
             font-size: 13px;
             font-weight: 600;
+            font-family: inherit;
             cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 12px;
+            transition: all 0.3s ease;
+            margin-top: 14px;
         }
         
         .add-field-btn:hover {
@@ -242,7 +341,7 @@
             display: flex;
             gap: 8px;
             margin-bottom: 12px;
-            align-items: flex-end;
+            align-items: stretch;
         }
         
         .custom-field input {
@@ -251,22 +350,69 @@
         
         .custom-field input:first-child {
             max-width: 100px;
+            flex: 0 0 100px;
         }
         
         .remove-field {
             padding: 12px 16px;
             background: #ffe0e0;
-            color: #ff006e;
+            color: var(--primary);
             border: none;
             border-radius: 10px;
             cursor: pointer;
             font-weight: 600;
             font-size: 16px;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
+            flex: 0 0 auto;
         }
         
         .remove-field:hover {
             background: #ffcccc;
+        }
+        
+        /* Mobile optimizations */
+        @media (max-width: 480px) {
+            body {
+                padding: 16px;
+            }
+            
+            .card {
+                padding: 24px 18px;
+                border-radius: 20px;
+            }
+            
+            h1 {
+                font-size: 26px;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .clear-btn {
+                order: 1;
+            }
+            
+            .custom-field {
+                flex-wrap: wrap;
+            }
+            
+            .custom-field input:first-child {
+                max-width: none;
+                flex: 1 1 100%;
+            }
+            
+            .custom-field input:last-of-type {
+                flex: 1;
+            }
+        }
+        
+        /* Safe area for notched phones */
+        @supports (padding: max(0px)) {
+            body {
+                padding-left: max(20px, env(safe-area-inset-left));
+                padding-right: max(20px, env(safe-area-inset-right));
+            }
         }
     </style>
 </head>
@@ -274,64 +420,67 @@
     <div id="loadingScreen">
         <div class="ship-emoji">🚢</div>
         <div class="loading-text">Atlantis 2026</div>
+        <div class="loading-sub">Setting sail...</div>
     </div>
 
     <div class="container">
         <div class="card">
-            <h1>⚓ Cruise Card</h1>
-            <p class="subtitle">Create your digital contact card</p>
+            <div class="header">
+                <h1>⚓ Cruise Card</h1>
+                <p class="subtitle">Create your digital contact card</p>
+            </div>
             
             <form id="vcardForm">
                 <div class="form-group">
                     <label for="firstName">First Name *</label>
-                    <input type="text" id="firstName" placeholder="Chad" required>
+                    <input type="text" id="firstName" placeholder="Chad" required autocomplete="given-name">
                 </div>
                 
                 <div class="form-group">
                     <label for="lastName">Last Name *</label>
-                    <input type="text" id="lastName" placeholder="Michaels" required>
+                    <input type="text" id="lastName" placeholder="Michaels" required autocomplete="family-name">
                 </div>
                 
                 <div class="form-group">
                     <label for="cabin">🛳️ Cabin Number *</label>
-                    <input type="text" id="cabin" placeholder="6969" required>
+                    <input type="text" id="cabin" placeholder="6969" required inputmode="numeric">
                 </div>
                 
                 <div class="form-group">
-                    <label for="phone">📱 Phone Number</label>
-                    <input type="tel" id="phone" placeholder="+1 555-CRUISE">
+                    <label for="phone">📱 Phone Number <span class="optional-tag">(optional)</span></label>
+                    <input type="tel" id="phone" placeholder="+1 555-CRUISE" autocomplete="tel">
                 </div>
                 
                 <div class="optional-fields">
                     <div class="section-title">🔗 Social Links</div>
                     
                     <div class="form-group">
-                        <label for="telegram">Telegram</label>
+                        <label for="telegram">Telegram <span class="optional-tag">(optional)</span></label>
                         <input type="text" id="telegram" placeholder="salty_seaman">
                     </div>
                     
                     <div class="form-group">
-                        <label for="instagram">Instagram</label>
+                        <label for="instagram">Instagram <span class="optional-tag">(optional)</span></label>
                         <input type="text" id="instagram" placeholder="pooldeckthirst">
                     </div>
                     
                     <div class="form-group">
-                        <label for="twitter">X / Twitter</label>
+                        <label for="twitter">X / Twitter <span class="optional-tag">(optional)</span></label>
                         <input type="text" id="twitter" placeholder="cruiseshipqueens">
                     </div>
                     
                     <div class="form-group">
-                        <label for="linkedin">LinkedIn</label>
+                        <label for="linkedin">LinkedIn <span class="optional-tag">(optional)</span></label>
                         <input type="text" id="linkedin" placeholder="johndoe">
                     </div>
                     
                     <div class="form-group">
-                        <label for="onlyfans">OnlyFans</label>
+                        <label for="onlyfans">OnlyFans <span class="optional-tag">(optional)</span></label>
                         <input type="text" id="onlyfans" placeholder="porthole_content">
                     </div>
                     
                     <div class="form-group">
-                        <label for="website">Website</label>
+                        <label for="website">Website <span class="optional-tag">(optional)</span></label>
                         <input type="url" id="website" placeholder="https://hotboatsummer.com">
                     </div>
                     
@@ -339,11 +488,11 @@
                     
                     <button type="button" class="add-field-btn" onclick="addCustomField()">+ Add Custom Link</button>
                     
-                    <div class="section-title" style="margin-top: 16px;">📝 Notes</div>
+                    <div class="section-title" style="margin-top: 20px;">📝 Notes</div>
                     
                     <div class="form-group">
-                        <label for="notes">Additional Notes</label>
-                        <textarea id="notes" rows="3" placeholder="Interests, fun facts, or anything you want to share..." style="width: 100%; padding: 12px 14px; border: 2px solid #e0e0e0; border-radius: 12px; font-size: 14px; font-family: inherit; resize: vertical; transition: all 0.3s;"></textarea>
+                        <label for="notes">Additional Notes <span class="optional-tag">(optional)</span></label>
+                        <textarea id="notes" rows="3" placeholder="Interests, fun facts, or anything you want to share..."></textarea>
                     </div>
                 </div>
                 
@@ -359,8 +508,7 @@
             
             <div class="save-note" id="saveNote">
                 💾 <strong>Tip:</strong> Long-press or right-click the QR code to save it! Add it to your phone's lock screen or wallet for easy access.
-                <br><br>
-                <button onclick="sendToRemixer()" style="display: inline-block; margin-top: 10px; padding: 12px 24px; background: #ff006e; color: white; border: none; text-decoration: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.background='#e6006a'" onmouseout="this.style.background='#ff006e'">🚢 Remix & Create Customized Lock Screen →</button>
+                <button onclick="sendToRemixer()" class="remix-btn">🎨 Create Custom Lock Screen Wallpaper →</button>
             </div>
         </div>
     </div>
@@ -433,12 +581,12 @@
             vcard += 'ORG:Atlantis Cruise 2026\n';
             vcard += `TITLE:Cabin ${cabin}\n`;
             
-            // Add notes if provided (only user-entered notes)
+            // Add notes if provided
             if (notes) {
                 vcard += `NOTE:${notes}\n`;
             }
             
-            // Add social media as URLs (without photo for now to avoid the error)
+            // Add social media as URLs
             if (telegram) {
                 const handle = telegram.replace('@', '');
                 const telegramUrl = telegram.startsWith('http') ? telegram : 
@@ -503,14 +651,14 @@
                     height: 256,
                     colorDark: '#000000',
                     colorLight: '#ffffff',
-                    correctLevel: QRCode.CorrectLevel.L  // Lower error correction for larger data
+                    correctLevel: QRCode.CorrectLevel.L
                 });
                 
                 // Show save note
                 document.getElementById('saveNote').classList.add('show');
             } catch (error) {
                 console.error('QR Code generation error:', error);
-                qrcodeDiv.innerHTML = '<div class="placeholder" style="color: #ff006e;">Error generating QR code. Try without a photo or with a different image.</div>';
+                qrcodeDiv.innerHTML = '<div class="placeholder" style="color: #ff006e;">Error generating QR code. Try with less data.</div>';
             }
         }
         
