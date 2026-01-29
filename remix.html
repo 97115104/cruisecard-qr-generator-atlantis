@@ -244,29 +244,33 @@
             
             <div class="section-title">Step 5: Choose Your Theme</div>
             <div class="theme-grid">
-                <div class="theme-card" data-theme="ocean">
-                    <div class="theme-preview" style="background: linear-gradient(135deg, #00d4ff 0%, #0066cc 100%);">🌊</div>
-                    <div class="theme-name">Ocean Vibes</div>
+                <div class="theme-card" data-theme="lostcity">
+                    <div class="theme-preview" style="background: linear-gradient(135deg, #001f3f 0%, #0066cc 100%);">🔱</div>
+                    <div class="theme-name">Lost City</div>
                 </div>
-                <div class="theme-card" data-theme="sunset">
-                    <div class="theme-preview" style="background: linear-gradient(135deg, #ff6b6b 0%, #ffd93d 100%);">🌅</div>
-                    <div class="theme-name">Sunset Cruise</div>
+                <div class="theme-card" data-theme="wild">
+                    <div class="theme-preview" style="background: linear-gradient(135deg, #0a4d3c 0%, #2d5016 100%);">🦁</div>
+                    <div class="theme-name">Wild!</div>
                 </div>
                 <div class="theme-card" data-theme="neon">
-                    <div class="theme-preview" style="background: linear-gradient(135deg, #f72585 0%, #7209b7 100%);">✨</div>
-                    <div class="theme-name">Neon Nights</div>
+                    <div class="theme-preview" style="background: linear-gradient(135deg, #ff00ff 0%, #00ffff 100%);">🎮</div>
+                    <div class="theme-name">Neon Playground</div>
                 </div>
-                <div class="theme-card" data-theme="tropical">
-                    <div class="theme-preview" style="background: linear-gradient(135deg, #06ffa5 0%, #00cc88 100%);">🌴</div>
-                    <div class="theme-name">Tropical Paradise</div>
+                <div class="theme-card" data-theme="whiteheat">
+                    <div class="theme-preview" style="background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);">🔥</div>
+                    <div class="theme-name">White Heat</div>
                 </div>
-                <div class="theme-card" data-theme="passport">
-                    <div class="theme-preview" style="background: linear-gradient(135deg, #1e3a8a 0%, #60a5fa 100%);">🛂</div>
-                    <div class="theme-name">Passport</div>
+                <div class="theme-card" data-theme="dogtag">
+                    <div class="theme-preview" style="background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);">🪖</div>
+                    <div class="theme-name">Dog Tag</div>
                 </div>
-                <div class="theme-card" data-theme="minimal">
-                    <div class="theme-preview" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">⚡</div>
-                    <div class="theme-name">Clean & Minimal</div>
+                <div class="theme-card" data-theme="disco">
+                    <div class="theme-preview" style="background: linear-gradient(135deg, #ffd700 0%, #ff6b6b 100%);">🕺</div>
+                    <div class="theme-name">Revival Disco</div>
+                </div>
+                <div class="theme-card" data-theme="pink">
+                    <div class="theme-preview" style="background: linear-gradient(135deg, #ff69b4 0%, #ffc0cb 100%);">💕</div>
+                    <div class="theme-name">Twisted Pink</div>
                 </div>
             </div>
             
@@ -384,23 +388,26 @@
             
             // Draw based on theme
             switch(selectedTheme) {
-                case 'ocean':
-                    drawOceanTheme(ctx, width, height);
+                case 'lostcity':
+                    drawLostCityTheme(ctx, width, height);
                     break;
-                case 'sunset':
-                    drawSunsetTheme(ctx, width, height);
+                case 'wild':
+                    drawWildTheme(ctx, width, height);
                     break;
                 case 'neon':
-                    drawNeonTheme(ctx, width, height);
+                    drawNeonPlaygroundTheme(ctx, width, height);
                     break;
-                case 'tropical':
-                    drawTropicalTheme(ctx, width, height);
+                case 'whiteheat':
+                    drawWhiteHeatTheme(ctx, width, height);
                     break;
-                case 'passport':
-                    drawPassportTheme(ctx, width, height);
+                case 'dogtag':
+                    drawDogTagTheme(ctx, width, height);
                     break;
-                case 'minimal':
-                    drawMinimalTheme(ctx, width, height);
+                case 'disco':
+                    drawDiscoTheme(ctx, width, height);
+                    break;
+                case 'pink':
+                    drawPinkTheme(ctx, width, height);
                     break;
             }
             
@@ -428,8 +435,8 @@
                 ctx.drawImage(profileImage, photoX, photoY, photoSize, photoSize);
                 ctx.restore();
                 
-                // Add themed cabin badge below photo
-                drawCabinBadge(ctx, width, photoY + photoSize + 40, selectedTheme);
+                // Add themed cabin badge below photo (moved down 10px)
+                drawCabinBadge(ctx, width, photoY + photoSize + 50, selectedTheme);
             } else {
                 // If no profile photo, show cabin prominently at top
                 drawCabinBadge(ctx, width, height * 0.15, selectedTheme);
@@ -501,29 +508,33 @@
             let bgColor = 'rgba(0, 212, 255, 0.95)';
             
             switch(theme) {
-                case 'ocean':
-                    emoji = '⚓';
-                    bgColor = 'rgba(0, 150, 255, 0.95)';
+                case 'lostcity':
+                    emoji = '🔱';
+                    bgColor = 'rgba(0, 102, 204, 0.95)';
                     break;
-                case 'sunset':
-                    emoji = '🌅';
-                    bgColor = 'rgba(255, 139, 83, 0.95)';
+                case 'wild':
+                    emoji = '🦁';
+                    bgColor = 'rgba(45, 80, 22, 0.95)';
                     break;
                 case 'neon':
-                    emoji = '💎';
-                    bgColor = 'rgba(247, 37, 133, 0.95)';
+                    emoji = '🎮';
+                    bgColor = 'rgba(255, 0, 255, 0.95)';
                     break;
-                case 'tropical':
-                    emoji = '🏝️';
-                    bgColor = 'rgba(6, 255, 165, 0.95)';
+                case 'whiteheat':
+                    emoji = '🔥';
+                    bgColor = 'rgba(220, 220, 220, 0.95)';
                     break;
-                case 'passport':
-                    emoji = '🛂';
-                    bgColor = 'rgba(30, 58, 138, 0.95)';
+                case 'dogtag':
+                    emoji = '🪖';
+                    bgColor = 'rgba(45, 55, 72, 0.95)';
                     break;
-                case 'minimal':
-                    emoji = '🎫';
-                    bgColor = 'rgba(102, 126, 234, 0.95)';
+                case 'disco':
+                    emoji = '🕺';
+                    bgColor = 'rgba(255, 215, 0, 0.95)';
+                    break;
+                case 'pink':
+                    emoji = '💕';
+                    bgColor = 'rgba(255, 105, 180, 0.95)';
                     break;
             }
             
@@ -551,285 +562,441 @@
             ctx.shadowOffsetY = 0;
         }
         
-        function drawOceanTheme(ctx, width, height) {
-            // Deep ocean gradient
+        function drawLostCityTheme(ctx, width, height) {
+            // Deep underwater Atlantis gradient
             const gradient = ctx.createLinearGradient(0, 0, 0, height);
-            gradient.addColorStop(0, '#001f3f');
-            gradient.addColorStop(0.3, '#004080');
-            gradient.addColorStop(0.6, '#0066cc');
-            gradient.addColorStop(1, '#00d4ff');
+            gradient.addColorStop(0, '#000814');
+            gradient.addColorStop(0.3, '#001d3d');
+            gradient.addColorStop(0.6, '#003566');
+            gradient.addColorStop(1, '#0077b6');
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, width, height);
             
-            // Animated wave layers
-            ctx.fillStyle = 'rgba(0, 212, 255, 0.15)';
-            for (let i = 0; i < 4; i++) {
+            // Glowing underwater ruins
+            ctx.fillStyle = 'rgba(0, 150, 200, 0.2)';
+            const pillarCount = 6;
+            for (let i = 0; i < pillarCount; i++) {
+                const x = (width / (pillarCount + 1)) * (i + 1);
+                const pillarWidth = width * 0.08;
+                const pillarHeight = height * 0.4;
+                
+                // Glowing pillar
+                const pillGrad = ctx.createLinearGradient(x, height - pillarHeight, x, height);
+                pillGrad.addColorStop(0, 'rgba(0, 200, 255, 0.3)');
+                pillGrad.addColorStop(1, 'rgba(0, 100, 150, 0.1)');
+                ctx.fillStyle = pillGrad;
+                ctx.fillRect(x - pillarWidth/2, height - pillarHeight, pillarWidth, pillarHeight);
+            }
+            
+            // Bioluminescent particles
+            ctx.fillStyle = 'rgba(0, 255, 255, 0.6)';
+            for (let i = 0; i < 40; i++) {
+                const x = Math.random() * width;
+                const y = Math.random() * height;
+                const radius = Math.random() * 4 + 2;
+                
+                const glowGrad = ctx.createRadialGradient(x, y, 0, x, y, radius * 3);
+                glowGrad.addColorStop(0, 'rgba(0, 255, 255, 0.8)');
+                glowGrad.addColorStop(1, 'rgba(0, 255, 255, 0)');
+                ctx.fillStyle = glowGrad;
                 ctx.beginPath();
-                for (let x = 0; x <= width; x += 10) {
-                    const y = height * (0.7 + i * 0.08) + Math.sin(x * 0.008 + i * 1.5) * 60;
+                ctx.arc(x, y, radius * 3, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            
+            // Wavy water caustics effect
+            ctx.strokeStyle = 'rgba(100, 200, 255, 0.15)';
+            ctx.lineWidth = 3;
+            for (let i = 0; i < 8; i++) {
+                ctx.beginPath();
+                for (let x = 0; x <= width; x += 15) {
+                    const y = height * 0.2 + Math.sin(x * 0.01 + i * 0.8) * 40 + i * 60;
                     if (x === 0) ctx.moveTo(x, y);
                     else ctx.lineTo(x, y);
                 }
-                ctx.lineTo(width, height);
-                ctx.lineTo(0, height);
-                ctx.fill();
+                ctx.stroke();
             }
+        }
+        
+        function drawWildTheme(ctx, width, height) {
+            // Dense jungle gradient
+            const gradient = ctx.createLinearGradient(0, 0, 0, height);
+            gradient.addColorStop(0, '#0d1f0d');
+            gradient.addColorStop(0.4, '#1a3a1a');
+            gradient.addColorStop(0.7, '#2d5016');
+            gradient.addColorStop(1, '#3d6b1a');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, width, height);
             
-            // Bubbles
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
-            for (let i = 0; i < 20; i++) {
+            // Jungle foliage layers
+            const leafShapes = [
+                { x: 0.1, y: 0.1, size: 0.3, rotation: 0.3 },
+                { x: 0.8, y: 0.15, size: 0.35, rotation: -0.4 },
+                { x: 0.3, y: 0.6, size: 0.25, rotation: 0.2 },
+                { x: 0.7, y: 0.7, size: 0.3, rotation: -0.3 },
+                { x: 0.5, y: 0.3, size: 0.2, rotation: 0.1 }
+            ];
+            
+            leafShapes.forEach(leaf => {
+                ctx.save();
+                ctx.translate(width * leaf.x, height * leaf.y);
+                ctx.rotate(leaf.rotation);
+                
+                // Monstera/palm leaf
+                ctx.fillStyle = 'rgba(20, 80, 30, 0.5)';
+                ctx.beginPath();
+                ctx.ellipse(0, 0, width * leaf.size, width * leaf.size * 0.6, 0, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.restore();
+            });
+            
+            // Fireflies/torch lights
+            ctx.fillStyle = 'rgba(255, 200, 100, 0.8)';
+            for (let i = 0; i < 25; i++) {
                 const x = Math.random() * width;
                 const y = Math.random() * height;
-                const radius = Math.random() * 30 + 10;
-                ctx.beginPath();
-                ctx.arc(x, y, radius, 0, Math.PI * 2);
-                ctx.fill();
-            }
-            
-            // Light rays from top
-            const rayGradient = ctx.createLinearGradient(width/2, 0, width/2, height * 0.4);
-            rayGradient.addColorStop(0, 'rgba(255, 255, 255, 0.15)');
-            rayGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
-            ctx.fillStyle = rayGradient;
-            ctx.fillRect(0, 0, width, height * 0.4);
-        }
-        
-        function drawSunsetTheme(ctx, width, height) {
-            // Vibrant sunset gradient
-            const gradient = ctx.createLinearGradient(0, 0, 0, height);
-            gradient.addColorStop(0, '#2d1b69');
-            gradient.addColorStop(0.3, '#ff6b6b');
-            gradient.addColorStop(0.6, '#ff8e53');
-            gradient.addColorStop(0.85, '#ffd93d');
-            gradient.addColorStop(1, '#ffeaa7');
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, width, height);
-            
-            // Large sun
-            const sunGradient = ctx.createRadialGradient(width/2, height * 0.35, 0, width/2, height * 0.35, width * 0.5);
-            sunGradient.addColorStop(0, 'rgba(255, 255, 255, 0.5)');
-            sunGradient.addColorStop(0.3, 'rgba(255, 220, 150, 0.3)');
-            sunGradient.addColorStop(0.6, 'rgba(255, 180, 100, 0.15)');
-            sunGradient.addColorStop(1, 'rgba(255, 150, 50, 0)');
-            ctx.fillStyle = sunGradient;
-            ctx.beginPath();
-            ctx.arc(width/2, height * 0.35, width * 0.5, 0, Math.PI * 2);
-            ctx.fill();
-            
-            // Cloud silhouettes
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
-            for (let i = 0; i < 3; i++) {
-                const y = height * (0.15 + i * 0.12);
-                ctx.beginPath();
-                ctx.ellipse(width * 0.2, y, width * 0.15, width * 0.05, 0, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.beginPath();
-                ctx.ellipse(width * 0.8, y + 20, width * 0.2, width * 0.06, 0, 0, Math.PI * 2);
-                ctx.fill();
-            }
-            
-            // Palm tree silhouettes at bottom
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
-            const palmX = width * 0.15;
-            const palmY = height * 0.8;
-            ctx.fillRect(palmX - 5, palmY, 10, height * 0.2);
-            for (let i = 0; i < 5; i++) {
-                ctx.save();
-                ctx.translate(palmX, palmY);
-                ctx.rotate((i - 2) * 0.4);
-                ctx.beginPath();
-                ctx.ellipse(0, -50, 60, 20, 0, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.restore();
-            }
-        }
-        
-        function drawNeonTheme(ctx, width, height) {
-            // Dark neon background
-            const gradient = ctx.createLinearGradient(0, 0, 0, height);
-            gradient.addColorStop(0, '#0a0014');
-            gradient.addColorStop(0.5, '#1a0033');
-            gradient.addColorStop(1, '#2d004d');
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, width, height);
-            
-            // Neon grid perspective
-            ctx.strokeStyle = 'rgba(247, 37, 133, 0.3)';
-            ctx.lineWidth = 2;
-            
-            // Vertical lines with perspective
-            for (let i = 0; i < 12; i++) {
-                const xTop = width * (i / 12);
-                const xBottom = width * ((i - 1) / 14 + 0.07);
-                ctx.beginPath();
-                ctx.moveTo(xTop, height * 0.5);
-                ctx.lineTo(xBottom, height);
-                ctx.stroke();
-            }
-            
-            // Horizontal lines
-            for (let i = 0; i < 20; i++) {
-                const y = height * (0.5 + (i / 40));
-                const scale = (i / 20);
-                ctx.beginPath();
-                ctx.moveTo(width * (0.07 - scale * 0.07), y);
-                ctx.lineTo(width * (0.93 + scale * 0.07), y);
-                ctx.stroke();
-            }
-            
-            // Glowing orbs
-            const colors = ['rgba(247, 37, 133, 0.6)', 'rgba(181, 23, 158, 0.6)', 'rgba(114, 9, 183, 0.6)'];
-            for (let i = 0; i < 15; i++) {
-                const x = Math.random() * width;
-                const y = Math.random() * height * 0.5;
-                const radius = Math.random() * 40 + 20;
-                const color = colors[Math.floor(Math.random() * colors.length)];
+                const radius = Math.random() * 3 + 2;
                 
-                const orbGradient = ctx.createRadialGradient(x, y, 0, x, y, radius);
-                orbGradient.addColorStop(0, color);
-                orbGradient.addColorStop(1, 'rgba(247, 37, 133, 0)');
-                ctx.fillStyle = orbGradient;
+                const fireGrad = ctx.createRadialGradient(x, y, 0, x, y, radius * 4);
+                fireGrad.addColorStop(0, 'rgba(255, 200, 100, 0.9)');
+                fireGrad.addColorStop(1, 'rgba(255, 100, 0, 0)');
+                ctx.fillStyle = fireGrad;
                 ctx.beginPath();
-                ctx.arc(x, y, radius, 0, Math.PI * 2);
+                ctx.arc(x, y, radius * 4, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            
+            // Animal eye glints
+            const eyeColors = ['rgba(255, 255, 0, 0.8)', 'rgba(0, 255, 100, 0.7)', 'rgba(255, 150, 0, 0.8)'];
+            for (let i = 0; i < 8; i++) {
+                const x = Math.random() * width;
+                const y = Math.random() * height * 0.6;
+                ctx.fillStyle = eyeColors[Math.floor(Math.random() * eyeColors.length)];
+                ctx.beginPath();
+                ctx.ellipse(x, y, 6, 8, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.ellipse(x + 15, y, 6, 8, 0, 0, Math.PI * 2);
                 ctx.fill();
             }
         }
         
-        function drawTropicalTheme(ctx, width, height) {
-            // Lush tropical gradient
-            const gradient = ctx.createLinearGradient(0, 0, 0, height);
-            gradient.addColorStop(0, '#0a4d3c');
-            gradient.addColorStop(0.3, '#06ffa5');
-            gradient.addColorStop(0.6, '#00cc88');
-            gradient.addColorStop(1, '#00a86b');
+        function drawNeonPlaygroundTheme(ctx, width, height) {
+            // Vibrant neon playground gradient
+            const gradient = ctx.createLinearGradient(0, 0, width, height);
+            gradient.addColorStop(0, '#ff00ff');
+            gradient.addColorStop(0.33, '#00ffff');
+            gradient.addColorStop(0.66, '#ffff00');
+            gradient.addColorStop(1, '#ff00ff');
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, width, height);
             
-            // Tropical leaves pattern
-            ctx.fillStyle = 'rgba(0, 50, 30, 0.3)';
-            for (let i = 0; i < 8; i++) {
-                const x = (i % 4) * (width / 4) + width / 8;
-                const y = Math.floor(i / 4) * height * 0.3 + height * 0.1;
+            // Overlay with playful patterns
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+            ctx.fillRect(0, 0, width, height);
+            
+            // Bouncing geometric shapes
+            const shapes = [
+                { x: 0.2, y: 0.2, size: 80, color: 'rgba(255, 0, 255, 0.6)', type: 'circle' },
+                { x: 0.7, y: 0.3, size: 100, color: 'rgba(0, 255, 255, 0.6)', type: 'square' },
+                { x: 0.5, y: 0.7, size: 90, color: 'rgba(255, 255, 0, 0.6)', type: 'triangle' },
+                { x: 0.15, y: 0.6, size: 70, color: 'rgba(0, 255, 150, 0.6)', type: 'circle' },
+                { x: 0.85, y: 0.75, size: 85, color: 'rgba(255, 100, 200, 0.6)', type: 'square' }
+            ];
+            
+            shapes.forEach(shape => {
+                ctx.fillStyle = shape.color;
+                const x = width * shape.x;
+                const y = height * shape.y;
+                
+                if (shape.type === 'circle') {
+                    ctx.beginPath();
+                    ctx.arc(x, y, shape.size / 2, 0, Math.PI * 2);
+                    ctx.fill();
+                } else if (shape.type === 'square') {
+                    ctx.fillRect(x - shape.size / 2, y - shape.size / 2, shape.size, shape.size);
+                } else if (shape.type === 'triangle') {
+                    ctx.beginPath();
+                    ctx.moveTo(x, y - shape.size / 2);
+                    ctx.lineTo(x - shape.size / 2, y + shape.size / 2);
+                    ctx.lineTo(x + shape.size / 2, y + shape.size / 2);
+                    ctx.closePath();
+                    ctx.fill();
+                }
+            });
+            
+            // Sparkle effects
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+            for (let i = 0; i < 50; i++) {
+                const x = Math.random() * width;
+                const y = Math.random() * height;
+                const size = Math.random() * 4 + 2;
                 
                 ctx.save();
                 ctx.translate(x, y);
-                ctx.rotate((i % 3) * 0.5 - 0.5);
-                
-                // Monstera leaf shape
+                ctx.rotate(Math.random() * Math.PI);
+                ctx.fillRect(-size / 2, -1, size, 2);
+                ctx.fillRect(-1, -size / 2, 2, size);
+                ctx.restore();
+            }
+        }
+        
+        function drawWhiteHeatTheme(ctx, width, height) {
+            // Pure white gradient with subtle warmth
+            const gradient = ctx.createLinearGradient(0, 0, 0, height);
+            gradient.addColorStop(0, '#ffffff');
+            gradient.addColorStop(0.5, '#f8f8f8');
+            gradient.addColorStop(1, '#f0f0f0');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, width, height);
+            
+            // Heat wave distortions
+            ctx.strokeStyle = 'rgba(255, 200, 150, 0.2)';
+            ctx.lineWidth = 4;
+            for (let i = 0; i < 10; i++) {
                 ctx.beginPath();
-                ctx.ellipse(0, 0, width * 0.15, width * 0.2, 0, 0, Math.PI * 2);
-                ctx.fill();
+                for (let x = 0; x <= width; x += 15) {
+                    const y = height * (0.2 + i * 0.08) + Math.sin(x * 0.015 + i) * 30;
+                    if (x === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                }
+                ctx.stroke();
+            }
+            
+            // Glowing white orbs
+            const orbGradient = ctx.createRadialGradient(width * 0.5, height * 0.4, 0, width * 0.5, height * 0.4, width * 0.4);
+            orbGradient.addColorStop(0, 'rgba(255, 255, 255, 0.8)');
+            orbGradient.addColorStop(0.5, 'rgba(255, 250, 240, 0.3)');
+            orbGradient.addColorStop(1, 'rgba(255, 240, 220, 0)');
+            ctx.fillStyle = orbGradient;
+            ctx.beginPath();
+            ctx.arc(width * 0.5, height * 0.4, width * 0.4, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Light streaks
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+            ctx.lineWidth = 2;
+            for (let i = 0; i < 20; i++) {
+                const angle = (Math.PI * 2 / 20) * i;
+                const x1 = width / 2 + Math.cos(angle) * width * 0.2;
+                const y1 = height * 0.4 + Math.sin(angle) * width * 0.2;
+                const x2 = width / 2 + Math.cos(angle) * width * 0.6;
+                const y2 = height * 0.4 + Math.sin(angle) * width * 0.6;
                 
+                ctx.beginPath();
+                ctx.moveTo(x1, y1);
+                ctx.lineTo(x2, y2);
+                ctx.stroke();
+            }
+        }
+        
+        function drawDogTagTheme(ctx, width, height) {
+            // Military olive/gray gradient
+            const gradient = ctx.createLinearGradient(0, 0, 0, height);
+            gradient.addColorStop(0, '#2d3748');
+            gradient.addColorStop(0.5, '#4a5568');
+            gradient.addColorStop(1, '#718096');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, width, height);
+            
+            // Camouflage pattern
+            const camoColors = ['rgba(60, 70, 50, 0.3)', 'rgba(80, 90, 70, 0.3)', 'rgba(100, 110, 90, 0.3)'];
+            for (let i = 0; i < 40; i++) {
+                const x = Math.random() * width;
+                const y = Math.random() * height;
+                const size = Math.random() * 150 + 100;
+                ctx.fillStyle = camoColors[Math.floor(Math.random() * camoColors.length)];
+                ctx.beginPath();
+                ctx.ellipse(x, y, size, size * 0.7, Math.random() * Math.PI, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            
+            // Dog tag chain pattern
+            ctx.strokeStyle = 'rgba(200, 200, 200, 0.2)';
+            ctx.lineWidth = 3;
+            for (let y = -50; y < height + 50; y += 20) {
+                ctx.beginPath();
+                for (let x = 0; x <= width; x += 10) {
+                    const yOffset = Math.sin(x * 0.05) * 15;
+                    if (x === 0) ctx.moveTo(x, y + yOffset);
+                    else ctx.lineTo(x, y + yOffset);
+                }
+                ctx.stroke();
+            }
+            
+            // Military star emblems
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+            for (let i = 0; i < 5; i++) {
+                const x = Math.random() * width;
+                const y = Math.random() * height;
+                drawStar(ctx, x, y, 5, 40, 20);
+            }
+        }
+        
+        function drawDiscoTheme(ctx, width, height) {
+            // Classic disco gradient - gold to red
+            const gradient = ctx.createLinearGradient(0, 0, 0, height);
+            gradient.addColorStop(0, '#ffd700');
+            gradient.addColorStop(0.4, '#ffb347');
+            gradient.addColorStop(0.7, '#ff6b6b');
+            gradient.addColorStop(1, '#c41e3a');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, width, height);
+            
+            // Disco ball facets
+            const facetCount = 60;
+            for (let i = 0; i < facetCount; i++) {
+                const x = Math.random() * width;
+                const y = Math.random() * height;
+                const size = Math.random() * 40 + 20;
+                const brightness = Math.random();
+                
+                ctx.fillStyle = `rgba(255, 255, 255, ${brightness * 0.6})`;
+                ctx.save();
+                ctx.translate(x, y);
+                ctx.rotate(Math.random() * Math.PI);
+                ctx.fillRect(-size / 2, -size / 2, size, size);
                 ctx.restore();
             }
             
-            // Hibiscus flowers
-            const flowerColors = ['rgba(255, 100, 150, 0.6)', 'rgba(255, 200, 0, 0.6)', 'rgba(255, 150, 200, 0.6)'];
-            for (let i = 0; i < 6; i++) {
-                const x = Math.random() * width;
-                const y = Math.random() * height;
-                ctx.fillStyle = flowerColors[i % 3];
-                
-                for (let p = 0; p < 5; p++) {
-                    ctx.save();
-                    ctx.translate(x, y);
-                    ctx.rotate((p * Math.PI * 2) / 5);
-                    ctx.beginPath();
-                    ctx.ellipse(30, 0, 25, 15, 0, 0, Math.PI * 2);
-                    ctx.fill();
-                    ctx.restore();
-                }
-            }
-            
-            // Subtle sparkles
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
-            for (let i = 0; i < 30; i++) {
-                const x = Math.random() * width;
-                const y = Math.random() * height;
-                ctx.fillRect(x, y, 3, 3);
-            }
-        }
-        
-        function drawMinimalTheme(ctx, width, height) {
-            // Soft gradient background
-            const gradient = ctx.createLinearGradient(0, 0, 0, height);
-            gradient.addColorStop(0, '#ffffff');
-            gradient.addColorStop(0.5, '#f8f9fa');
-            gradient.addColorStop(1, '#e9ecef');
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, width, height);
-            
-            // Soft circular gradients
-            const circles = [
-                { x: width * 0.2, y: height * 0.2, r: width * 0.35, color: 'rgba(102,126,234,0.08)' },
-                { x: width * 0.8, y: height * 0.7, r: width * 0.4, color: 'rgba(255,0,110,0.06)' },
-                { x: width * 0.5, y: height * 0.5, r: width * 0.3, color: 'rgba(0,212,255,0.05)' }
-            ];
-            
-            circles.forEach(circle => {
-                const grad = ctx.createRadialGradient(circle.x, circle.y, 0, circle.x, circle.y, circle.r);
-                grad.addColorStop(0, circle.color);
-                grad.addColorStop(1, 'rgba(255,255,255,0)');
-                ctx.fillStyle = grad;
+            // Retro sunburst pattern
+            ctx.strokeStyle = 'rgba(255, 215, 0, 0.3)';
+            ctx.lineWidth = 8;
+            const centerX = width / 2;
+            const centerY = height * 0.4;
+            for (let i = 0; i < 36; i++) {
+                const angle = (Math.PI * 2 / 36) * i;
                 ctx.beginPath();
-                ctx.arc(circle.x, circle.y, circle.r, 0, Math.PI * 2);
-                ctx.fill();
-            });
-            
-            // Geometric line art
-            ctx.strokeStyle = 'rgba(102,126,234,0.15)';
-            ctx.lineWidth = 3;
-            ctx.setLineDash([10, 10]);
-            
-            for (let i = 0; i < 5; i++) {
-                ctx.beginPath();
-                ctx.moveTo(width * (i / 5), 0);
-                ctx.lineTo(width * (1 - i / 5), height);
+                ctx.moveTo(centerX, centerY);
+                ctx.lineTo(centerX + Math.cos(angle) * width, centerY + Math.sin(angle) * width);
                 ctx.stroke();
             }
-            ctx.setLineDash([]);
+            
+            // Dance floor squares
+            const gridSize = 8;
+            const squareSize = width / gridSize;
+            ctx.globalAlpha = 0.2;
+            for (let i = 0; i < gridSize; i++) {
+                for (let j = 0; j < gridSize; j++) {
+                    if ((i + j) % 2 === 0) {
+                        ctx.fillStyle = '#ffd700';
+                    } else {
+                        ctx.fillStyle = '#ff6b6b';
+                    }
+                    ctx.fillRect(i * squareSize, height - (j + 1) * squareSize * 0.5, squareSize, squareSize * 0.5);
+                }
+            }
+            ctx.globalAlpha = 1;
         }
         
-        function drawPassportTheme(ctx, width, height) {
-            // Navy blue passport background
+        function drawPinkTheme(ctx, width, height) {
+            // Barbie pink gradient
             const gradient = ctx.createLinearGradient(0, 0, 0, height);
-            gradient.addColorStop(0, '#1e3a8a');
-            gradient.addColorStop(0.5, '#3b82f6');
-            gradient.addColorStop(1, '#60a5fa');
+            gradient.addColorStop(0, '#ff69b4');
+            gradient.addColorStop(0.5, '#ff85c1');
+            gradient.addColorStop(1, '#ffc0cb');
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, width, height);
             
-            // Gold embossed pattern
-            ctx.strokeStyle = 'rgba(251, 191, 36, 0.2)';
-            ctx.lineWidth = 3;
-            const borderPadding = width * 0.08;
+            // Sparkly hearts
+            const hearts = 30;
+            for (let i = 0; i < hearts; i++) {
+                const x = Math.random() * width;
+                const y = Math.random() * height;
+                const size = Math.random() * 60 + 30;
+                const alpha = Math.random() * 0.4 + 0.2;
+                
+                ctx.fillStyle = `rgba(255, 192, 203, ${alpha})`;
+                drawHeart(ctx, x, y, size);
+            }
             
-            // Outer border
-            ctx.strokeRect(borderPadding, borderPadding, width - borderPadding * 2, height - borderPadding * 2);
+            // Glitter particles
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+            for (let i = 0; i < 100; i++) {
+                const x = Math.random() * width;
+                const y = Math.random() * height;
+                const size = Math.random() * 5 + 2;
+                
+                ctx.save();
+                ctx.translate(x, y);
+                ctx.rotate(Math.random() * Math.PI);
+                ctx.fillRect(-size / 2, -0.5, size, 1);
+                ctx.fillRect(-0.5, -size / 2, 1, size);
+                ctx.restore();
+            }
             
-            // Inner decorative border
-            ctx.strokeRect(borderPadding + 20, borderPadding + 20, width - (borderPadding + 20) * 2, height - (borderPadding + 20) * 2);
+            // Wavy ribbons
+            ctx.strokeStyle = 'rgba(255, 105, 180, 0.4)';
+            ctx.lineWidth = 8;
+            for (let i = 0; i < 5; i++) {
+                ctx.beginPath();
+                for (let x = 0; x <= width; x += 10) {
+                    const y = height * (0.2 + i * 0.15) + Math.sin(x * 0.02 + i) * 60;
+                    if (x === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                }
+                ctx.stroke();
+            }
             
-            // Corner decorations
-            const corners = [
-                [borderPadding + 40, borderPadding + 40],
-                [width - borderPadding - 40, borderPadding + 40],
-                [borderPadding + 40, height - borderPadding - 40],
-                [width - borderPadding - 40, height - borderPadding - 40]
+            // Bubble overlays
+            const bubbles = [
+                { x: 0.3, y: 0.3, r: 0.25 },
+                { x: 0.7, y: 0.6, r: 0.2 },
+                { x: 0.5, y: 0.8, r: 0.15 }
             ];
             
-            ctx.fillStyle = 'rgba(251, 191, 36, 0.3)';
-            corners.forEach(([x, y]) => {
+            bubbles.forEach(bubble => {
+                const bubbleGrad = ctx.createRadialGradient(
+                    width * bubble.x, height * bubble.y, 0,
+                    width * bubble.x, height * bubble.y, width * bubble.r
+                );
+                bubbleGrad.addColorStop(0, 'rgba(255, 255, 255, 0.3)');
+                bubbleGrad.addColorStop(0.7, 'rgba(255, 192, 203, 0.2)');
+                bubbleGrad.addColorStop(1, 'rgba(255, 192, 203, 0)');
+                ctx.fillStyle = bubbleGrad;
                 ctx.beginPath();
-                ctx.arc(x, y, 15, 0, Math.PI * 2);
+                ctx.arc(width * bubble.x, height * bubble.y, width * bubble.r, 0, Math.PI * 2);
                 ctx.fill();
             });
+        }
+        
+        // Helper functions for shapes
+        function drawStar(ctx, cx, cy, spikes, outerRadius, innerRadius) {
+            let rot = Math.PI / 2 * 3;
+            let x = cx;
+            let y = cy;
+            const step = Math.PI / spikes;
             
-            // Top text
-            ctx.fillStyle = 'rgba(251, 191, 36, 0.8)';
-            ctx.font = `600 ${width * 0.045}px serif`;
-            ctx.textAlign = 'center';
-            ctx.fillText('ATLANTIS CRUISE 2026', width/2, borderPadding + 60);
+            ctx.beginPath();
+            ctx.moveTo(cx, cy - outerRadius);
+            for (let i = 0; i < spikes; i++) {
+                x = cx + Math.cos(rot) * outerRadius;
+                y = cy + Math.sin(rot) * outerRadius;
+                ctx.lineTo(x, y);
+                rot += step;
+                
+                x = cx + Math.cos(rot) * innerRadius;
+                y = cy + Math.sin(rot) * innerRadius;
+                ctx.lineTo(x, y);
+                rot += step;
+            }
+            ctx.lineTo(cx, cy - outerRadius);
+            ctx.closePath();
+            ctx.fill();
+        }
+        
+        function drawHeart(ctx, x, y, size) {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.scale(size / 100, size / 100);
+            ctx.beginPath();
+            ctx.moveTo(0, 20);
+            ctx.bezierCurveTo(-50, -20, -100, 20, 0, 100);
+            ctx.bezierCurveTo(100, 20, 50, -20, 0, 20);
+            ctx.closePath();
+            ctx.fill();
+            ctx.restore();
         }
         
         // Download
