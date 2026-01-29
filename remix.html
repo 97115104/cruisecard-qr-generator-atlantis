@@ -518,16 +518,16 @@
             <div class="form-group">
                 <select id="themeSelect">
                     <option value="">— Select a theme —</option>
-                    <option value="neon">Neon Playground — Flashy & Fun</option>
-                    <option value="dogtag">Dog Tag Green — Military Tribute</option>
-                    <option value="dogtagyellow">Dog Tag Yellow — Military Tribute</option>
-                    <option value="dogtagred">Dog Tag Red — Military Tribute</option>
-                    <option value="pink">Twisted Pink — Barbie Dreams</option>
-                    <option value="glass">Glass — Apple-style Minimal</option>
-                    <option value="basic">Basic Black — Clean & Simple</option>
-                    <option value="fabulous">Fabulous — Rainbow Pride</option>
-                    <option value="atlantis1">Atlantis T-Dance — Deck Party</option>
                     <option value="atlantis2">Atlantis Pride — Rainbow Party</option>
+                    <option value="atlantis1">Atlantis T-Dance — Deck Party</option>
+                    <option value="basic">Basic Black — Clean & Simple</option>
+                    <option value="dogtag">Dog Tag Green — Military Tribute</option>
+                    <option value="dogtagred">Dog Tag Red — Military Tribute</option>
+                    <option value="dogtagyellow">Dog Tag Yellow — Military Tribute</option>
+                    <option value="fabulous">Fabulous — Rainbow Pride</option>
+                    <option value="glass">Glass — Apple-style Minimal</option>
+                    <option value="neon">Neon Playground — Flashy & Fun</option>
+                    <option value="pink">Twisted Pink — Barbie Dreams</option>
                 </select>
                 <div class="theme-preview-box" id="themePreview">
                     <div class="theme-preview-header">
@@ -582,13 +582,13 @@
         // Preload background images for photo-based themes
         const bgImages = {};
         const bgImagePaths = {
-            atlantis1: 'https://cruisecardgen.97115104.com/backgrounds/Atlantis1.jpg',
-            atlantis2: 'https://cruisecardgen.97115104.com/backgrounds/Atlantis2.jpg',
-            fabulous: 'https://cruisecardgen.97115104.com/backgrounds/Fab.jpg',
-            pink: 'https://cruisecardgen.97115104.com/backgrounds/pink.jpg',
-            dogtag: 'https://cruisecardgen.97115104.com/backgrounds/dogtaggreen.png',
-            dogtagyellow: 'https://cruisecardgen.97115104.com/backgrounds/dogtagyellow.png',
-            dogtagred: 'https://cruisecardgen.97115104.com/backgrounds/dogtagred.png'
+            atlantis1: 'https://cruisecard.gay/backgrounds/Atlantis1.jpg',
+            atlantis2: 'https://cruisecard.gay/backgrounds/Atlantis2.jpg',
+            fabulous: 'https://cruisecard.gay/backgrounds/Fab.jpg',
+            pink: 'https://cruisecard.gay/backgrounds/pink.jpg',
+            dogtag: 'https://cruisecard.gay/backgrounds/dogtaggreen.png',
+            dogtagyellow: 'https://cruisecard.gay/backgrounds/dogtagyellow.png',
+            dogtagred: 'http://cruisecard.gay/backgrounds/dogtagred.png'
         };
 
         // Preload images
@@ -602,16 +602,16 @@
         const currentYear = new Date().getFullYear();
 
         const themeData = {
-            neon: { icon: '🎮', title: 'Neon Playground', desc: 'Bright, flashy, unapologetically extra. Like your ex, but fun.', gradient: 'linear-gradient(135deg, #ff00ff, #00ffff)', isGlass: false },
-            dogtag: { icon: '🪖', title: 'Dog Tag Green', desc: 'Military camo vibes — green.', gradient: 'linear-gradient(135deg, #4a5568, #2d3748)', isGlass: false },
-            dogtagyellow: { icon: '🪖', title: 'Dog Tag Yellow', desc: 'Military camo vibes — yellow variant.', gradient: 'linear-gradient(135deg, #776400, #b58a00)', isGlass: false },
-            dogtagred: { icon: '🪖', title: 'Dog Tag Red', desc: 'Military camo vibes — red variant.', gradient: 'linear-gradient(135deg, #5a1a1a, #8b2323)', isGlass: false },
-            pink: { icon: '💕', title: 'Twisted Pink', desc: 'Barbie meets bear. Ken is shook.', gradient: 'linear-gradient(135deg, #ff69b4, #ffc0cb)', isGlass: false },
-            glass: { icon: '🪟', title: 'Glass', desc: 'Clean, minimal, Apple-inspired transparency.', gradient: 'none', isGlass: true },
-            basic: { icon: '🖤', title: 'Basic Black', desc: 'Simple, elegant, timeless. Pure black sophistication.', gradient: 'linear-gradient(135deg, #1a1a1a, #000000)', isGlass: false },
-            fabulous: { icon: '🏳️‍🌈', title: 'Fabulous', desc: 'Loud, proud, and covered in rainbows. Slay queen!', gradient: 'linear-gradient(135deg, #ff6b6b, #ffd93d, #6bcb77, #4d96ff)', isGlass: false },
+            atlantis2: { icon: '🌈', title: 'Atlantis Pride', desc: 'Rainbow explosion on the high seas. Pure joy and celebration.', gradient: 'linear-gradient(135deg, #ff6b6b, #ffd93d, #6bcb77, #4d96ff)', isGlass: false },
             atlantis1: { icon: '🚢', title: 'Atlantis T-Dance', desc: 'The legendary deck party. Dog Tag vibes with thousands of your closest friends.', gradient: 'linear-gradient(135deg, #1a5276, #2980b9)', isGlass: false },
-            atlantis2: { icon: '🌈', title: 'Atlantis Pride', desc: 'Rainbow explosion on the high seas. Pure joy and celebration.', gradient: 'linear-gradient(135deg, #ff6b6b, #ffd93d, #6bcb77, #4d96ff)', isGlass: false }
+            basic: { icon: '🖤', title: 'Basic Black', desc: 'Simple, elegant, timeless. Pure black sophistication.', gradient: 'linear-gradient(135deg, #1a1a1a, #000000)', isGlass: false },
+            dogtag: { icon: '🪖', title: 'Dog Tag Green', desc: 'Military camo vibes — green.', gradient: 'linear-gradient(135deg, #4a5568, #2d3748)', isGlass: false },
+            dogtagred: { icon: '🪖', title: 'Dog Tag Red', desc: 'Military camo vibes — red variant.', gradient: 'linear-gradient(135deg, #5a1a1a, #8b2323)', isGlass: false },
+            dogtagyellow: { icon: '🪖', title: 'Dog Tag Yellow', desc: 'Military camo vibes — yellow variant.', gradient: 'linear-gradient(135deg, #776400, #b58a00)', isGlass: false },
+            fabulous: { icon: '🏳️‍🌈', title: 'Fabulous', desc: 'Loud, proud, and covered in rainbows. Slay queen!', gradient: 'linear-gradient(135deg, #ff6b6b, #ffd93d, #6bcb77, #4d96ff)', isGlass: false },
+            glass: { icon: '🪟', title: 'Glass', desc: 'Clean, minimal, Apple-inspired transparency.', gradient: 'none', isGlass: true },
+            neon: { icon: '🎮', title: 'Neon Playground', desc: 'Bright, flashy, unapologetically extra. Like your ex, but fun.', gradient: 'linear-gradient(135deg, #ff00ff, #00ffff)', isGlass: false },
+            pink: { icon: '💕', title: 'Twisted Pink', desc: 'Barbie meets bear. Ken is shook.', gradient: 'linear-gradient(135deg, #ff69b4, #ffc0cb)', isGlass: false }
         };
 
         const funnyQuotes = [
@@ -1058,16 +1058,16 @@
 
         function drawTheme(ctx, w, h, s, theme) {
                 const themes = { 
-                neon: drawNeon, 
-                dogtag: drawDogTagGreen,
-                dogtagyellow: drawDogTagYellow,
-                dogtagred: drawDogTagRed,
-                pink: drawPink,
-                glass: drawGlass,
-                basic: drawBasic,
-                fabulous: drawFabulous,
+                atlantis2: drawAtlantis2,
                 atlantis1: drawAtlantis1,
-                atlantis2: drawAtlantis2
+                basic: drawBasic,
+                dogtag: drawDogTagGreen,
+                dogtagred: drawDogTagRed,
+                dogtagyellow: drawDogTagYellow,
+                fabulous: drawFabulous,
+                glass: drawGlass,
+                neon: drawNeon,
+                pink: drawPink
             };
             if (themes[theme]) themes[theme](ctx, w, h, s);
         }
