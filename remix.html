@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Lock Screen Remix</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚢</text></svg>">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 32px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #ff006e;
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 24px;
+        }
+        
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #ff006e;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        select, input[type="file"], input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 14px;
+            background: white;
+            transition: all 0.3s;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #ff006e;
+            box-shadow: 0 0 0 3px rgba(255, 0, 110, 0.1);
+        }
+        
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .theme-card {
+            border: 3px solid #e0e0e0;
+            border-radius: 16px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .theme-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        
+        .theme-card.selected {
+            border-color: #ff006e;
+            background: rgba(255, 0, 110, 0.1);
+        }
+        
+        .theme-preview {
+            width: 100%;
+            aspect-ratio: 9/19.5;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+        }
+        
+        .theme-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+        
+        .generate-btn {
+            width: 100%;
+            padding: 16px;
+            background: #ff006e;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 0, 110, 0.4);
+            background: #e6006a;
+        }
+        
+        .generate-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        #preview {
+            display: none;
+            text-align: center;
+        }
+        
+        #preview.show {
+            display: block;
+        }
+        
+        #wallpaperCanvas {
+            max-width: 100%;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            margin: 20px 0;
+        }
+        
+        .download-btn {
+            padding: 14px 32px;
+            background: #ff006e;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .download-btn:hover {
+            background: #e6006a;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .back-link:hover {
+            background: rgba(255,255,255,0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">← Back to Cruise Card</a>
+        
+        <div class="card">
+            <h1>🎨 QR Lock Screen Remix</h1>
+            <p class="subtitle">Create a stunning lock screen wallpaper with your QR code</p>
+            
+            <div class="section-title">Step 1: Upload Your QR Code</div>
+            <div class="form-group">
+                <label for="qrUpload">QR Code Image *</label>
+                <input type="file" id="qrUpload" accept="image/*" required>
+            </div>
+            
+            <div class="section-title">Step 2: Upload Profile Photo (Optional)</div>
+            <div class="form-group">
+                <label for="photoUpload">Profile Photo</label>
+                <input type="file" id="photoUpload" accept="image/*">
+            </div>
+            
+            <div class="section-title">Step 3: Enter Cabin Number *</div>
+            <div class="form-group">
+                <label for="cabinNumber">Cabin Number</label>
+                <input type="text" id="cabinNumber" placeholder="6969" required>
+            </div>
+            
+            <div class="section-title">Step 4: Select Your Phone</div>
+            <div class="form-group">
+                <label for="phoneModel">Phone Screen Size</label>
+                <select id="phoneModel">
+                    <option value="1179,2556">iPhone 15 Pro Max / 14 Pro Max (1179 × 2556)</option>
+                    <option value="1290,2796">iPhone 16 Pro Max / 15 Pro Max (1290 × 2796)</option>
+                    <option value="1170,2532">iPhone 15 / 14 / 13 / 12 (1170 × 2532)</option>
+                    <option value="1125,2436">iPhone X / XS / 11 Pro (1125 × 2436)</option>
+                    <option value="1284,2778">iPhone 14 Plus / 13 Pro Max (1284 × 2778)</option>
+                    <option value="1080,2400">Android (1080 × 2400)</option>
+                    <option value="1440,3200">Android XL (1440 × 3200)</option>
+                </select>
+            </div>
+            
+            <div class="section-title">Step 5: Choose Your Theme</div>
+            <div class="theme-grid">
+                <div class="theme-card" data-theme="ocean">
+                    <div class="theme-preview" style="background: linear-gradient(135deg, #00d4ff 0%, #0066cc 100%);">🌊</div>
+                    <div class="theme-name">Ocean Vibes</div>
+                </div>
+                <div class="theme-card" data-theme="sunset">
+                    <div class="theme-preview" style="background: linear-gradient(135deg, #ff6b6b 0%, #ffd93d 100%);">🌅</div>
+                    <div class="theme-name">Sunset Cruise</div>
+                </div>
+                <div class="theme-card" data-theme="neon">
+                    <div class="theme-preview" style="background: linear-gradient(135deg, #f72585 0%, #7209b7 100%);">✨</div>
+                    <div class="theme-name">Neon Nights</div>
+                </div>
+                <div class="theme-card" data-theme="tropical">
+                    <div class="theme-preview" style="background: linear-gradient(135deg, #06ffa5 0%, #00cc88 100%);">🌴</div>
+                    <div class="theme-name">Tropical Paradise</div>
+                </div>
+                <div class="theme-card" data-theme="minimal">
+                    <div class="theme-preview" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">⚡</div>
+                    <div class="theme-name">Clean & Minimal</div>
+                </div>
+            </div>
+            
+            <button class="generate-btn" id="generateBtn" disabled>Generate Wallpaper</button>
+        </div>
+        
+        <div class="card" id="preview">
+            <div class="section-title">Your Custom Lock Screen</div>
+            <canvas id="wallpaperCanvas"></canvas>
+            <button class="download-btn" id="downloadBtn">Download Wallpaper</button>
+        </div>
+    </div>
+
+    <script>
+        let qrImage = null;
+        let profileImage = null;
+        let selectedTheme = null;
+        let cabinNumber = '';
+        
+        // Cabin number input
+        document.getElementById('cabinNumber').addEventListener('input', function() {
+            cabinNumber = this.value.trim();
+            checkReadyToGenerate();
+        });
+        
+        // Theme selection
+        document.querySelectorAll('.theme-card').forEach(card => {
+            card.addEventListener('click', function() {
+                document.querySelectorAll('.theme-card').forEach(c => c.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedTheme = this.dataset.theme;
+                checkReadyToGenerate();
+            });
+        });
+        
+        // QR Upload
+        document.getElementById('qrUpload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const img = new Image();
+                    img.onload = function() {
+                        qrImage = img;
+                        checkReadyToGenerate();
+                    };
+                    img.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // Profile Photo Upload
+        document.getElementById('photoUpload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const img = new Image();
+                    img.onload = function() {
+                        profileImage = img;
+                    };
+                    img.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        function checkReadyToGenerate() {
+            const btn = document.getElementById('generateBtn');
+            btn.disabled = !(qrImage && selectedTheme && cabinNumber);
+        }
+        
+        // Generate Wallpaper
+        document.getElementById('generateBtn').addEventListener('click', generateWallpaper);
+        
+        function generateWallpaper() {
+            const phoneSize = document.getElementById('phoneModel').value.split(',');
+            const width = parseInt(phoneSize[0]);
+            const height = parseInt(phoneSize[1]);
+            
+            const canvas = document.getElementById('wallpaperCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = width;
+            canvas.height = height;
+            
+            // Draw based on theme
+            switch(selectedTheme) {
+                case 'ocean':
+                    drawOceanTheme(ctx, width, height);
+                    break;
+                case 'sunset':
+                    drawSunsetTheme(ctx, width, height);
+                    break;
+                case 'neon':
+                    drawNeonTheme(ctx, width, height);
+                    break;
+                case 'tropical':
+                    drawTropicalTheme(ctx, width, height);
+                    break;
+                case 'minimal':
+                    drawMinimalTheme(ctx, width, height);
+                    break;
+            }
+            
+            // Add profile photo if provided
+            if (profileImage) {
+                const photoSize = Math.min(width * 0.35, 400);
+                const photoX = (width - photoSize) / 2;
+                const photoY = height * 0.15;
+                
+                // Draw circular photo with border
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(photoX + photoSize/2, photoY + photoSize/2, photoSize/2 + 8, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255,255,255,0.9)';
+                ctx.fill();
+                
+                ctx.beginPath();
+                ctx.arc(photoX + photoSize/2, photoY + photoSize/2, photoSize/2, 0, Math.PI * 2);
+                ctx.clip();
+                ctx.drawImage(profileImage, photoX, photoY, photoSize, photoSize);
+                ctx.restore();
+                
+                // Add cabin number badge below photo
+                const badgeY = photoY + photoSize + 30;
+                const badgeText = `CABIN ${cabinNumber}`;
+                
+                ctx.font = `bold ${width * 0.05}px sans-serif`;
+                const textWidth = ctx.measureText(badgeText).width;
+                const badgePadding = 30;
+                const badgeWidth = textWidth + badgePadding * 2;
+                const badgeHeight = width * 0.08;
+                const badgeX = (width - badgeWidth) / 2;
+                
+                // Badge background
+                ctx.fillStyle = 'rgba(255, 0, 110, 0.95)';
+                ctx.shadowColor = 'rgba(0,0,0,0.3)';
+                ctx.shadowBlur = 20;
+                ctx.shadowOffsetY = 8;
+                roundRect(ctx, badgeX, badgeY, badgeWidth, badgeHeight, 20);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+                ctx.shadowOffsetY = 0;
+                
+                // Badge text
+                ctx.fillStyle = 'white';
+                ctx.textAlign = 'center';
+                ctx.fillText(badgeText, width/2, badgeY + badgeHeight * 0.65);
+            } else {
+                // If no profile photo, show cabin prominently at top
+                const badgeY = height * 0.15;
+                const badgeText = `CABIN ${cabinNumber}`;
+                
+                ctx.font = `bold ${width * 0.08}px sans-serif`;
+                const textWidth = ctx.measureText(badgeText).width;
+                const badgePadding = 40;
+                const badgeWidth = textWidth + badgePadding * 2;
+                const badgeHeight = width * 0.12;
+                const badgeX = (width - badgeWidth) / 2;
+                
+                // Badge background
+                ctx.fillStyle = 'rgba(255, 0, 110, 0.95)';
+                ctx.shadowColor = 'rgba(0,0,0,0.3)';
+                ctx.shadowBlur = 20;
+                ctx.shadowOffsetY = 8;
+                roundRect(ctx, badgeX, badgeY, badgeWidth, badgeHeight, 20);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+                ctx.shadowOffsetY = 0;
+                
+                // Badge text
+                ctx.fillStyle = 'white';
+                ctx.textAlign = 'center';
+                ctx.fillText(badgeText, width/2, badgeY + badgeHeight * 0.65);
+            }
+            
+            // Add QR code
+            const qrSize = Math.min(width * 0.5, 600);
+            const qrX = (width - qrSize) / 2;
+            const qrY = profileImage ? height * 0.55 : height * 0.35;
+            
+            // QR background
+            ctx.fillStyle = 'rgba(255,255,255,0.95)';
+            ctx.shadowColor = 'rgba(0,0,0,0.3)';
+            ctx.shadowBlur = 30;
+            ctx.shadowOffsetY = 10;
+            const borderRadius = 30;
+            roundRect(ctx, qrX - 30, qrY - 30, qrSize + 60, qrSize + 60, borderRadius);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+            ctx.shadowOffsetY = 0;
+            
+            // Draw QR
+            ctx.drawImage(qrImage, qrX, qrY, qrSize, qrSize);
+            
+            // Add text
+            ctx.fillStyle = 'white';
+            ctx.font = `bold ${width * 0.06}px sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.shadowColor = 'rgba(0,0,0,0.5)';
+            ctx.shadowBlur = 10;
+            ctx.fillText('Atlantis 2026', width/2, height * 0.92);
+            
+            // Show preview
+            document.getElementById('preview').classList.add('show');
+            document.getElementById('preview').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function roundRect(ctx, x, y, width, height, radius) {
+            ctx.beginPath();
+            ctx.moveTo(x + radius, y);
+            ctx.lineTo(x + width - radius, y);
+            ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+            ctx.lineTo(x + width, y + height - radius);
+            ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+            ctx.lineTo(x + radius, y + height);
+            ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+            ctx.lineTo(x, y + radius);
+            ctx.quadraticCurveTo(x, y, x + radius, y);
+            ctx.closePath();
+        }
+        
+        function drawOceanTheme(ctx, width, height) {
+            const gradient = ctx.createLinearGradient(0, 0, 0, height);
+            gradient.addColorStop(0, '#00d4ff');
+            gradient.addColorStop(0.5, '#0099ff');
+            gradient.addColorStop(1, '#0066cc');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, width, height);
+            
+            // Add wave patterns
+            ctx.fillStyle = 'rgba(255,255,255,0.1)';
+            for (let i = 0; i < 3; i++) {
+                ctx.beginPath();
+                for (let x = 0; x <= width; x += 10) {
+                    const y = height * (0.8 + i * 0.1) + Math.sin(x * 0.01 + i) * 50;
+                    if (x === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                }
+                ctx.lineTo(width, height);
+                ctx.lineTo(0, height);
+                ctx.fill();
+            }
+        }
+        
+        function drawSunsetTheme(ctx, width, height) {
+            const gradient = ctx.createLinearGradient(0, 0, 0, height);
+            gradient.addColorStop(0, '#ff6b6b');
+            gradient.addColorStop(0.5, '#ff8e53');
+            gradient.addColorStop(1, '#ffd93d');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, width, height);
+            
+            // Sun
+            const sunGradient = ctx.createRadialGradient(width/2, height * 0.3, 0, width/2, height * 0.3, width * 0.4);
+            sunGradient.addColorStop(0, 'rgba(255,255,255,0.3)');
+            sunGradient.addColorStop(1, 'rgba(255,255,255,0)');
+            ctx.fillStyle = sunGradient;
+            ctx.fillRect(0, 0, width, height);
+        }
+        
+        function drawNeonTheme(ctx, width, height) {
+            const gradient = ctx.createLinearGradient(0, 0, 0, height);
+            gradient.addColorStop(0, '#f72585');
+            gradient.addColorStop(0.5, '#b5179e');
+            gradient.addColorStop(1, '#7209b7');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, width, height);
+            
+            // Grid lines
+            ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+            ctx.lineWidth = 2;
+            for (let i = 0; i < width; i += width / 10) {
+                ctx.beginPath();
+                ctx.moveTo(i, 0);
+                ctx.lineTo(i, height);
+                ctx.stroke();
+            }
+            for (let i = 0; i < height; i += height / 20) {
+                ctx.beginPath();
+                ctx.moveTo(0, i);
+                ctx.lineTo(width, i);
+                ctx.stroke();
+            }
+        }
+        
+        function drawTropicalTheme(ctx, width, height) {
+            const gradient = ctx.createLinearGradient(0, 0, 0, height);
+            gradient.addColorStop(0, '#06ffa5');
+            gradient.addColorStop(0.5, '#00cc88');
+            gradient.addColorStop(1, '#009966');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, width, height);
+            
+            // Palm leaves
+            ctx.fillStyle = 'rgba(0,0,0,0.1)';
+            for (let i = 0; i < 5; i++) {
+                ctx.save();
+                ctx.translate(width * (0.2 + i * 0.15), height * 0.1);
+                ctx.rotate((i - 2) * 0.3);
+                ctx.beginPath();
+                ctx.ellipse(0, 0, width * 0.15, width * 0.05, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+        
+        function drawMinimalTheme(ctx, width, height) {
+            const gradient = ctx.createLinearGradient(0, 0, 0, height);
+            gradient.addColorStop(0, '#f8f9fa');
+            gradient.addColorStop(1, '#e9ecef');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, width, height);
+            
+            // Subtle geometric shapes
+            ctx.fillStyle = 'rgba(102,126,234,0.05)';
+            ctx.beginPath();
+            ctx.arc(width * 0.2, height * 0.2, width * 0.3, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.fillStyle = 'rgba(118,75,162,0.05)';
+            ctx.beginPath();
+            ctx.arc(width * 0.8, height * 0.8, width * 0.4, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        
+        // Download
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            const canvas = document.getElementById('wallpaperCanvas');
+            const link = document.createElement('a');
+            link.download = 'atlantis-cruise-wallpaper.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        });
+    </script>
+</body>
+</html>
