@@ -123,6 +123,12 @@
             box-shadow: 0 0 0 3px rgba(255, 0, 110, 0.1);
         }
         
+        textarea:focus {
+            outline: none;
+            border-color: #ff006e;
+            box-shadow: 0 0 0 3px rgba(255, 0, 110, 0.1);
+        }
+        
         .optional-fields {
             margin-top: 16px;
             padding-top: 16px;
@@ -291,6 +297,11 @@
                     <input type="text" id="cabin" placeholder="6969" required>
                 </div>
                 
+                <div class="form-group">
+                    <label for="phone">📱 Phone Number</label>
+                    <input type="tel" id="phone" placeholder="+1 555-CRUISE">
+                </div>
+                
                 <div class="optional-fields">
                     <div class="section-title">🔗 Social Links</div>
                     
@@ -310,6 +321,11 @@
                     </div>
                     
                     <div class="form-group">
+                        <label for="linkedin">LinkedIn</label>
+                        <input type="text" id="linkedin" placeholder="johndoe">
+                    </div>
+                    
+                    <div class="form-group">
                         <label for="onlyfans">OnlyFans</label>
                         <input type="text" id="onlyfans" placeholder="porthole_content">
                     </div>
@@ -322,6 +338,13 @@
                     <div id="customFieldsContainer"></div>
                     
                     <button type="button" class="add-field-btn" onclick="addCustomField()">+ Add Custom Link</button>
+                    
+                    <div class="section-title" style="margin-top: 16px;">📝 Notes</div>
+                    
+                    <div class="form-group">
+                        <label for="notes">Additional Notes</label>
+                        <textarea id="notes" rows="3" placeholder="Interests, fun facts, or anything you want to share..." style="width: 100%; padding: 12px 14px; border: 2px solid #e0e0e0; border-radius: 12px; font-size: 14px; font-family: inherit; resize: vertical; transition: all 0.3s;"></textarea>
+                    </div>
                 </div>
                 
                 <div class="button-group">
@@ -379,11 +402,14 @@
             const firstName = document.getElementById('firstName').value.trim();
             const lastName = document.getElementById('lastName').value.trim();
             const cabin = document.getElementById('cabin').value.trim();
+            const phone = document.getElementById('phone').value.trim();
             const telegram = document.getElementById('telegram').value.trim();
             const instagram = document.getElementById('instagram').value.trim();
             const twitter = document.getElementById('twitter').value.trim();
+            const linkedin = document.getElementById('linkedin').value.trim();
             const onlyfans = document.getElementById('onlyfans').value.trim();
             const website = document.getElementById('website').value.trim();
+            const notes = document.getElementById('notes').value.trim();
             
             if (!firstName || !lastName || !cabin) {
                 alert('Please fill in all required fields (Name and Cabin)');
@@ -396,10 +422,19 @@
             vcard += `FN:${firstName} ${lastName}\n`;
             vcard += `N:${lastName};${firstName};;;\n`;
             
+            // Add phone if provided
+            if (phone) {
+                vcard += `TEL;TYPE=CELL:${phone}\n`;
+            }
+            
             // Add cabin as organization/title for visibility
-            vcard += 'ORG:Atlantis Cruise\n';
+            vcard += 'ORG:Atlantis Cruise 2026\n';
             vcard += `TITLE:Cabin ${cabin}\n`;
-            vcard += `NOTE:Cruise Cabin: ${cabin}\n`;
+            
+            // Add notes if provided (only user-entered notes)
+            if (notes) {
+                vcard += `NOTE:${notes}\n`;
+            }
             
             // Add social media as URLs (without photo for now to avoid the error)
             if (telegram) {
@@ -417,6 +452,13 @@
             if (twitter) {
                 const handle = twitter.replace('@', '');
                 vcard += `URL;TYPE=Twitter:https://x.com/${handle}\n`;
+            }
+            
+            if (linkedin) {
+                const handle = linkedin.replace('@', '');
+                const linkedinUrl = linkedin.startsWith('http') ? linkedin :
+                                   `https://linkedin.com/in/${handle}`;
+                vcard += `URL;TYPE=LinkedIn:${linkedinUrl}\n`;
             }
             
             if (onlyfans) {
