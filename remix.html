@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>QR Lock Screen Remix | Atlantis 2026</title>
+    <title>QR Lock Screen Remix | Atlantis</title>
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚢</text></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -129,7 +129,8 @@
 
         select,
         input[type="file"],
-        input[type="text"] {
+        input[type="text"],
+        textarea {
             width: 100%;
             padding: 12px 14px;
             border: 2px solid var(--border);
@@ -139,6 +140,11 @@
             background: white;
             color: var(--text-primary);
             transition: all 0.3s;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 60px;
         }
 
         select {
@@ -152,7 +158,8 @@
         }
 
         input:focus,
-        select:focus {
+        select:focus,
+        textarea:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px var(--primary-glow);
@@ -302,6 +309,137 @@
             color: var(--primary);
         }
 
+        /* Quote Options Styling */
+        .quote-options {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .quote-option-btn {
+            flex: 1;
+            padding: 10px 14px;
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: var(--text-secondary);
+        }
+
+        .quote-option-btn.active {
+            border-color: var(--primary);
+            background: rgba(255, 0, 110, 0.1);
+            color: var(--primary);
+        }
+
+        .quote-option-btn:hover:not(.active) {
+            border-color: var(--primary);
+        }
+
+        .custom-quote-input {
+            display: none;
+        }
+
+        .custom-quote-input.show {
+            display: block;
+            animation: fadeInUp 0.3s ease-out;
+        }
+
+        .random-quote-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: var(--text-secondary);
+            margin-top: 8px;
+        }
+
+        .random-quote-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        #quotePreview {
+            margin-top: 8px;
+            padding: 10px;
+            background: rgba(255, 240, 245, 0.8);
+            border-radius: 8px;
+            font-size: 13px;
+            font-style: italic;
+            color: var(--text-secondary);
+            display: none;
+        }
+
+        #quotePreview.show {
+            display: block;
+        }
+
+        /* Wallpaper Section */
+        .wallpaper-preview {
+            margin-top: 10px;
+            width: 100%;
+            height: 80px;
+            border-radius: 10px;
+            background-size: cover;
+            background-position: center;
+            display: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wallpaper-preview.show {
+            display: block;
+        }
+
+        .wallpaper-preview::after {
+            content: 'Wallpaper Set';
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            background: rgba(0, 204, 136, 0.9);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .clear-wallpaper-btn {
+            display: none;
+            margin-top: 8px;
+            padding: 8px 14px;
+            background: transparent;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: all 0.3s;
+        }
+
+        .clear-wallpaper-btn.show {
+            display: inline-block;
+        }
+
+        .clear-wallpaper-btn:hover {
+            border-color: #ff4444;
+            color: #ff4444;
+        }
+
         @media (max-width: 480px) {
             body {
                 padding: 16px;
@@ -320,9 +458,9 @@
 
 <body>
     <div class="container">
-        <a href="index.html" class="back-link">← Back to Cruise Card</a>
+        <a href="index.html" class="back-link">Back to Cruise Card</a>
         <div class="card">
-            <h1>Atlantis 2026 Lock Screen Remix</h1>
+            <h1>Atlantis Lock Screen Remix</h1>
             <p class="subtitle">Create a custom wallpaper with your QR code</p>
 
             <div class="section-title">Upload QR Code</div>
@@ -373,14 +511,40 @@
                     <option value="dogtag">🪖 Dog Tag — Military Tribute</option>
                     <option value="disco">🕺 Revival! Disco — 70s Vibes</option>
                     <option value="pink">💕 Twisted Pink — Barbie Dreams</option>
+                    <option value="glass">🪟 Glass — Apple-style Minimal</option>
+                    <option value="basic">🖤 Basic Black — Clean & Simple</option>
+                    <option value="fabulous">🏳️‍🌈 Fabulous — Rainbow Pride</option>
                 </select>
                 <div class="theme-preview-box" id="themePreview">
                     <div class="theme-preview-header">
-                        <div class="theme-preview-icon" id="themeIcon">🔱</div>
+                        <div class="theme-preview-icon" id="themeIcon"></div>
                         <div class="theme-preview-title" id="themeTitle">Lost City</div>
                     </div>
                     <div class="theme-preview-desc" id="themeDesc"></div>
                 </div>
+            </div>
+
+            <div class="section-title">Custom Background <span class="optional-tag">(optional)</span></div>
+            <div class="form-group">
+                <label>Upload Your Own Wallpaper</label>
+                <input type="file" id="wallpaperUpload" accept="image/*">
+                <div id="wallpaperStatus" class="status-text">This will replace the theme background</div>
+                <div class="wallpaper-preview" id="wallpaperPreview"></div>
+                <button class="clear-wallpaper-btn" id="clearWallpaper">Remove Wallpaper</button>
+            </div>
+
+            <div class="section-title">Quote</div>
+            <div class="form-group">
+                <div class="quote-options">
+                    <button class="quote-option-btn active" id="randomQuoteBtn" data-mode="random">Random</button>
+                    <button class="quote-option-btn" id="customQuoteBtn" data-mode="custom">Custom</button>
+                    <button class="quote-option-btn" id="noQuoteBtn" data-mode="none">No Quote</button>
+                </div>
+                <div class="custom-quote-input" id="customQuoteSection">
+                    <textarea id="customQuote" placeholder="Enter your custom quote..." maxlength="100"></textarea>
+                </div>
+                <button class="random-quote-btn" id="shuffleQuote">Shuffle Quote</button>
+                <div id="quotePreview"></div>
             </div>
 
             <button class="generate-btn" id="generateBtn" disabled>Generate Wallpaper</button>
@@ -389,14 +553,20 @@
         <div class="card" id="preview">
             <div class="section-title">Your Custom Lock Screen</div>
             <canvas id="wallpaperCanvas"></canvas>
-            <button class="download-btn" id="downloadBtn">📲 Download Wallpaper</button>
-            <div class="tip-box">💡 <strong>Tip:</strong> After downloading, go to Settings → Wallpaper and select this
+            <button class="download-btn" id="downloadBtn">Download Wallpaper</button>
+            <div class="tip-box"><strong>Tip:</strong> After downloading, go to Settings then Wallpaper and select this
                 image.</div>
         </div>
     </div>
 
     <script>
         let qrImage = null, profileImage = null, selectedTheme = null, cabinNumber = '', userLocation = '';
+        let customWallpaper = null;
+        let quoteMode = 'random';
+        let currentRandomQuote = '';
+
+        // Get current year dynamically
+        const currentYear = new Date().getFullYear();
 
         const themeData = {
             lostcity: { icon: '🔱', title: 'Lost City', desc: 'Dive deep into underwater Atlantis. Mermaids, mermen, and everyone in between.', gradient: 'linear-gradient(135deg, #001f3f, #0066cc)' },
@@ -405,26 +575,86 @@
             whiteheat: { icon: '🔥', title: 'White Heat', desc: 'All white everything. Looking like a bleach commercial is a serve.', gradient: 'linear-gradient(135deg, #fff, #e8e8e8)' },
             dogtag: { icon: '🪖', title: 'Dog Tag', desc: 'Small uniforms, big energy. Don\'t ask, just dance.', gradient: 'linear-gradient(135deg, #4a5568, #2d3748)' },
             disco: { icon: '🕺', title: 'Revival! Disco', desc: 'Bell bottoms and chest hair. Studio 54 wishes.', gradient: 'linear-gradient(135deg, #ffd700, #ff6b6b)' },
-            pink: { icon: '💕', title: 'Twisted Pink', desc: 'Barbie meets bear. Ken is shook.', gradient: 'linear-gradient(135deg, #ff69b4, #ffc0cb)' }
+            pink: { icon: '💕', title: 'Twisted Pink', desc: 'Barbie meets bear. Ken is shook.', gradient: 'linear-gradient(135deg, #ff69b4, #ffc0cb)' },
+            glass: { icon: '🪟', title: 'Glass', desc: 'Clean, minimal, Apple-inspired frosted glass aesthetic.', gradient: 'linear-gradient(135deg, #e8e8e8, #f5f5f5)' },
+            basic: { icon: '🖤', title: 'Basic Black', desc: 'Simple, elegant, timeless. Pure black sophistication.', gradient: 'linear-gradient(135deg, #1a1a1a, #000000)' },
+            fabulous: { icon: '🏳️‍🌈', title: 'Fabulous', desc: 'Loud, proud, and covered in rainbows. Slay queen!', gradient: 'linear-gradient(135deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #8b00ff)' }
         };
 
         const funnyQuotes = [
-            "I'm not gay but my boyfriend is 💅", "Slay the day away ✨", "Sorry can't hear you over my outfit 👗",
-            "Too glam to give a damn 💄", "My ship has come in... literally 🚢", "Professional homosexual 💼",
-            "Cher is my spirit animal 🦄", "Body-ody-ody-ody 🍑", "Main character energy only ⭐",
-            "Not a phase, Mom 🌈", "Beyoncé said I look good 🐝", "The category is: REALNESS 💃",
-            "Probably thinking about brunch 🥂", "My other ride is a disco ball 🪩", "Fluent in Drag Race 👠",
-            "Warning: May burst into song 🎤", "Handle with care: contains glitter 💖", "Yes I'm this extra IRL ✨",
-            "If lost, return to dance floor 🪩", "Charisma, Uniqueness, Nerve & Tan 👑", "Making choices since birth 🤭",
-            "Here for a good time 🎉", "Powered by iced coffee & anxiety ☕", "Born this way 🌈"
+            "I'm not gay but my boyfriend is", "Slay the day away", "Sorry can't hear you over my outfit",
+            "Too glam to give a damn", "My ship has come in... literally", "Professional homosexual",
+            "Cher is my spirit animal", "Body-ody-ody-ody", "Main character energy only",
+            "Not a phase, Mom", "Beyonce said I look good", "The category is: REALNESS",
+            "Probably thinking about brunch", "My other ride is a disco ball", "Fluent in Drag Race",
+            "Warning: May burst into song", "Handle with care: contains glitter", "Yes I'm this extra IRL",
+            "If lost, return to dance floor", "Charisma, Uniqueness, Nerve & Tan", "Making choices since birth",
+            "Here for a good time", "Powered by iced coffee & anxiety", "Born this way"
         ];
+
+        // Initialize with a random quote
+        function getRandomQuote() {
+            return funnyQuotes[Math.floor(Math.random() * funnyQuotes.length)];
+        }
+
+        currentRandomQuote = getRandomQuote();
+
+        function updateQuotePreview() {
+            const previewEl = document.getElementById('quotePreview');
+            const shuffleBtn = document.getElementById('shuffleQuote');
+            
+            if (quoteMode === 'none') {
+                previewEl.textContent = '(No quote will be displayed)';
+                previewEl.classList.add('show');
+                shuffleBtn.style.display = 'none';
+            } else if (quoteMode === 'custom') {
+                const customText = document.getElementById('customQuote').value.trim();
+                previewEl.textContent = customText ? `"${customText}"` : '(Enter your quote above)';
+                previewEl.classList.add('show');
+                shuffleBtn.style.display = 'none';
+            } else {
+                previewEl.textContent = `"${currentRandomQuote}"`;
+                previewEl.classList.add('show');
+                shuffleBtn.style.display = 'inline-flex';
+            }
+        }
+
+        // Quote mode toggle
+        document.querySelectorAll('.quote-option-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.quote-option-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                quoteMode = this.dataset.mode;
+                
+                const customSection = document.getElementById('customQuoteSection');
+                
+                if (quoteMode === 'custom') {
+                    customSection.classList.add('show');
+                } else {
+                    customSection.classList.remove('show');
+                }
+                updateQuotePreview();
+            });
+        });
+
+        // Shuffle quote button
+        document.getElementById('shuffleQuote').addEventListener('click', function() {
+            currentRandomQuote = getRandomQuote();
+            updateQuotePreview();
+        });
+
+        // Custom quote input
+        document.getElementById('customQuote').addEventListener('input', updateQuotePreview);
+
+        // Initialize quote preview
+        updateQuotePreview();
 
         window.addEventListener('load', function () {
             const qrData = sessionStorage.getItem('qrData');
             const savedCabin = sessionStorage.getItem('cabinNumber');
             if (qrData) {
                 const img = new Image();
-                img.onload = function () { qrImage = img; document.getElementById('qrStatus').textContent = '✓ QR imported'; document.getElementById('qrStatus').classList.add('success'); checkReady(); };
+                img.onload = function () { qrImage = img; document.getElementById('qrStatus').textContent = 'QR imported'; document.getElementById('qrStatus').classList.add('success'); checkReady(); };
                 img.src = qrData;
             }
             if (savedCabin) { document.getElementById('cabinNumber').value = savedCabin; cabinNumber = savedCabin; checkReady(); }
@@ -453,7 +683,7 @@
                 const reader = new FileReader();
                 reader.onload = function (event) {
                     const img = new Image();
-                    img.onload = function () { qrImage = img; document.getElementById('qrStatus').textContent = '✓ Uploaded'; document.getElementById('qrStatus').classList.add('success'); checkReady(); };
+                    img.onload = function () { qrImage = img; document.getElementById('qrStatus').textContent = 'Uploaded'; document.getElementById('qrStatus').classList.add('success'); checkReady(); };
                     img.src = event.target.result;
                 };
                 reader.readAsDataURL(file);
@@ -466,11 +696,43 @@
                 const reader = new FileReader();
                 reader.onload = function (event) {
                     const img = new Image();
-                    img.onload = function () { profileImage = img; document.getElementById('photoStatus').textContent = '✓ Uploaded'; document.getElementById('photoStatus').classList.add('success'); };
+                    img.onload = function () { profileImage = img; document.getElementById('photoStatus').textContent = 'Uploaded'; document.getElementById('photoStatus').classList.add('success'); };
                     img.src = event.target.result;
                 };
                 reader.readAsDataURL(file);
             }
+        });
+
+        // Custom wallpaper upload
+        document.getElementById('wallpaperUpload').addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    const img = new Image();
+                    img.onload = function () {
+                        customWallpaper = img;
+                        document.getElementById('wallpaperStatus').textContent = 'Wallpaper uploaded';
+                        document.getElementById('wallpaperStatus').classList.add('success');
+                        document.getElementById('wallpaperPreview').style.backgroundImage = `url(${event.target.result})`;
+                        document.getElementById('wallpaperPreview').classList.add('show');
+                        document.getElementById('clearWallpaper').classList.add('show');
+                    };
+                    img.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Clear wallpaper button
+        document.getElementById('clearWallpaper').addEventListener('click', function() {
+            customWallpaper = null;
+            document.getElementById('wallpaperUpload').value = '';
+            document.getElementById('wallpaperStatus').textContent = 'This will replace the theme background';
+            document.getElementById('wallpaperStatus').classList.remove('success');
+            document.getElementById('wallpaperPreview').style.backgroundImage = '';
+            document.getElementById('wallpaperPreview').classList.remove('show');
+            document.getElementById('clearWallpaper').classList.remove('show');
         });
 
         function checkReady() { document.getElementById('generateBtn').disabled = !(qrImage && selectedTheme && cabinNumber); }
@@ -488,7 +750,12 @@
 
             const scale = width / 1170;
 
-            drawTheme(ctx, width, height, scale, selectedTheme);
+            // Draw custom wallpaper or theme
+            if (customWallpaper) {
+                drawCustomWallpaper(ctx, width, height, customWallpaper);
+            } else {
+                drawTheme(ctx, width, height, scale, selectedTheme);
+            }
 
             const hasPhoto = profileImage !== null;
             const hasLocation = userLocation.length > 0;
@@ -505,7 +772,7 @@
             ctx.font = `800 ${Math.round(78 * scale)}px 'Outfit', sans-serif`;
             ctx.shadowBlur = 25 * scale;
             ctx.fillText(
-                'ATLANTIS 2026',
+                `ATLANTIS ${currentYear}`,
                 width / 2,
                 height * 0.08 * spacingCompression + topSafeOffset
             );
@@ -618,34 +885,45 @@
                 ctx.shadowBlur = 12 * scale;
 
                 const locationY = qrY + qrSize + height * 0.036; // slightly below QR
-                ctx.fillText('📍 ' + userLocation, width / 2, locationY);
+                ctx.fillText(userLocation, width / 2, locationY);
             }
 
-            /* 6. QUOTE (below QR, slightly lower than location) */
-            const quote = funnyQuotes[Math.floor(Math.random() * funnyQuotes.length)];
-            ctx.fillStyle = 'rgba(255,255,255,0.85)';
-            ctx.font = `500 ${Math.round(32 * scale)}px 'Outfit', sans-serif`;
-
-            const maxW = width - 100 * scale;
-            const words = quote.split(' ');
-            let line = '';
-            const lines = [];
-
-            for (let word of words) {
-                const test = line + word + ' ';
-                if (ctx.measureText(test).width > maxW && line) {
-                    lines.push(line.trim());
-                    line = word + ' ';
+            /* 6. QUOTE (below QR, slightly lower than location) - only if not 'none' mode */
+            if (quoteMode !== 'none') {
+                let quote = '';
+                if (quoteMode === 'custom') {
+                    quote = document.getElementById('customQuote').value.trim();
                 } else {
-                    line = test;
+                    quote = currentRandomQuote;
+                }
+                
+                if (quote) {
+                    ctx.fillStyle = 'rgba(255,255,255,0.85)';
+                    // Quote text 3% bigger: 32 * 1.03 = ~33
+                    ctx.font = `500 ${Math.round(33 * scale)}px 'Outfit', sans-serif`;
+
+                    const maxW = width - 100 * scale;
+                    const words = quote.split(' ');
+                    let line = '';
+                    const lines = [];
+
+                    for (let word of words) {
+                        const test = line + word + ' ';
+                        if (ctx.measureText(test).width > maxW && line) {
+                            lines.push(line.trim());
+                            line = word + ' ';
+                        } else {
+                            line = test;
+                        }
+                    }
+                    lines.push(line.trim());
+
+                    const quoteY = qrY + qrSize + height * 0.072; // slightly below location
+                    lines.forEach((l, i) =>
+                        ctx.fillText(l, width / 2, quoteY + i * 42 * scale)
+                    );
                 }
             }
-            lines.push(line.trim());
-
-            const quoteY = qrY + qrSize + height * 0.072; // slightly below location
-            lines.forEach((l, i) =>
-                ctx.fillText(l, width / 2, quoteY + i * 40 * scale)
-            );
 
             ctx.shadowBlur = 0;
 
@@ -665,9 +943,154 @@
             ctx.closePath();
         }
 
+        function drawCustomWallpaper(ctx, w, h, img) {
+            // Draw custom wallpaper covering the canvas
+            const imgAspect = img.width / img.height;
+            const canvasAspect = w / h;
+            let drawW, drawH, drawX, drawY;
+
+            if (imgAspect > canvasAspect) {
+                drawH = h;
+                drawW = drawH * imgAspect;
+                drawX = (w - drawW) / 2;
+                drawY = 0;
+            } else {
+                drawW = w;
+                drawH = drawW / imgAspect;
+                drawX = 0;
+                drawY = (h - drawH) / 2;
+            }
+
+            ctx.drawImage(img, drawX, drawY, drawW, drawH);
+
+            // Add a subtle dark overlay for better text readability
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
+            ctx.fillRect(0, 0, w, h);
+        }
+
         function drawTheme(ctx, w, h, s, theme) {
-            const themes = { lostcity: drawLostCity, wild: drawWild, neon: drawNeon, whiteheat: drawWhiteHeat, dogtag: drawDogTag, disco: drawDisco, pink: drawPink };
+            const themes = { 
+                lostcity: drawLostCity, 
+                wild: drawWild, 
+                neon: drawNeon, 
+                whiteheat: drawWhiteHeat, 
+                dogtag: drawDogTag, 
+                disco: drawDisco, 
+                pink: drawPink,
+                glass: drawGlass,
+                basic: drawBasic,
+                fabulous: drawFabulous
+            };
             themes[theme](ctx, w, h, s);
+        }
+
+        // GLASS - Apple-style minimal frosted glass
+        function drawGlass(ctx, w, h, s) {
+            // Soft gradient background
+            const grad = ctx.createLinearGradient(0, 0, w, h);
+            grad.addColorStop(0, '#e8eef5');
+            grad.addColorStop(0.3, '#d4dce8');
+            grad.addColorStop(0.6, '#c8d4e4');
+            grad.addColorStop(1, '#b8c8dc');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, w, h);
+
+            // Subtle glass panels
+            ctx.globalAlpha = 0.15;
+            for (let i = 0; i < 4; i++) {
+                const x = w * (0.1 + Math.random() * 0.6);
+                const y = h * (0.1 + Math.random() * 0.6);
+                const rw = w * (0.3 + Math.random() * 0.3);
+                const rh = h * (0.15 + Math.random() * 0.2);
+                
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+                roundRect(ctx, x, y, rw, rh, 30 * s);
+                ctx.fill();
+            }
+            ctx.globalAlpha = 1;
+
+            // Soft light orbs
+            const orbs = [
+                [0.2, 0.3, 0.25, 'rgba(255, 255, 255, 0.3)'],
+                [0.8, 0.2, 0.2, 'rgba(200, 220, 255, 0.25)'],
+                [0.5, 0.7, 0.3, 'rgba(255, 255, 255, 0.2)'],
+                [0.1, 0.8, 0.15, 'rgba(220, 230, 255, 0.2)']
+            ];
+            orbs.forEach(([ox, oy, or, oc]) => {
+                const g = ctx.createRadialGradient(w * ox, h * oy, 0, w * ox, h * oy, w * or);
+                g.addColorStop(0, oc);
+                g.addColorStop(1, 'rgba(255,255,255,0)');
+                ctx.fillStyle = g;
+                ctx.fillRect(0, 0, w, h);
+            });
+        }
+
+        // BASIC - Clean black
+        function drawBasic(ctx, w, h, s) {
+            // Pure black gradient with subtle depth
+            const grad = ctx.createLinearGradient(0, 0, 0, h);
+            grad.addColorStop(0, '#0a0a0a');
+            grad.addColorStop(0.5, '#000000');
+            grad.addColorStop(1, '#0d0d0d');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, w, h);
+
+            // Very subtle vignette
+            const vignette = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, Math.max(w, h) * 0.7);
+            vignette.addColorStop(0, 'rgba(30, 30, 30, 0.1)');
+            vignette.addColorStop(1, 'rgba(0, 0, 0, 0.3)');
+            ctx.fillStyle = vignette;
+            ctx.fillRect(0, 0, w, h);
+        }
+
+        // FABULOUS - Rainbow pride
+        function drawFabulous(ctx, w, h, s) {
+            // Rainbow stripes background
+            const stripeHeight = h / 6;
+            const rainbowColors = ['#FF0018', '#FFA52C', '#FFFF41', '#008018', '#0000F9', '#86007D'];
+            
+            rainbowColors.forEach((color, i) => {
+                ctx.fillStyle = color;
+                ctx.fillRect(0, i * stripeHeight, w, stripeHeight + 1);
+            });
+
+            // Add sparkle/glitter effect
+            for (let i = 0; i < 100; i++) {
+                const x = Math.random() * w;
+                const y = Math.random() * h;
+                const r = (2 + Math.random() * 6) * s;
+                const g = ctx.createRadialGradient(x, y, 0, x, y, r * 2);
+                g.addColorStop(0, 'rgba(255, 255, 255, 0.9)');
+                g.addColorStop(0.5, 'rgba(255, 255, 255, 0.4)');
+                g.addColorStop(1, 'rgba(255, 255, 255, 0)');
+                ctx.fillStyle = g;
+                ctx.beginPath();
+                ctx.arc(x, y, r * 2, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            // Add diagonal shine streaks
+            ctx.globalAlpha = 0.15;
+            for (let i = 0; i < 8; i++) {
+                const x = w * (-0.2 + i * 0.2);
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x + w * 0.15, 0);
+                ctx.lineTo(x + w * 0.35, h);
+                ctx.lineTo(x + w * 0.2, h);
+                ctx.closePath();
+                ctx.fillStyle = 'white';
+                ctx.fill();
+            }
+            ctx.globalAlpha = 1;
+
+            // Subtle overlay for depth
+            const overlay = ctx.createLinearGradient(0, 0, 0, h);
+            overlay.addColorStop(0, 'rgba(255, 255, 255, 0.1)');
+            overlay.addColorStop(0.5, 'rgba(0, 0, 0, 0)');
+            overlay.addColorStop(1, 'rgba(0, 0, 0, 0.15)');
+            ctx.fillStyle = overlay;
+            ctx.fillRect(0, 0, w, h);
         }
 
         // LOST CITY - Deep ocean with bioluminescence
@@ -693,7 +1116,6 @@
                 ctx.fillStyle = glow; ctx.beginPath(); ctx.arc(x, y, r * 4, 0, Math.PI * 2); ctx.fill();
             }
 
-            // Trident watermark
             ctx.font = `${Math.round(350 * s)}px sans-serif`; ctx.fillStyle = 'rgba(0, 200, 255, 0.06)'; ctx.textAlign = 'center';
             ctx.fillText('', w / 2, h * 0.65);
         }
@@ -856,7 +1278,7 @@
 
         document.getElementById('downloadBtn').addEventListener('click', function () {
             const link = document.createElement('a');
-            link.download = 'atlantis-2026-lockscreen.png';
+            link.download = `atlantis-${currentYear}-lockscreen.png`;
             link.href = document.getElementById('wallpaperCanvas').toDataURL('image/png');
             link.click();
         });
